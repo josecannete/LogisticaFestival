@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 
 class HorarioDisponible(models.Model):
-    inicio = models.DateTimeField
-    fin = models.DateTimeField
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField()
 
 
 class Espacio(models.Model):
@@ -13,7 +13,7 @@ class Espacio(models.Model):
     nombre = models.CharField(max_length=200)
     ubicacion = models.CharField(max_length=2)
     capacidad = models.IntegerField(default=0)
-    duracion = models.DurationField
+    duracion = models.DurationField()
     horarioDisponible = models.ForeignKey(HorarioDisponible, on_delete=models.CASCADE)
 
 
@@ -23,15 +23,15 @@ class Monitor(models.Model):
 
 
 class Disponibilidad(models.Model):
-    inicio = models.DateTimeField
-    fin = models.DateTimeField
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField()
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-    tamanoGrupo = models.IntegerField
+    tamanoGrupo = models.IntegerField()
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
 
 
 class Charla(models.Model):
     nombre = models.CharField(max_length=200)
-    inicio = models.DateTimeField
-    capacidadTotal = models.IntegerField
-    capacidadActual = models.IntegerField
+    inicio = models.DateTimeField()
+    capacidadTotal = models.IntegerField()
+    capacidadActual = models.IntegerField()
