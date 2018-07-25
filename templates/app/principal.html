@@ -1,0 +1,115 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="ui-view">
+            <div>
+                <div class="animated fadeIn">
+                    <div class="row">
+
+                        <div class="col-sm-12 col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Tours
+                                </div>
+                                <div class="card-body">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
+                                        <div class="container">
+                                            <h1 class="display-3">Pide un Tour</h1>
+                                            Arreglar esto de abajo
+
+                                            <div class="card-body">
+                                                <form action="" method="post">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">Duración</span>
+                                                            </div>
+                                                            <input type="text" id="duracion" name="duracion"
+                                                                   class="form-control">
+                                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                <i class="fa fa-clock-o"></i>
+                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">Cantidad</span>
+                                                            </div>
+                                                            <input type="email" id="cantidad" name="cantidad"
+                                                                   class="form-control">
+                                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                <i class="fa fa-user"></i>
+                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group form-actions">
+                                                        <button type="submit" class="btn btn-sm btn-primary">Buscar
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Charlas
+                                </div>
+                                <div class="card-body">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
+                                        <div class="container">
+                                            <h1 class="display-3">Charlas</h1>
+                                            {% if charlas %}
+                                                <div class="table-wrapper-scroll-y" style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
+
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th scope="col">Charla</th>
+                                                            <th scope="col">Hora inicio</th>
+                                                            <th scope="col">Hora término</th>
+                                                              <th scope="col">Asistentes</th>
+                                                            <th scope="col">Capacidad</th>
+                                                          </tr>
+                                                        </thead>
+                                                          <tbody>
+                                                          {% for charla in charlas %}
+                                                              <tr style="text-align: center">
+                                                                  <td class="filterable-cell">{{ charla.nombre }}</td>
+                                                                  <td class="filterable-cell">{{ charla.horario.inicio.time }}</td>
+                                                                  <td class="filterable-cell">{{ charla.horario.fin.time }}</td>
+                                                                  <td class="filterable-cell">{{ charla.capacidadActual }}</td>
+                                                                  <td class="filterable-cell">{{ charla.capacidadTotal }}</td>
+                                                              </tr>
+                                                          {% endfor %}
+                                                          </tbody>
+                                                      </table>
+
+                                                    </div>
+                                            {% else %}
+                                            No hay charlas para mostrar
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
