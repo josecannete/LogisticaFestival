@@ -19,10 +19,16 @@ class Espacio(models.Model):
     duracion = models.DurationField()
     horarioDisponible = models.ManyToManyField(Horario)
 
+    def __str__(self):
+        return self.nombre
+
 
 class Monitor(models.Model):
     nombre = models.CharField(max_length=200)
     contacto = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.nombre
 
 
 class Reserva(models.Model):
@@ -38,6 +44,9 @@ class Charla(models.Model):
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
+
+    def __str__(self):
+        return self.nombre
 
 
 class Taller(models.Model):
