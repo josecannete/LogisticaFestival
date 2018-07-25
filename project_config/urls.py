@@ -25,5 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', logistica.home, name='home'),
+
     url(r'^login/', logistica.login_user, name='login_user'),
+    url(r'^logout/', logistica.logout_user, name='logout_user'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
