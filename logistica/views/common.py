@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
-    user = request.user
-    if user.is_authenticated():
+    # user = request.user
+    # if user.is_authenticated():
         return render(request, 'app/home.html')
-    return redirect(reverse(login_user))
+    # return redirect(reverse(login_user))
 
 
 def login_user(request):
