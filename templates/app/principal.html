@@ -21,6 +21,7 @@
 
                                             <div class="card-body">
                                                 <form action="" method="post">
+                                                    {% csrf_token %}
                                                     <div class="form-group">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
@@ -55,10 +56,10 @@
                                                         </button>
                                                     </div>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -101,6 +102,54 @@
                                                     </div>
                                             {% else %}
                                             No hay charlas para mostrar
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-sm-12 col-xl-6 ml-auto">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Talleres
+                                </div>
+                                <div class="card-body">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
+                                        <div class="container">
+                                            <h1 class="display-3">Talleres</h1>
+                                            {% if talleres %}
+                                                <div class="table-wrapper-scroll-y" style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
+
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th scope="col">Taller</th>
+                                                            <th scope="col">Hora inicio</th>
+                                                            <th scope="col">Hora término</th>
+                                                              <th scope="col">Asistentes</th>
+                                                            <th scope="col">Capacidad</th>
+                                                              <th scope="col"></th>
+                                                          </tr>
+                                                        </thead>
+                                                          <tbody>
+                                                          {% for taller in talleres %}
+                                                              <tr style="text-align: center">
+                                                                  <td class="filterable-cell">{{ taller.nombre }}</td>
+                                                                  <td class="filterable-cell">{{ taller.horario.inicio.time }}</td>
+                                                                  <td class="filterable-cell">{{ taller.horario.fin.time }}</td>
+                                                                  <td class="filterable-cell">{{ taller.capacidadActual }}</td>
+                                                                  <td class="filterable-cell">{{ taller.capacidadTotal }}</td>
+                                                                    <td class="filterable-cell"><button
+                                                                            class="btn btn-secondary" style="border-radius:
+                                                                            4px;"><i class="fa fa-edit"></i></button></td>
+                                                              </tr>
+                                                          {% endfor %}
+                                                          </tbody>
+                                                      </table>
+
+                                                    </div>
+                                            {% else %}
+                                            No hay talleres para mostrar
                                             {% endif %}
                                         </div>
                                     </div>
