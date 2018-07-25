@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+
 # Create your models here.
 
 
-class HorarioDisponible(models.Model):
+class Horario(models.Model):
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
 
@@ -14,7 +16,7 @@ class Espacio(models.Model):
     ubicacion = models.CharField(max_length=2)
     capacidad = models.IntegerField(default=0)
     duracion = models.DurationField()
-    horarioDisponible = models.ForeignKey(HorarioDisponible, on_delete=models.CASCADE)
+    horarioDisponible = models.ManyToManyField(Horario)
 
 
 class Monitor(models.Model):
@@ -22,7 +24,7 @@ class Monitor(models.Model):
     contacto = models.CharField(max_length=15)
 
 
-class Disponibilidad(models.Model):
+class Reserva(models.Model):
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
@@ -32,6 +34,13 @@ class Disponibilidad(models.Model):
 
 class Charla(models.Model):
     nombre = models.CharField(max_length=200)
-    inicio = models.DateTimeField()
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
+    capacidadTotal = models.IntegerField()
+    capacidadActual = models.IntegerField()
+
+
+class Taller(models.Model):
+    nombre = models.CharField(max_length=200)
+    horario = models.DateTimeField()
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()

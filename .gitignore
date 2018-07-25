@@ -57,3 +57,5 @@ fabric.properties
 .idea/httpRequests
 
 
+logistica/migrations/**
+logistica/__pycache__/**
