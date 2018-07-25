@@ -7864,7 +7864,8 @@ base-chart.chart {
     -ms-flex-direction: row;
         flex-direction: row;
     -ms-flex-align: center;
-        align-items: center; }
+        align-items: center;
+        padding-right: 1rem;}
   .app-header.navbar .nav-item {
     position: relative;
     min-width: 50px;
@@ -7939,8 +7940,8 @@ base-chart.chart {
   .brand-minimized .app-header.navbar .navbar-brand {
     width: 50px;
     background-color: #fff;
-    background-image: url("../img/logo-symbol.png");
-    background-size: 24px;
+    background-image: url("../img/logo-symbol-fcfm.png");
+    background-size: 29px;
     border-bottom: 1px solid #c2cfd6; } }
 
 .progress-xs {
