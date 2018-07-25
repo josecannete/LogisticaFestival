@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-
-
 class Horario(models.Model):
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
@@ -44,3 +42,6 @@ class Taller(models.Model):
     horario = models.DateTimeField()
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
+
+    def __str__(self):
+        return self.nombre
