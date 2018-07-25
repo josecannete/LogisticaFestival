@@ -7,6 +7,9 @@ class Horario(models.Model):
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
 
+    def __str__(self):
+        return str(self.inicio) + " -> " + str(self.fin)
+
 
 class Espacio(models.Model):
     encargado = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,7 +42,7 @@ class Charla(models.Model):
 
 class Taller(models.Model):
     nombre = models.CharField(max_length=200)
-    horario = models.DateTimeField()
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
 

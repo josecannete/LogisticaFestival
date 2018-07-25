@@ -1,7 +1,7 @@
 {% load static %}
 
 <!-- Bootstrap and necessary plugins -->
-<script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>
+{#<script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>#}
 <script src="{% static 'dist/vendors/js/popper.min.js' %}"></script>
 <script src="{% static 'dist/vendors/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'dist/vendors/js/pace.min.js' %}"></script>
@@ -19,6 +19,6 @@
 <!-- Custom scripts required by this view -->
 <script src="{% static 'dist/js/views/main.js' %}"></script>
 
-{% block script %}
+{% block extrascript %}
 
 {% endblock %}
