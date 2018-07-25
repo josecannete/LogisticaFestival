@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     user = request.user
-    if user.is_authenticated():
-        return render(request, 'app/home.html')
+    # if user.is_authenticated():
+    #     return render(request, 'app/home.html')
     return redirect(reverse(login_user))
 
 

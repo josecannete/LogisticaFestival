@@ -18,9 +18,12 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import *
+
+import logistica.views as logistica
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', home, name='home')
+
+    url(r'^$', logistica.home, name='home'),
+    url(r'^login/', logistica.login_user, name='login_user'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

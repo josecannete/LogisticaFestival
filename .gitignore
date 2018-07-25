@@ -57,6 +57,5 @@ fabric.properties
 .idea/httpRequests
 
 **.sqlite3
+**/__pycache__
 logistica/migrations/**
-logistica/__pycache__/**
-project_config/__pycache__/**
