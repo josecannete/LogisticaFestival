@@ -56,7 +56,7 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-
+**.sqlite3
 logistica/migrations/**
 logistica/__pycache__/**
 project_config/__pycache__/**
