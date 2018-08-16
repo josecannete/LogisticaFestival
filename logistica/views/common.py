@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from logistica.models import Actividad
 import datetime
-
+from .calendar import getEventsByMonitor, getEventsByEspacio
 
 def home(request):
     user = request.user
@@ -45,3 +45,14 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect(reverse(home))
+
+
+def monitor(request, nombreMonitor):
+    context = {'events': getEventsByMonitor(nombreMonitor)
+               }
+    return render(request, 'app/monitor.html', context)
+
+def espacio(request, nombreEspacio):
+    context = {'events': getEventsByEspacio(nombreEspacio)
+               }
+    return render(request, 'app/espacio.html', context)

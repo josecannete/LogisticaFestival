@@ -23,7 +23,7 @@ class Espacio(models.Model):
     horarioDisponible = models.ManyToManyField(Horario)
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
 
 class Monitor(models.Model):
@@ -31,7 +31,7 @@ class Monitor(models.Model):
     contacto = models.CharField(max_length=15)
 
     def __str__(self):
-        return self.nombre
+        return str(self.nombre)
 
 
 # Visita

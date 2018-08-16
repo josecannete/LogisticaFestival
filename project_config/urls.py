@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 
 import logistica.views as logistica
 
+from django.urls import path
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -31,4 +33,9 @@ urlpatterns = [
 
     url(r'^talleres/', logistica.workshop, name='workshop'),
     url(r'^principal/', logistica.principal, name='principal'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+    path('monitor/<str:nombreMonitor>/', logistica.monitor, name='monitor'),
+
+    path('espacio/<str:nombreEspacio>/', logistica.espacio, name='espacio'),
+
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
