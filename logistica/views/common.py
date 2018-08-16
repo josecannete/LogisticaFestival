@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
-from logistica.models import Charla
+from logistica.models import Actividad
 import datetime
 
 
@@ -16,8 +16,8 @@ def home(request):
 
 def principal(request):
     if request.user.is_authenticated:
-        charlas = Charla.objects.filter(horario__inicio__gt=datetime.datetime.now(),
-                                        horario__inicio__day=datetime.datetime.now().day)
+        charlas = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
+                                           horario__inicio__day=datetime.datetime.now().day)
         context = {'charlas': charlas}
         return render(request, 'app/principal.html', context)
     else:

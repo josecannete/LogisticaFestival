@@ -2,12 +2,12 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from logistica.forms import NewWorkshopForm
+# from logistica.forms import NewInscriptionWorkshopForm
 
 
 @login_required
 def workshop(request):
     context = {
-        'new_workshop_form': NewWorkshopForm()
+        # 'inscription_workshop_form': NewInscriptionWorkshopForm()
     }
     return render(request, 'app/workshop.html', context)
