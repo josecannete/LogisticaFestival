@@ -16,12 +16,12 @@ def home(request):
 
 def principal(request):
     if request.user.is_authenticated:
-        charlas = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
-                                           horario__inicio__day=datetime.datetime.now().day)
-        context = {'charlas': charlas}
+        actividades = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
+                                               horario__inicio__day=datetime.datetime.now().day)
+        context = {'actividades': actividades}
         return render(request, 'app/principal.html', context)
     else:
-        redirect(reverse(login_user))
+        redirect('/')
 
 
 def login_user(request):
