@@ -51,3 +51,6 @@ class Actividad(models.Model):
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
     tipo = models.CharField(max_length=15)  # Charla o taller
+
+    def __str__(self):
+        return self.nombre
