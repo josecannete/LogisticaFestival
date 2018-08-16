@@ -18,16 +18,30 @@
                 <div class="card-body">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                         <div class="form-group row">
-                            <label class="col-md-3 col-form-label" for="text-input">Nombre</label>
+                            <label class="col-md-3 col-form-label" for="activity">Actividad</label>
                             <div class="col-md-9">
-                                {{ new_workshop_form.nombre }}
+                                <select name="tabs" class="form-control"
+                                        id="id_tabs" data-parsley-multiple="tabs">
+                                    {% for activity in activities %}
+                                        <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
+                                                data-ct="{{ activity.capacidadTotal }}"
+                                                {% if activity.id == -1 %}selected="true"
+                                                disabled="disabled"{% endif %}>{{ activity.nombre }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label" for="text-input">Hora Inicio</label>
+                        <div class="form-group row" id="ct_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Capacidad Total</label>
+                            <div class="col-md-9 col-form-label" id="ct_value"></div>
+                        </div>
+
+                        <div class="form-group row" id="ca_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Capacidad Actual</label>
+
                             <div class="col-md-9">
-                                {{ new_workshop_form.horaInicio }}
+                                <input type="number" class="form-control" name="capacidadActual" id="ca_value">
                             </div>
                         </div>
                     </form>
@@ -45,18 +59,12 @@
     </div>
 {% endblock %}
 {% block extrascript %}
-    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
-{#    <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>#}
-{#    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
-    <script src="//cdn.bootcss.com/moment.js/2.17.1/moment.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
-        $(function () {
-            $('.datetime-input').datetimepicker({
-                format: 'HH:mm MM-YYYY'
-            });
+        $("#id_tabs").on('change', function () {
+            $("#ct_div").attr("hidden", false);
+            $("#ca_div").attr("hidden", false);
+            $("#ct_value").text($(this).find(':selected').data("ct"));
+            $("#ca_value").val($(this).find(':selected').data("ca"));
         });
     </script>
 {% endblock %}
