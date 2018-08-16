@@ -16,9 +16,11 @@ def home(request):
 
 def principal(request):
     if request.user.is_authenticated:
-        actividades = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
-                                               horario__inicio__day=datetime.datetime.now().day)
-        context = {'actividades': actividades}
+        charlas = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
+                                           horario__inicio__day=datetime.datetime.now().day, tipo='charla')
+        talleres = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
+                                            horario__inicio__day=datetime.datetime.now().day, tipo='taller')
+        context = {'charlas': charlas, 'talleres': talleres}
         return render(request, 'app/principal.html', context)
     else:
         redirect('/')

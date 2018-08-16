@@ -1,0 +1,70 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Inscripción Taller</strong>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="activity">Actividad</label>
+                            <div class="col-md-9">
+                                <select name="tabs" class="form-control"
+                                        id="id_tabs" data-parsley-multiple="tabs">
+                                    {% for activity in activities %}
+                                        <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
+                                                data-ct="{{ activity.capacidadTotal }}"
+                                                {% if activity.id == -1 %}selected="true"
+                                                disabled="disabled"{% endif %}>{{ activity.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="ct_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Capacidad Total</label>
+                            <div class="col-md-9 col-form-label" id="ct_value"></div>
+                        </div>
+
+                        <div class="form-group row" id="ca_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Capacidad Actual</label>
+
+                            <div class="col-md-9">
+                                <input type="number" class="form-control" name="capacidadActual" id="ca_value">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fa fa-dot-circle-o"></i> Submit
+                    </button>
+                    <button type="reset" class="btn btn-sm btn-danger">
+                        <i class="fa fa-ban"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extrascript %}
+    <script type="text/javascript">
+        $("#id_tabs").on('change', function () {
+            $("#ct_div").attr("hidden", false);
+            $("#ca_div").attr("hidden", false);
+            $("#ct_value").text($(this).find(':selected').data("ct"));
+            $("#ca_value").val($(this).find(':selected').data("ca"));
+        });
+    </script>
+{% endblock %}

@@ -42,6 +42,9 @@ class Visita(models.Model):
     tamanoGrupo = models.IntegerField()
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.nombre
+
 
 # Actividad
 # Son sólo charlas y talleres
@@ -51,3 +54,6 @@ class Actividad(models.Model):
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
     tipo = models.CharField(max_length=15)  # Charla o taller
+
+    def __str__(self):
+        return self.nombre

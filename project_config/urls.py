@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^login/', logistica.login_user, name='login_user'),
     url(r'^logout/', logistica.logout_user, name='logout_user'),
 
-    url(r'^talleres/', logistica.workshop, name='workshop'),
+    url(r'^actividades/', logistica.activities, name='activities'),
     url(r'^principal/', logistica.principal, name='principal'),
 
     path('monitor/<str:nombreMonitor>/', logistica.monitor, name='monitor'),
