@@ -44,7 +44,21 @@
         });
     </script>
     
+<center>
+    <div class="dropdown">
+  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Seleccionar espacio
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      {% for espacio in disponibles %}
+    <a class="dropdown-item" href="/espacio/{{ espacio.nombre }}">{{ espacio.nombre }}</a>
+      {% endfor %}
+  </div>
+</div>
+
 
             <div id='calendar'> </div>
+
+</center>
 
 {% endblock content %}

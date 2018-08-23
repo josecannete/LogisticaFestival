@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
-from logistica.models import Actividad
+from logistica.models import Actividad, Monitor, Espacio
 import datetime
 from .calendar import getEventsByMonitor, getEventsByEspacio
 
@@ -49,12 +49,17 @@ def logout_user(request):
     return redirect(reverse(home))
 
 
+
 def monitor(request, nombreMonitor):
-    context = {'events': getEventsByMonitor(nombreMonitor)
+    monitoresDisponibles = Monitor.objects.all()
+    context = {'events': getEventsByMonitor(nombreMonitor),
+               'disponibles': monitoresDisponibles
                }
     return render(request, 'app/monitor.html', context)
 
 def espacio(request, nombreEspacio):
-    context = {'events': getEventsByEspacio(nombreEspacio)
+    espaciosDisponibles = Espacio.objects.all()
+    context = {'events': getEventsByEspacio(nombreEspacio),
+               'disponibles': espaciosDisponibles
                }
     return render(request, 'app/espacio.html', context)
