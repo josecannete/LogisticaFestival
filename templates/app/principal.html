@@ -8,55 +8,53 @@
                 <div class="animated fadeIn">
                     <div class="row">
 
-                        <div class="col-sm-12 col-xl-6">
+                        <div class="col-sm-12 col-l-6">
                             <div class="card">
                                 <div class="card-header">
                                     <i class="fa fa-align-justify"></i> Tours
                                 </div>
                                 <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
-                                        <div class="container">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white; padding: 0rem 2rem;">
+                                        <div class="container" align="center">
                                             <h1 class="display-3">Pide un Tour</h1>
-                                            Arreglar esto de abajo
+
 
                                             <div class="card-body">
                                                 <form action="" method="post">
                                                     {% csrf_token %}
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text">Duración</span>
-                                                            </div>
-                                                            <input type="text" id="duracion" name="duracion"
-                                                                   class="form-control">
-                                                            <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                <i class="fa fa-clock-o"></i>
-                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text">Cantidad</span>
-                                                            </div>
-                                                            <input type="email" id="cantidad" name="cantidad"
-                                                                   class="form-control">
-                                                            <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                <i class="fa fa-user"></i>
-                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <table class="table" style="width: 50%">
+                                                    <tr>
+                                                        <td>
+                                                            Duración (Horas)
 
-                                                    <div class="form-group form-actions">
-                                                        <button type="submit" class="btn btn-sm btn-primary">Buscar
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="duracion" id="duracion">
+                                                            <i class="fa fa-clock-o"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Cantidad de alumnos
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="cantidad" id="cantidad">
+                                                            <i class="fa fa-user"></i>
+                                                        </td>
+
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+
+                                                        </td>
+                                                        <td>
+                                                            <button type="submit" class="btn btn-sm btn-primary">Buscar
                                                         </button>
-                                                    </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                                 </form>
-
                                             </div>
                                         </div>
                                     </div>
@@ -70,7 +68,7 @@
                                     <i class="fa fa-align-justify"></i> Charlas
                                 </div>
                                 <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white; padding: 1rem 2rem">
                                         <div class="container">
                                             <h1 class="display-3">Charlas</h1>
                                             {% if charlas %}
@@ -114,7 +112,7 @@
                                     <i class="fa fa-align-justify"></i> Talleres
                                 </div>
                                 <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid" style="background-color: white">
+                                    <div class="jumbotron jumbotron-fluid" style="background-color: white; padding: 1rem 2rem;">
                                         <div class="container">
                                             <h1 class="display-3">Talleres</h1>
                                             {% if talleres %}
