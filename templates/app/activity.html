@@ -6,21 +6,32 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+    <script src="{% static 'src/js/activity.js' %}"></script>
 {% endblock %}
 
 {% block content %}
+
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <strong>Inscripción Taller</strong>
                 </div>
-                <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <div id="div_for_alert"></div>
+{#                <div class="alert alert-dismissible fade show" role="alert" id="alert_div">#}
+{#                    <div id="alert_msg"></div>#}
+{#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
+{#                </div>#}
+                <div class="card-body" id="card_id">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+                          id="edit_capacity_form">
+                        {% csrf_token %}
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label" for="activity">Actividad</label>
                             <div class="col-md-9">
-                                <select name="tabs" class="form-control"
+                                <select name="id" class="form-control"
                                         id="id_tabs" data-parsley-multiple="tabs">
                                     {% for activity in activities %}
                                         <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
@@ -46,12 +57,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="fa fa-dot-circle-o"></i> Submit
-                    </button>
-                    <button type="reset" class="btn btn-sm btn-danger">
-                        <i class="fa fa-ban"></i> Reset
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-primary" onclick="return edit_activity_capacity()">
+                        <i class="fa fa-dot-circle-o"></i> Enviar
                     </button>
                 </div>
             </div>

@@ -1,2 +1,2 @@
 from .common import *
-from .spaces import *
+from .activities import *

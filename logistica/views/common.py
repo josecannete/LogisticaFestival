@@ -7,6 +7,7 @@ from logistica.models import Actividad, Monitor, Espacio
 import datetime
 from .calendar import getEventsByMonitor, getEventsByEspacio
 
+
 def home(request):
     user = request.user
     if user.is_authenticated:
@@ -49,13 +50,13 @@ def logout_user(request):
     return redirect(reverse(home))
 
 
-
 def monitor(request, nombreMonitor):
     monitoresDisponibles = Monitor.objects.all()
     context = {'events': getEventsByMonitor(nombreMonitor),
                'disponibles': monitoresDisponibles
                }
     return render(request, 'app/monitor.html', context)
+
 
 def espacio(request, nombreEspacio):
     espaciosDisponibles = Espacio.objects.all()

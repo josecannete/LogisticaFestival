@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^actividades/', logistica.activities, name='activities'),
     url(r'^principal/', logistica.principal, name='principal'),
 
+    url(r'^edit_activity_capacity/', logistica.edit_activity_capacity, name='edit_activity_capacity'),
+
     path('monitor/<str:nombreMonitor>/', logistica.monitor, name='monitor'),
 
     path('espacio/<str:nombreEspacio>/', logistica.espacio, name='espacio'),
