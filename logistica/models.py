@@ -35,6 +35,14 @@ class Monitor(models.Model):
         return str(self.nombre)
 
 
+# Tour
+# Útil para permitir desarmar tour si no es seleccionado
+class Tour(models.Model):
+    nombre = models.CharField(max_length=200)
+    duracion = models.IntegerField()
+    alumnos = models.IntegerField()
+
+
 # Visita
 # Un tour es un conjunto de visitas
 class Visita(models.Model):
@@ -42,7 +50,7 @@ class Visita(models.Model):
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     tamanoGrupo = models.IntegerField()
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
-
+    tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
 
 
 # Actividad

@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-/
 from django import forms
-from logistica.models import Visita, Espacio
+from logistica.models import Visita, Espacio, Tour
+
+import datetime
 
 
-class NewTourForm(forms.Form):
-    duration = forms.IntegerField()
-    students = forms.IntegerField()
+class NewTourForm(forms.ModelForm):
+
+    class Meta:
+        model = Tour
+        fields = ('nombre', 'duracion', 'alumnos')
 
     def __init__(self, *args, **kwargs):
         super(NewTourForm, self).__init__(*args, **kwargs)
@@ -13,4 +17,6 @@ class NewTourForm(forms.Form):
             visible.field.widget.attrs['class'] = 'form-control'
 
     def save(self):
-        print(self.cleaned_data['duration'])
+        tour = super(NewTourForm, self).save(commit=False)
+        time_now = datetime.datetime.now()
+        print(self.cleaned_data['duracion'])

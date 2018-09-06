@@ -34,19 +34,27 @@
 
                                                     <div class="form-group row">
                                                         <label class="col-md-3 col-form-label"
-                                                               for="{{ tour.duration.id_for_label }}">Duración
-                                                            (Minutos)</label>
+                                                               for="{{ tour.nombre.id_for_label }}">Nombre</label>
                                                         <div class="col-md-9">
-                                                            {{ tour.duration }}
+                                                            {{ tour.nombre }}
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label class="col-md-3 col-form-label"
-                                                               for="{{ tour.students.id_for_label }}">Cantidad
+                                                               for="{{ tour.duracion.id_for_label }}">Duración
+                                                            (Minutos)</label>
+                                                        <div class="col-md-9">
+                                                            {{ tour.duracion }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-form-label"
+                                                               for="{{ tour.alumnos.id_for_label }}">Cantidad
                                                             de Alumnos</label>
                                                         <div class="col-md-9">
-                                                            {{ tour.students }}
+                                                            {{ tour.alumnos }}
                                                         </div>
                                                     </div>
                                                     <div class="">
