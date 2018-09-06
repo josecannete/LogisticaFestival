@@ -17,7 +17,7 @@ function edit_activity_capacity() {
         data: form,
         success: function (data) {
             if (data["status"]) {
-                append_alert("success", "Capacidad actualizada");
+                append_alert("success", "Información de actividad actualizada");
                 setTimeout(function () {
                     location = self.location.href
                 }, 1000);
