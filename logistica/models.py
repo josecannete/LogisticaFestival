@@ -51,7 +51,8 @@ class Actividad(models.Model):
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
-    tipo = models.CharField(max_length=15)  # Charla o taller
+    charlista = models.CharField(max_length=200, null=True, blank=True)    # Quién dara charla/taller. Sólo uso informativo
+    tipo = models.CharField(max_length=15)          # Charla o taller
 
     def __str__(self):
         return self.nombre

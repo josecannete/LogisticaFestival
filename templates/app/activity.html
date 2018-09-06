@@ -18,12 +18,12 @@
                     <strong>Inscripción Taller</strong>
                 </div>
                 <div id="div_for_alert"></div>
-{#                <div class="alert alert-dismissible fade show" role="alert" id="alert_div">#}
-{#                    <div id="alert_msg"></div>#}
-{#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
-{#                        <span aria-hidden="true">&times;</span>#}
-{#                    </button>#}
-{#                </div>#}
+                {#                <div class="alert alert-dismissible fade show" role="alert" id="alert_div">#}
+                {#                    <div id="alert_msg"></div>#}
+                {#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+                {#                        <span aria-hidden="true">&times;</span>#}
+                {#                    </button>#}
+                {#                </div>#}
                 <div class="card-body" id="card_id">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
                           id="edit_capacity_form">
@@ -36,9 +36,24 @@
                                     {% for activity in activities %}
                                         <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
                                                 data-ct="{{ activity.capacidadTotal }}"
+                                                data-ch="{{ activity.charlista }}"
                                                 {% if activity.id == -1 %}selected="true"
                                                 disabled="disabled"{% endif %}>{{ activity.nombre }}</option>
                                     {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="ch_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Charlista</label>
+                            <div class="col-md-9 col-form-label" id="ch_value"></div>
+                        </div>
+
+                        <div class="form-group row" id="me_div" hidden>
+                            <label class="col-md-3 col-form-label" for="text-input">Monitor Encargado</label>
+                            <div class="col-md-9">
+                                <select name="me" class="form-control"
+                                        id="me_tabs" data-parsley-multiple="tabs">
                                 </select>
                             </div>
                         </div>
@@ -69,6 +84,14 @@
 {% block extrascript %}
     <script type="text/javascript">
         $("#id_tabs").on('change', function () {
+            var charlista = $(this).find(':selected').data("ch");
+            if (charlista == null || charlista == 'None') {
+                $("#ch_div").attr("hidden", true);
+            } else {
+                $("#ch_div").attr("hidden", false);
+                $("#ch_value").text(charlista);
+            }
+            $("#me_div").attr("hidden", false);
             $("#ct_div").attr("hidden", false);
             $("#ca_div").attr("hidden", false);
             $("#ct_value").text($(this).find(':selected').data("ct"));
