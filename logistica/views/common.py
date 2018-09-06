@@ -74,10 +74,28 @@ def espacio(request, nombreEspacio):
 
 def monitorProfile(request):
     if request.user.is_authenticated:
-        monitorActivo = request.user
-        actividades = Actividad.objects.filter(monitor=monitorActivo)
-        print(actividades)
-        context = {'actividades': actividades}
-        return render(request, 'app/profile.html', context)
+        try:
+            if request.method == 'GET':
+                monitorActivo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                context = {'actividades': actividades}
+                return render(request, 'app/profile.html', context)
+            if request.method == 'POST':
+                print(request.POST)
+                monitorActivo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                act = Actividad.objects.get(id=request.POST['actividad'])
+                context = {'actividades': actividades, 'act': act}
+                return render(request, 'app/profile_edit.html', context)
+        except:
+            return redirect('/')
     else:
         return redirect('/')
+
+
+def updateActividad(request):
+    actividad = Actividad.objects.get(id=request.POST['id'])
+    actividad.nombre = request.POST['nombre']
+    actividad.capacidadActual = request.POST['asistentes']
+    actividad.save()
+    return redirect('/profile/')

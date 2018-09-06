@@ -4,21 +4,17 @@
 {% block content %}
     <div class="container-fluid">
         <div id="ui-view" align="center">
-            <div class="dropdown">
-                <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Seleccionar actividad
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {% for act in actividades %}
-                        <a class="dropdown-item" href="">{{ act.nombre }}</a>
+            <form method="post" action="" name="edit" style="width: 60%">
+            {% csrf_token %}
+                <label for="actividad">Selecciona una actividad</label>
+                <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">
+                <option disabled selected value> -- </option>
+                    {% for actividad in actividades %}
+                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
                     {% endfor %}
-                </div>
-            </div>
-            <div>
-                {% for act in actividades %}
-                    {{ act }}
-                {% endfor %}
-            </div>
+                </select>
+
+            </form>
         </div>
     </div>
 {% endblock %}

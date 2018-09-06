@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="ui-view" align="center">
+            <form method="post" action="" name="edit" style="width: 60%">
+            {% csrf_token %}
+                <label for="actividad">Selecciona una actividad</label>
+                <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">
+                <option disabled selected value> -- </option>
+                    {% for actividad in actividades %}
+                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+            </form>
+            <div align="center">
+                <form action="{% url 'update' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ act.id }}">
+                    <table class="table" style="width: 70%">
+                        <tr>
+                            <td>Nombre:</td>
+                            <td><input type="text" name="nombre" value="{{ act.nombre }}"></td>
+                        </tr>
+                        <tr>
+                            <td>Asistentes:</td>
+                            <td><input type="text" name="asistentes" value="{{ act.capacidadActual }}"></td>
+                        </tr>
+                        <tr>
+                            <td>Tipo de Actividad:</td>
+                            <td>{{ act.tipo }}</td>
+                        </tr>
+
+                    </table>
+                    <button class="button" type="submit">Actualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
