@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
 from logistica.models import Actividad, Monitor, Espacio
+from logistica.forms import NewTourForm
 import datetime
 from .calendar import getEventsByMonitor, getEventsByEspacio
 
@@ -15,13 +16,28 @@ def home(request):
     return redirect(reverse(login_user))
 
 
+def tour(request):
+    user = request.user
+    if user.is_authenticated:
+        tour = NewTourForm(request.POST)
+        tour.is_valid()
+        tour.save()
+        context = {}
+        return render(request, 'app/tour.html', context)
+    return redirect(reverse(login_user))
+
+
 def principal(request):
     if request.user.is_authenticated:
         charlas = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
                                            horario__inicio__day=datetime.datetime.now().day, tipo='charla')
         talleres = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
                                             horario__inicio__day=datetime.datetime.now().day, tipo='taller')
-        context = {'charlas': charlas, 'talleres': talleres}
+        context = {
+            'charlas': charlas,
+            'talleres': talleres,
+            'tour': NewTourForm()
+        }
         return render(request, 'app/principal.html', context)
     else:
         redirect('/')

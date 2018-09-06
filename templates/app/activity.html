@@ -6,6 +6,7 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css"/>
+    <script src="{% static 'src/js/general.js' %}"></script>
     <script src="{% static 'src/js/activity.js' %}"></script>
 {% endblock %}
 
@@ -15,15 +16,10 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <strong>Inscripción Actividad</strong>
+                    Inscripción Actividad
                 </div>
                 <div id="div_for_alert"></div>
-                {#                <div class="alert alert-dismissible fade show" role="alert" id="alert_div">#}
-                {#                    <div id="alert_msg"></div>#}
-                {#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
-                {#                        <span aria-hidden="true">&times;</span>#}
-                {#                    </button>#}
-                {#                </div>#}
+
                 <div class="card-body" id="card_id">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
                           id="edit_capacity_form">
