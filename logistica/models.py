@@ -18,7 +18,7 @@ class Horario(models.Model):
 class Espacio(models.Model):
     encargado = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
-    ubicacion = models.CharField(max_length=2)
+    ubicacion = models.CharField(max_length=200)
     capacidad = models.IntegerField()
     horarioDisponible = models.ManyToManyField(Horario)
 
@@ -42,8 +42,6 @@ class Visita(models.Model):
     tamanoGrupo = models.IntegerField()
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.nombre
 
 
 # Actividad
