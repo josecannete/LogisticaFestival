@@ -67,16 +67,51 @@ def logout_user(request):
 
 
 def monitor(request, nombreMonitor):
-    monitoresDisponibles = Monitor.objects.all()
-    context = {'events': getEventsByMonitor(nombreMonitor),
-               'disponibles': monitoresDisponibles
-               }
-    return render(request, 'app/monitor.html', context)
+    if request.user.is_authenticated:
+        monitoresDisponibles = Monitor.objects.all()
+        context = {'events': getEventsByMonitor(nombreMonitor),
+                   'disponibles': monitoresDisponibles
+                   }
+        return render(request, 'app/monitor.html', context)
+    else:
+        return redirect('/')
 
 
 def espacio(request, nombreEspacio):
-    espaciosDisponibles = Espacio.objects.all()
-    context = {'events': getEventsByEspacio(nombreEspacio),
-               'disponibles': espaciosDisponibles
-               }
-    return render(request, 'app/espacio.html', context)
+    if request.user.is_authenticated:
+        espaciosDisponibles = Espacio.objects.all()
+        context = {'events': getEventsByEspacio(nombreEspacio),
+                   'disponibles': espaciosDisponibles
+                   }
+        return render(request, 'app/espacio.html', context)
+    else:
+        return redirect('/')
+
+
+def monitorProfile(request):
+    if request.user.is_authenticated:
+        try:
+            if request.method == 'GET':
+                monitorActivo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                context = {'actividades': actividades}
+                return render(request, 'app/profile.html', context)
+            if request.method == 'POST':
+                print(request.POST)
+                monitorActivo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                act = Actividad.objects.get(id=request.POST['actividad'])
+                context = {'actividades': actividades, 'act': act}
+                return render(request, 'app/profile_edit.html', context)
+        except:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+def updateActividad(request):
+    actividad = Actividad.objects.get(id=request.POST['id'])
+    actividad.nombre = request.POST['nombre']
+    actividad.capacidadActual = request.POST['asistentes']
+    actividad.save()
+    return redirect('/profile/')

@@ -26,7 +26,8 @@
 
 
                                             <div class="card-body">
-                                                <form action="{% url 'tour' %}" method="post" enctype="multipart/form-data"
+                                                <form action="{% url 'tour' %}" method="post"
+                                                      enctype="multipart/form-data"
                                                       class="form-horizontal"
                                                       id="new_tour_form">
                                                     {% csrf_token %}
@@ -48,11 +49,11 @@
                                                             {{ tour.students }}
                                                         </div>
                                                     </div>
-                                                <div class="">
-                                                    <button type="submit" class="btn btn-success btn-primary">
-                                                        <i class="fa fa-dot-circle-o"></i> Enviar
-                                                    </button>
-                                                </div>
+                                                    <div class="">
+                                                        <button type="submit" class="btn btn-success btn-primary">
+                                                            <i class="fa fa-dot-circle-o"></i> Enviar
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -127,7 +128,7 @@
                                                             <th scope="col">Taller</th>
                                                             <th scope="col">Hora inicio</th>
                                                             <th scope="col">Hora término</th>
-                                                            <th scope="col">Asistentes</th>
+                                                            <th scope="col">Inscritos</th>
                                                             <th scope="col">Capacidad</th>
                                                         </tr>
                                                         </thead>

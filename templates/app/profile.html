@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="ui-view" align="center">
+            <form method="post" action="" name="edit" style="width: 60%">
+            {% csrf_token %}
+                <label for="actividad">Selecciona una actividad</label>
+                <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">
+                <option disabled selected value> -- </option>
+                    {% for actividad in actividades %}
+                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                    {% endfor %}
+                </select>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

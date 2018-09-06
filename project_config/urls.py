@@ -41,4 +41,9 @@ urlpatterns = [
 
     path('espacio/<str:nombreEspacio>/', logistica.espacio, name='espacio'),
 
+    url(r'^profile/', logistica.monitorProfile, name='profile'),
+    url(r'^update/', logistica.updateActividad, name='update'),
+
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+

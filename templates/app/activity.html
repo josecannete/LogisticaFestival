@@ -29,6 +29,7 @@
                             <div class="col-md-9">
                                 <select name="id" class="form-control"
                                         id="id_tabs" data-parsley-multiple="tabs">
+                                <option disabled selected value> -- </option>
                                     {% for activity in activities %}
                                         <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
                                                 data-ct="{{ activity.capacidadTotal }}"
