@@ -15,7 +15,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <strong>Inscripción Taller</strong>
+                    <strong>Inscripción Actividad</strong>
                 </div>
                 <div id="div_for_alert"></div>
                 {#                <div class="alert alert-dismissible fade show" role="alert" id="alert_div">#}
@@ -37,6 +37,7 @@
                                         <option value="{{ activity.id }}" data-ca="{{ activity.capacidadActual }}"
                                                 data-ct="{{ activity.capacidadTotal }}"
                                                 data-ch="{{ activity.charlista }}"
+                                                data-me="{{ activity.monitor.pk }}"
                                                 {% if activity.id == -1 %}selected="true"
                                                 disabled="disabled"{% endif %}>{{ activity.nombre }}</option>
                                     {% endfor %}
@@ -53,7 +54,10 @@
                             <label class="col-md-3 col-form-label" for="text-input">Monitor Encargado</label>
                             <div class="col-md-9">
                                 <select name="me" class="form-control"
-                                        id="me_tabs" data-parsley-multiple="tabs">
+                                        id="me_value" data-parsley-multiple="tabs">
+                                    {% for monitor in monitores %}
+                                        <option value="{{ monitor.pk }}">{{ monitor.nombre }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -94,6 +98,7 @@
             $("#me_div").attr("hidden", false);
             $("#ct_div").attr("hidden", false);
             $("#ca_div").attr("hidden", false);
+            $("#me_value").val($(this).find(':selected').data("me"));
             $("#ct_value").text($(this).find(':selected').data("ct"));
             $("#ca_value").val($(this).find(':selected').data("ca"));
         });

@@ -3,13 +3,14 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from logistica.models import Actividad
+from logistica.models import Actividad, Monitor
 
 
 @login_required
 def activities(request):
     context = {
         'activities': generate_activity_id_list(),
+        'monitores': Monitor.objects.all()
     }
     return render(request, 'app/activity.html', context)
 
