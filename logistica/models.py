@@ -52,6 +52,7 @@ class Actividad(models.Model):
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
     charlista = models.CharField(max_length=200, null=True, blank=True)    # Quién dara charla/taller. Sólo uso informativo
+    tipo = models.CharField(max_length=15)          # Charla o taller
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
 
     def __str__(self):
