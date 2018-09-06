@@ -51,16 +51,33 @@ def logout_user(request):
 
 
 def monitor(request, nombreMonitor):
-    monitoresDisponibles = Monitor.objects.all()
-    context = {'events': getEventsByMonitor(nombreMonitor),
-               'disponibles': monitoresDisponibles
-               }
-    return render(request, 'app/monitor.html', context)
+    if request.user.is_authenticated:
+        monitoresDisponibles = Monitor.objects.all()
+        context = {'events': getEventsByMonitor(nombreMonitor),
+                   'disponibles': monitoresDisponibles
+                   }
+        return render(request, 'app/monitor.html', context)
+    else:
+        return redirect('/')
 
 
 def espacio(request, nombreEspacio):
-    espaciosDisponibles = Espacio.objects.all()
-    context = {'events': getEventsByEspacio(nombreEspacio),
-               'disponibles': espaciosDisponibles
-               }
-    return render(request, 'app/espacio.html', context)
+    if request.user.is_authenticated:
+        espaciosDisponibles = Espacio.objects.all()
+        context = {'events': getEventsByEspacio(nombreEspacio),
+                   'disponibles': espaciosDisponibles
+                   }
+        return render(request, 'app/espacio.html', context)
+    else:
+        return redirect('/')
+
+
+def monitorProfile(request):
+    if request.user.is_authenticated:
+        monitorActivo = request.user
+        actividades = Actividad.objects.filter(monitor=monitorActivo)
+        print(actividades)
+        context = {'actividades': actividades}
+        return render(request, 'app/profile.html', context)
+    else:
+        return redirect('/')

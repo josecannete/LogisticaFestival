@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="ui-view" align="center">
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Seleccionar actividad
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for act in actividades %}
+                        <a class="dropdown-item" href="">{{ act.nombre }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                {% for act in actividades %}
+                    {{ act }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
