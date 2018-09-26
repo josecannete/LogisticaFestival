@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
+from logistica.arma_tour import get_tours
 from logistica.models import Actividad, Monitor, Espacio
 from logistica.forms import NewTourForm
 import datetime
@@ -22,6 +23,11 @@ def tour(request):
         tour = NewTourForm(request.POST)
         tour.is_valid()
         tour.save()
+        # TODO: get groups_places
+        start_time = datetime.datetime.now()
+        number_people = tour.cleaned_data['alumnos']
+        duration = tour.cleaned_data['duracion']
+        #get_tours(groups_places, start_time, number_people, duration, tours_count=5)
         context = {}
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))

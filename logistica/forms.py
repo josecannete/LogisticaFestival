@@ -19,4 +19,3 @@ class NewTourForm(forms.ModelForm):
     def save(self):
         tour = super(NewTourForm, self).save(commit=False)
         time_now = datetime.datetime.now()
-        print(self.cleaned_data['duracion'])

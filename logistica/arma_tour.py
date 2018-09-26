@@ -20,8 +20,8 @@ def get_walking_time(from, to):
         Estimated walking time between those Espacio's
     '''
     # TODO: estimate an array between all groups of places
-    # TODO: change 'ubicacion' on the model to be an integer
-    #       that'll represent the group of the place
+    # TODO: change 'ubicacion' on the model to be an integer that'll represent the group of the place
+
 
 def not_good_locations(tour):
     '''
@@ -80,7 +80,7 @@ def get_tours(groups_places, start_time, number_people, duration=120,
         for place in group:
             if available_at(place, start_time):
                 incomplete_tours.append(Tour(place))
-    # generate all posible tours accrding to time constraint
+    # generate all posible tours according to time constraint
     while len(incomplete_tours) > 0:
         # get first
         curr_tour = incomplete_tours.pop()
@@ -89,25 +89,26 @@ def get_tours(groups_places, start_time, number_people, duration=120,
             continue
         for group in groups_places:
             for place in group:
-                next_hour = curr_tour.duration + get_walking_time(
+                next_hour = start_time + curr_tour.duration + get_walking_time(
                     curr_tour.get_last_place(), place)
                 if available_at(place, next_hour):
                     next_curr_tour = copy.deepcopy(curr_tour)
                     next_curr_tour.add_place(place)
                     incomplete_tours.append(next_curr_tour)
-        # tag tours with bad order of locations
-        count_bad_locations = 0
-        for tour in complete_tours:
-            if not_good_locations(tour):
-                count_bad_locations += 1
-                tour.good_locations = False
-        # if possible delete tours with bad location
-        if len(complete_tours) - count_bad_locations >= tours_count:
-            complete_tours = list(filter(lambda tour: tour.good_locations,
-                                         complete_tours))
-        # select tours to return randomly
-        for i in range(tours_count):
-            selected = randint(i, len(complete_tours)-1)
-            tours_count[i], tours_count[selected] = (tours_count[selected],
-                                                     tours_count[i])
-        return complete_tours[0:tours_count]
+    # tag tours with bad order of locations
+    count_bad_locations = 0
+    for tour in complete_tours:
+        if not_good_locations(tour):
+            count_bad_locations += 1
+            tour.good_locations = False
+    # if possible delete tours with bad location
+    if len(complete_tours) - count_bad_locations >= tours_count:
+        complete_tours = list(filter(lambda tour: tour.good_locations,
+                                     complete_tours))
+    # select tours to return randomly
+    for i in range(tours_count):
+        selected = randint(i, len(complete_tours)-1)
+        tours_count[i], tours_count[selected] = (tours_count[selected],
+                                                 tours_count[i])
+    # TODO: return list with times for each place
+    return complete_tours[0:tours_count]
