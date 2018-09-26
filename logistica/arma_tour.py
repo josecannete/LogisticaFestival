@@ -11,7 +11,7 @@ def available_at(space, time):
     '''
     # TODO
 
-def get_walking_time(from, to):
+def get_walking_time(from_place, to_place):
     '''
     Args:
         from Espacio
@@ -35,8 +35,8 @@ def not_good_locations(tour):
     before = tour.places[0]
     visited.add(before)
     for place in tour.places:
-        location = # TODO: get this place location
-        if location != before and not in visited:
+        location = "" # TODO: get this place location
+        if location != before and location not in visited:
             before = location
             visited.add(location)
         elif location != before:
@@ -48,14 +48,14 @@ def not_good_locations(tour):
 
 class Tour():
     def __init__(self, first_place):
-        self.duration = #TODO: get duration of first_place
+        self.duration = "" #TODO: get duration of first_place
         self.places = [first_place]
         self.good_locations = True
 
     def get_last_place(self):
-        return places[-1]
+        return self.places[-1]
 
-    def add_place(place):
+    def add_place(self, place):
         self.places.append(place)
         # TODO: update duration with walking time + new place duration
 
