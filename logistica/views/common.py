@@ -20,7 +20,7 @@ def home(request):
 def get_places_by_group():
     ans = []
     for name in places_names:
-        ans.append(Espacio.objects.filter(zona=name))
+        ans.append(Espacio.objects.filter(zona__contains=name))
     return ans
 
 
@@ -34,8 +34,8 @@ def tour(request):
         start_time = datetime.datetime.now()
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
-        get_tours(groups_places, start_time, number_people, duration, tours_count=5)
-        context = {}
+        tours_disponibles = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+        context = {'tours_disponibles' : tours_disponibles}
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
 

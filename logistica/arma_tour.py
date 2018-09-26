@@ -1,5 +1,7 @@
 import copy
 from random import randint
+from logistica.models import Visita
+import datetime
 
 def available_at(space, time):
     '''
@@ -9,7 +11,14 @@ def available_at(space, time):
     Returns:
         boolean, true if the space is available at that time else false.
     '''
-    # TODO
+    start_date = datetime.date(2005, 1, 1)
+    end_date = datetime.date(2025, 1, 1)
+    visitas = Visita.objects.filter(espacio=space).filter(horarioDisponible__inicio__range=(start_date, time)).filter(horarioDisponible__fin__range=(time, end_date))
+    if (len(visitas) > 0):
+        return False
+    else:
+        return True
+    # TODO : agregar margen de tiempo
 
 def get_walking_time(from_place, to_place):
     '''
@@ -19,6 +28,7 @@ def get_walking_time(from_place, to_place):
     Returns:
         Estimated walking time between those Espacio's
     '''
+    return 10
     # TODO: estimate an array between all groups of places
     # TODO: change 'ubicacion' on the model to be an integer that'll represent the group of the place
 
@@ -48,7 +58,7 @@ def not_good_locations(tour):
 
 class Tour():
     def __init__(self, first_place):
-        self.duration = "" #TODO: get duration of first_place
+        self.duration = 30 #TODO: get duration of first_place
         self.places = [first_place]
         self.good_locations = True
 
@@ -110,9 +120,9 @@ def get_tours(groups_places, start_time, number_people, duration=120,
         complete_tours = list(filter(lambda tour: tour.good_locations,
                                      complete_tours))
     # select tours to return randomly
-    for i in range(tours_count):
-        selected = randint(i, len(complete_tours)-1)
-        tours_count[i], tours_count[selected] = (tours_count[selected],
-                                                 tours_count[i])
+    #for i in range(tours_count):
+     #   selected = randint(i, len(complete_tours)-1)
+      #  tours_count[i], tours_count[selected] = (tours_count[selected],
+       #                                          tours_count[i])
     # TODO: return list with times for each place
     return complete_tours[0:tours_count]
