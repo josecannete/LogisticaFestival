@@ -73,6 +73,10 @@ def get_tours(groups_places, start_time, number_people, duration=120,
         list containing tours, each tour is a list of Espacio's
     '''
 
+    # TODO: chequear parámetros
+    if True:
+        print(groups_places)
+
     incomplete_tours = []
     complete_tours = []
     # select all places that are available at the start hour

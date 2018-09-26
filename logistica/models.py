@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fisica_civil", "quimica", "electrica",
+                "geo"]
+
 
 # Create your models here.
 # Horario
