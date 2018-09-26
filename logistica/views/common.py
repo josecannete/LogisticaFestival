@@ -110,7 +110,7 @@ def monitorProfile(request):
                 context = {'actividades': actividades}
                 return render(request, 'app/profile.html', context)
             if request.method == 'POST':
-                print(request.POST)
+
                 monitorActivo = request.user.monitor
                 actividades = Actividad.objects.filter(monitor=monitorActivo)
                 act = Actividad.objects.get(id=request.POST['actividad'])

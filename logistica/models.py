@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fisica_civil", "quimica", "electrica",
                 "geo"]
 
-
 # Create your models here.
 def is_monitor_admin(self):
     return self.groups.filter(name='Monitor Admin').exists()
