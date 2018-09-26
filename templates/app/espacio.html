@@ -4,7 +4,7 @@
 
 
 {# END OF CONTENT #}
-{% block script %}
+{% block extrahead %}
 
     <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -13,52 +13,63 @@
     <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
-    <script src='{% static 'fullcalendar/es.js'%}'></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
+{% endblock %}
 
+{% block extrascript %}
 
-{% endblock script %}
-
-{% block content %}
-
-        <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
     <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
-    <script src='{% static 'fullcalendar/es.js'%}'></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
+    <script src='{% static 'src/js/espacio.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
 
+{% endblock %}
+
+{% block content %}
     <script>
-        $(function() {
+        $(function () {
             $('#calendar').fullCalendar({
-                eventClick: function(eventObj) {
-                        alert('Monitor: ' + eventObj['title'] + '\n Contacto: ' + eventObj['contacto']);
+                eventClick: function (eventObj) {
+                    alert('Monitor: ' + eventObj['title'] + '\n Contacto: ' + eventObj['contacto']);
                 },
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
-                  events: {{ events|safe }}
+                events: {{ events|safe }}
             });
         });
     </script>
-    
-<center>
-    <div class="dropdown">
-  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Seleccionar espacio
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      {% for espacio in disponibles %}
-    <a class="dropdown-item" href="/espacio/{{ espacio.nombre }}">{{ espacio.nombre }}</a>
-      {% endfor %}
-  </div>
-</div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Visión Espacios
+                </div>
 
-            <div id='calendar'> </div>
+                <div class="card-body" id="card_id">
 
-</center>
+                    <select class="form-control"
+                            id="select_espacio" data-parsley-multiple="tabs">
+                        <option disabled selected value>Seleccionar Espacio</option>
+                        {% for espacio in espacios %}
+                            <option value="{{ espacio.id }}">{{ espacio.nombre }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <br>
+
+                    <div id='calendar'></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}

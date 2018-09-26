@@ -37,9 +37,11 @@ urlpatterns = [
 
     url(r'^edit_activity_capacity/', logistica.edit_activity_capacity, name='edit_activity_capacity'),
 
-    path('monitor/<str:nombreMonitor>/', logistica.monitor, name='monitor'),
+    url(r'^monitor/(?P<pk_monitor>[0-9A-Za-z_\-]+)/$', logistica.monitor, name='monitor'),
+    url(r'^monitor/', logistica.monitor, name='monitor'),
 
-    path('espacio/<str:nombreEspacio>/', logistica.espacio, name='espacio'),
+    url(r'^espacio/(?P<pk_espacio>[0-9A-Za-z_\-]+)/$', logistica.espacio, name='espacio'),
+    url(r'^espacio/', logistica.espacio, name='espacio'),
 
     url(r'^profile/', logistica.monitorProfile, name='profile'),
     url(r'^update/', logistica.updateActividad, name='update'),

@@ -7,7 +7,7 @@ from logistica.arma_tour import get_tours
 from logistica.models import Actividad, Monitor, Espacio, places_names
 from logistica.forms import NewTourForm
 import datetime
-from .calendar import getEventsByMonitor, getEventsByEspacio
+from .calendar import get_event_by_monitor, get_events_by_espacio
 
 
 def home(request):
@@ -79,23 +79,23 @@ def logout_user(request):
     return redirect(reverse(home))
 
 
-def monitor(request, nombreMonitor):
+def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
         context = {
-            'events': getEventsByMonitor(nombreMonitor),
-            'disponibles': Monitor.objects.all()
+            'events': get_event_by_monitor(pk_monitor),
+            'monitores': Monitor.objects.all()
         }
         return render(request, 'app/monitor.html', context)
     else:
         return redirect('/')
 
 
-def espacio(request, nombreEspacio):
+def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
-        espaciosDisponibles = Espacio.objects.all()
-        context = {'events': getEventsByEspacio(nombreEspacio),
-                   'disponibles': espaciosDisponibles
-                   }
+        context = {
+            'events': get_events_by_espacio(pk_espacio),
+            'espacios': Espacio.objects.all()
+        }
         return render(request, 'app/espacio.html', context)
     else:
         return redirect('/')
@@ -105,12 +105,11 @@ def monitorProfile(request):
     if request.user.is_authenticated:
         try:
             if request.method == 'GET':
-                monitorActivo = request.user.monitor
-                actividades = Actividad.objects.filter(monitor=monitorActivo)
-                context = {'actividades': actividades}
+                context = {
+                    'actividades': Actividad.objects.filter(monitor=request.user.monitor)
+                }
                 return render(request, 'app/profile.html', context)
             if request.method == 'POST':
-                print(request.POST)
                 monitorActivo = request.user.monitor
                 actividades = Actividad.objects.filter(monitor=monitorActivo)
                 act = Actividad.objects.get(id=request.POST['actividad'])

@@ -30,21 +30,17 @@ def visitaToEventforEspacio(visita):
     return event
 
 
-def getEventsByMonitor(nombreMonitor):
-    visitas = Visita.objects.filter(monitor__nombre=nombreMonitor)
+def get_event_by_monitor(pk_monitor):
+    visitas = Visita.objects.filter(monitor__pk=pk_monitor)
     events = []
-
     for visita in visitas:
         events.append(visitaToEventforMonitor(visita))
-
     return json.dumps(events)
 
 
-def getEventsByEspacio(nombreEspacio):
-    visitas = Visita.objects.filter(espacio__nombre=nombreEspacio)
+def get_events_by_espacio(pk_espacio):
+    visitas = Visita.objects.filter(espacio__pk=pk_espacio)
     events = []
-
     for visita in visitas:
         events.append(visitaToEventforEspacio(visita))
-
     return json.dumps(events)
