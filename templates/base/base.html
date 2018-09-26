@@ -94,9 +94,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'principal' %}"><i class="icon-speedometer"></i> Principal</a>
                 </li>
+                {% if user.is_encargado_actividad %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'activities' %}"><i class="icon-puzzle"></i> Actividades</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="/monitor/a/"><i class="fa fa-user"></i> Monitores</a>
                 </li>

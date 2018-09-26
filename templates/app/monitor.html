@@ -13,7 +13,7 @@
     <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
-    <script src='{% static 'fullcalendar/es.js'%}'></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
 
 
@@ -21,41 +21,42 @@
 
 {% block content %}
 
-        <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
     <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
-    <script src='{% static 'fullcalendar/es.js'%}'></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
 
     <script>
-        $(function() {
+        $(function () {
             $('#calendar').fullCalendar({
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
-                  events: {{ events|safe }}
+                events: {{ events|safe }}
             });
         });
     </script>
 
-<center>
-    <div class="dropdown">
-  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Seleccionar monitor
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      {% for monitor in disponibles %}
-    <a class="dropdown-item" href="/monitor/{{ monitor.nombre }}">{{ monitor.nombre }}</a>
-      {% endfor %}
-  </div>
-</div>
+    <center>
+        <div class="dropdown">
+            <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Seleccionar monitor
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for monitor in disponibles %}
+                    <a class="dropdown-item" href="/monitor/{{ monitor.nombre }}">{{ monitor.nombre }}</a>
+                {% endfor %}
+            </div>
+        </div>
 
 
-            <div id='calendar'> </div>
+        <div id='calendar'></div>
 
-</center>
+    </center>
 
 {% endblock content %}

@@ -81,10 +81,10 @@ def logout_user(request):
 
 def monitor(request, nombreMonitor):
     if request.user.is_authenticated:
-        monitoresDisponibles = Monitor.objects.all()
-        context = {'events': getEventsByMonitor(nombreMonitor),
-                   'disponibles': monitoresDisponibles
-                   }
+        context = {
+            'events': getEventsByMonitor(nombreMonitor),
+            'disponibles': Monitor.objects.all()
+        }
         return render(request, 'app/monitor.html', context)
     else:
         return redirect('/')
@@ -110,7 +110,7 @@ def monitorProfile(request):
                 context = {'actividades': actividades}
                 return render(request, 'app/profile.html', context)
             if request.method == 'POST':
-                print(request.POST)
+
                 monitorActivo = request.user.monitor
                 actividades = Actividad.objects.filter(monitor=monitorActivo)
                 act = Actividad.objects.get(id=request.POST['actividad'])
