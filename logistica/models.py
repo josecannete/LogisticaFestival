@@ -3,6 +3,33 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+def is_monitor_admin(self):
+    return self.groups.filter(name='Monitor Admin').exists()
+
+
+def is_monitor_stand(self):
+    return self.groups.filter(name='Monitor Stand Principal').exists()
+
+
+def is_monitor_tour(self):
+    return self.groups.filter(name='Monitor Tour').exists()
+
+
+def is_encargado_actividad(self):
+    return self.groups.filter(name='Encargado Actividad').exists()
+
+
+def is_encargado_espacio(self):
+    return self.groups.filter(name='Encargado Espacio').exists()
+
+
+User.add_to_class("is_monitor_admin", is_monitor_admin)
+User.add_to_class("is_monitor_stand", is_monitor_stand)
+User.add_to_class("is_monitor_tour", is_monitor_tour)
+User.add_to_class("is_encargado_actividad", is_encargado_actividad)
+User.add_to_class("is_encargado_espacio", is_encargado_espacio)
+
+
 # Horario
 # Tiene horarios (?)
 class Horario(models.Model):
@@ -41,6 +68,9 @@ class Tour(models.Model):
     nombre = models.CharField(max_length=200)
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
+
+    def __str__(self):
+        return str(self.nombre)
 
 
 # Visita

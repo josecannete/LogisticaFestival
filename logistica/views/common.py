@@ -68,10 +68,10 @@ def logout_user(request):
 
 def monitor(request, nombreMonitor):
     if request.user.is_authenticated:
-        monitoresDisponibles = Monitor.objects.all()
-        context = {'events': getEventsByMonitor(nombreMonitor),
-                   'disponibles': monitoresDisponibles
-                   }
+        context = {
+            'events': getEventsByMonitor(nombreMonitor),
+            'disponibles': Monitor.objects.all()
+        }
         return render(request, 'app/monitor.html', context)
     else:
         return redirect('/')

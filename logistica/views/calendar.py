@@ -1,6 +1,7 @@
 from logistica.models import Visita
 import json
 
+
 def visitaToEventforMonitor(visita):
     inicio = str(visita.horarioDisponible.all()[0].inicio.isoformat())
     fin = str(visita.horarioDisponible.all()[0].fin.isoformat())
@@ -13,6 +14,7 @@ def visitaToEventforMonitor(visita):
     }
     return event
 
+
 def visitaToEventforEspacio(visita):
     inicio = str(visita.horarioDisponible.all()[0].inicio.isoformat())
     fin = str(visita.horarioDisponible.all()[0].fin.isoformat())
@@ -23,9 +25,10 @@ def visitaToEventforEspacio(visita):
         "title": title,
         "start": inicio,
         "end": fin,
-        "contacto" : contacto
+        "contacto": contacto
     }
     return event
+
 
 def getEventsByMonitor(nombreMonitor):
     visitas = Visita.objects.filter(monitor__nombre=nombreMonitor)
@@ -35,6 +38,7 @@ def getEventsByMonitor(nombreMonitor):
         events.append(visitaToEventforMonitor(visita))
 
     return json.dumps(events)
+
 
 def getEventsByEspacio(nombreEspacio):
     visitas = Visita.objects.filter(espacio__nombre=nombreEspacio)

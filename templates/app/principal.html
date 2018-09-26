@@ -11,6 +11,7 @@
             <div>
                 <div class="animated fadeIn">
                     <div class="row">
+                    {% if user.is_monitor_admin or user.is_monitor_stand %}
                         <div class="col-sm-12 col-l-6">
                             <div class="card">
                                 <div class="card-header">
@@ -69,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-
+                    {% endif %}
                         <div class="col-sm-12 col-xl-6">
                             <div class="card">
                                 <div class="card-header">
