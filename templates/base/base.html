@@ -10,7 +10,13 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Circle Fintech">
     <meta name="keyword" content="">
-    <link rel="shortcut icon" href="{% static 'src/img/favicon.png' %}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'dist/img/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dist/img/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dist/img/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'dist/img/favicon/site.webmanifest' %}">
+    <link rel="mask-icon" href="{% static 'dist/img/favicon/safari-pinned-tab.svg' %}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
     <title>IV° Festival Ingeniería y Ciencias</title>
     <style>
         .container-fluid {
@@ -98,9 +104,9 @@
                     <a class="nav-link" href="{% url 'principal' %}"><i class="icon-speedometer"></i> Principal</a>
                 </li>
                 {% if user.is_encargado_actividad %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'activities' %}"><i class="icon-puzzle"></i> Actividades</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'activities' %}"><i class="icon-puzzle"></i> Actividades</a>
+                    </li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'monitor' %}"><i class="fa fa-user"></i> Monitores</a>
