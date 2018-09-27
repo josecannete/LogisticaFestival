@@ -48,7 +48,7 @@ class Espacio(models.Model):
     encargado = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
     capacidad = models.IntegerField()
-    horarioDisponible = models.ManyToManyField(Horario)
+    horarioAbierto = models.ManyToManyField(Horario)
     # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
     zona = models.CharField(max_length=200)
     duracion = models.IntegerField()  # minutos
@@ -67,11 +67,13 @@ class Monitor(models.Model):
 
 
 # Tour
-# Útil para permitir desarmar tour si no es seleccionado
 class Tour(models.Model):
     nombre = models.CharField(max_length=200)
+    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE, null=True)
+    horaInicio = models.TimeField()
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
+    visitas = models.ManyToManyField(Visita)
 
     def __str__(self):
         return str(self.nombre)
@@ -80,11 +82,8 @@ class Tour(models.Model):
 # Visita
 # Un tour es un conjunto de visitas
 class Visita(models.Model):
-    horarioDisponible = models.ManyToManyField(Horario)
+    horario = models.ManyToManyField(Horario)
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-    tamanoGrupo = models.IntegerField()
-    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
-    tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
 
 
 # Actividad
