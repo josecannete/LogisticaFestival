@@ -48,10 +48,12 @@ def not_good_route(tour):
     before = tour.places[0]
     visited.add(before)
     for place in tour.places:
-        location = ""  # TODO: get this place location
+        location = place.zona
+        # different zone not already visited
         if location != before and location not in visited:
             before = location
             visited.add(location)
+        # zone is already visited but it's not the one before
         elif location != before:
             return False
     if len(visited) == 1:
@@ -97,7 +99,7 @@ def get_tours(groups_places, start_time, number_people, duration=120,
         tours_count: quantity of tours wanted
 
     Returns:
-        list containing tours, each tour is a list of Espacio's
+        list of list, each list represents a tour containing tuples (time, Espacio)
     """
 
     # TODO: chequear parámetros
@@ -142,8 +144,6 @@ def get_tours(groups_places, start_time, number_people, duration=120,
     # select tours to return randomly
     for i in range(tours_count):
         selected = randint(i, len(complete_tours) - 1)
-        tours_count[i], tours_count[selected] = (tours_count[selected],
-                                                 tours_count[i])
-    # TODO: return list with times for each place
-
-    return complete_tours[0:tours_count]
+        tours_count[i], tours_count[selected] = tours_count[selected], tours_count[i]
+    tours_selected = complete_tours[0:tours_count]
+    return [[(tour.start_times[i], place) for i, place in enumerate(tour.places)] for tour in tours_selected]
