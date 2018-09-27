@@ -124,6 +124,8 @@ def get_tours(groups_places, start_time, number_people, duration=120,
             continue
         for group in groups_places:
             for place in group:
+                if place.capacidad < number_people:
+                    continue
                 next_hour = start_time + curr_tour.duration + get_walking_time(curr_tour.get_last_place(), place)
                 # the place is not already on the tour and it's available at this time
                 time_place_available = available_at(place, next_hour)
