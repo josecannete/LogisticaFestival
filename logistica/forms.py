@@ -17,12 +17,6 @@ def sub_mins(time, flex=TIME_FLEX):
     return time - datetime.timedelta(minutes=flex)
 
 
-def is_today(time1, time2):
-    return time1.day == time2.day and \
-           time1.month == time2.month and \
-           time1.year == time2.year
-
-
 def get_available_spaces(init_time, duration):
     # Debemos obtener Espacios disponibles
     # que no estén ocupados por alguna visita
@@ -109,7 +103,8 @@ class NewTourForm(forms.ModelForm):
     def save(self):
         super(NewTourForm, self).save(commit=False)
         # time_now = datetime.datetime.now()
-        actual_time = datetime.datetime(2018, 10, 18, 13, 0, 0, 0, pytz.UTC)
+        time_now = datetime.datetime(2018, 10, 18, 13, 0, 0, 0, pytz.UTC)
+        actual_time = time_now
         duration = self.cleaned_data['duracion']
         spaces = []
         visits = []
@@ -130,13 +125,20 @@ class NewTourForm(forms.ModelForm):
                     inicio=add_mins(actual_time, wait_time),
                     fin=add_mins(actual_time, space.duracion + wait_time)
                 )
-
                 visit = Visita.objects.create(horario=horario, espacio=space)
                 visit.save()
                 visits.append(visit)
                 actual_time = horario.fin
                 duration -= space.duracion
-                duration -= wait_time
             else:
                 break
+        new_tour = Tour.objects.create(
+            nombre=self.cleaned_data['nombre'],
+            duracion=self.cleaned_data['duracion'],
+            horaInicio=time_now,
+            alumnos=self.cleaned_data['alumnos']
+        )
+        new_tour.save()
+        for visit in visits:
+            new_tour.visitas.add(visit)
         print(visits)

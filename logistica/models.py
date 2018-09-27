@@ -81,7 +81,7 @@ class Visita(models.Model):
 # Útil para permitir desarmar tour si no es seleccionado
 class Tour(models.Model):
     nombre = models.CharField(max_length=200)
-    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
+    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE, null=True)
     horaInicio = models.TimeField()
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
