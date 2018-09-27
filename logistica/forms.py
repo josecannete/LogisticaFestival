@@ -37,12 +37,11 @@ def get_available_spaces(init_time, duration):
     # Luego, vemos que esos espacios no estén ocupados por una visita
     for space in spaces2:
         limit_end_time = add_mins(init_time, space.duracion * 0.5 + 10)
-        visits = Visita.objects.all().exclude(
-            Q(espacio=space),
+        visits = Visita.objects.filter(espacio=space).exclude(
             Q(horario__inicio__lte=add_mins(init_time), horario__fin__lte=add_mins(init_time)) |
             Q(horario__inicio__gte=limit_end_time, horario__fin__gte=limit_end_time)
         )
-        if (len(visits) == 0):
+        if len(visits) == 0:
             av_sp.append(space)
     return av_sp
 
