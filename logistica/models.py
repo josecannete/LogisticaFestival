@@ -58,7 +58,7 @@ class Espacio(models.Model):
     encargado = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
     capacidad = models.IntegerField()
-    horarioDisponible = models.ManyToManyField(Horario)
+    horarioAbierto = models.ManyToManyField(Horario)
     # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
     zona = models.CharField(max_length=200)
     duracion = models.IntegerField()  # minutos

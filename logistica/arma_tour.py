@@ -2,6 +2,7 @@ import copy
 from random import randint
 from logistica.models import Visita
 import datetime
+from logistica.forms import get_available_spaces
 
 def available_at(space, time):
     '''
@@ -11,13 +12,12 @@ def available_at(space, time):
     Returns:
         boolean, true if the space is available at that time else false.
     '''
-    start_date = datetime.date(2005, 1, 1)
-    end_date = datetime.date(2025, 1, 1)
-    visitas = Visita.objects.filter(espacio=space).filter(horarioDisponible__inicio__range=(start_date, time)).filter(horarioDisponible__fin__range=(time, end_date))
-    if (len(visitas) > 0):
-        return False
-    else:
+    available_places = get_available_spaces(time, space.duration)
+    if (space in available_places):
         return True
+    else:
+        return False
+
     # TODO : agregar margen de tiempo
 
 def get_walking_time(from_place, to_place):
