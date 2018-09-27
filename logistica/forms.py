@@ -17,6 +17,12 @@ def sub_mins(time, flex=TIME_FLEX):
     return time - datetime.timedelta(minutes=flex)
 
 
+def is_today(time1, time2):
+    return time1.day == time2.day and \
+           time1.month == time2.month and \
+           time1.year == time2.year
+
+
 def get_available_spaces(init_time, duration):
     # Debemos obtener Espacios disponibles
     # que no estén ocupados por alguna visita
@@ -41,26 +47,51 @@ def get_available_spaces(init_time, duration):
                 break
     print("second spaces")
     print(spaces2)
-    available_spaces = []
-    # Finalmente, vemos que esos espacios no estén ocupados por una visita
+    av_sp = []
+    # Luego, vemos que esos espacios no estén ocupados por una visita
     for space in spaces2:
         limit_end_time = add_mins(init_time, space.duracion * 0.5 + 10)
         visits = Visita.objects.filter(
             Q(espacio=space),
             Q(horario__inicio__lte=init_time, horario__fin__gte=init_time) |
             Q(horario__inicio__lte=limit_end_time, horario__fin__gte=limit_end_time)
-        ).order_by('-horario__fin')
+        ).order_by('horario__inicio')
         wait_time = 0
+        checked_pk_visits = []
+        print("wait time")
+        print(wait_time)
+        print("visits")
+        print(visits)
         while len(visits):
             new_init_time = visits[0].horario.fin
-            wait_time += int((new_init_time - init_time).seconds / 60)
+            checked_pk_visits.append(visits[0].pk)
+            wait_time = int((new_init_time - init_time).seconds / 60)
             limit_end_time = add_mins(new_init_time, space.duracion * 0.5 + 10)
             visits = Visita.objects.filter(
                 Q(espacio=space),
                 Q(horario__inicio__lte=new_init_time, horario__fin__gte=new_init_time) |
                 Q(horario__inicio__lte=limit_end_time, horario__fin__gte=limit_end_time)
-            ).exclude(pk=visits[0].pk).order_by('-horario__fin')
-        available_spaces.append([space, wait_time])
+            ).exclude(pk__in=checked_pk_visits).order_by('horario__inicio')
+            print("wait time")
+            print(wait_time)
+            print("visits")
+            print(visits)
+        av_sp.append([space, wait_time])
+    # Finalmente, vemos si los tiempos de espera indican que el espacio no se puede ocupar más
+    # i.e. espacio está copado hasta hora de cierre
+    available_spaces = []
+    for space_info in av_sp:
+        space = space_info[0]
+        wait_time = space_info[1]
+        print("last_time")
+        print(add_mins(init_time, space.duracion * 0.5 + 10 + wait_time))
+        possible_times = space.horarioDisponible.filter(
+            fin__gte=add_mins(init_time, space.duracion * 0.5 + 10 + wait_time)
+        )
+        print("possible_times")
+        print(possible_times)
+        if len(possible_times) > 0:
+            available_spaces.append(space_info)
     available_spaces.sort(key=lambda x: x[1])
     return available_spaces
 
@@ -103,9 +134,9 @@ class NewTourForm(forms.ModelForm):
                 visit = Visita.objects.create(horario=horario, espacio=space)
                 visit.save()
                 visits.append(visit)
-
                 actual_time = horario.fin
-                duration -= space.duracion - wait_time
+                duration -= space.duracion
+                duration -= wait_time
             else:
                 break
         print(visits)
