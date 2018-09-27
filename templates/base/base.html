@@ -10,7 +10,7 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Circle Fintech">
     <meta name="keyword" content="">
-    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'src/img/favicon.png' %}">
     <title>IV° Festival Ingeniería y Ciencias</title>
     <style>
         .container-fluid {
@@ -24,6 +24,7 @@
 
     <!-- Main styles for this application -->
     <link href="{% static 'dist/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'src/css/extra_main.css' %}" rel="stylesheet">
     <script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>
 
     {% block extrahead %}
@@ -71,6 +72,8 @@
     </button>
 
     <ul class="nav navbar-nav ml-auto">
+        <li id="name_user">{{ user.monitor.nombre }}</li>
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">Opciones
