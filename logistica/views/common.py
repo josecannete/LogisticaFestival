@@ -27,16 +27,21 @@ def get_places_by_group():
 def tour(request):
     user = request.user
     if user.is_authenticated:
-        tour = NewTourForm(request.POST)
-        tour.is_valid()
-        tour.save()
+        #tour = NewTourForm(request.POST)
+        #tour.is_valid()
+        #tour.save()
         # groups_places = get_places_by_group()
         # start_time = datetime.datetime.now()
         # number_people = tour.cleaned_data['alumnos']
         # duration = tour.cleaned_data['duracion']
         # tours_disponibles = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
         # context = {'tours_disponibles': tours_disponibles}
-        return render(request, 'app/tour.html', {})
+        divcalendarios = []
+        for i in range(1,6):
+            divcalendarios.append('calendar'+str(i))
+            print('"calendar'+str(i)+'"')
+        context = {'divcalendarios': divcalendarios}
+        return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
 
 

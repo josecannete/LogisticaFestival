@@ -1,5 +1,6 @@
 from logistica.models import Visita
 import json
+import datetime
 
 
 def visitaToEventforMonitor(visita):
@@ -28,6 +29,22 @@ def visitaToEventforEspacio(visita):
         "contacto": contacto
     }
     return event
+
+def objectTourToEvent(object_tour):
+    events = []
+    for i in range(object_tour.places):
+        espacio = object_tour.places[i]
+        inicio = str(object_tour.start_time[i].isoformat())
+        fin = str(inicio + datetime.timedelta(espacio.duracion).isoformat())
+        title = str(espacio)
+
+        event = {
+            "title": title,
+            "start": inicio,
+            "end": fin
+        }
+        events.append(event)
+    return json.dumps(events)
 
 
 def get_event_by_monitor(pk_monitor):
