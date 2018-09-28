@@ -1,26 +1,32 @@
 import copy
 from random import randint
-from logistica.models import Visita
+from logistica.models import Visita, Espacio, Tour, Horario
 import datetime
 
 
-def available_at(space, time):
+def available_at(space, init_time):
     """
     Args:
-        space Espacio
-        time DateTimeField
+        space: Espacio
+        init_time: DateTimeField
     Returns:
         time at which the space is available (this can differ in 5 min. from time parameter)
     """
-    start_date = datetime.date(2005, 1, 1)
-    end_date = datetime.date(2025, 1, 1)
-    visitas = Visita.objects.filter(espacio=space).filter(horarioDisponible__inicio__range=(start_date, time)).filter(
-        horarioDisponible__fin__range=(time, end_date))
-    if len(visitas) > 0:
+    flex_minutes = 5
+    earliest_end = init_time + space.duracion - datetime.timedelta(flex_minutes)
+    latest_begin = init_time + datetime.timedelta(flex_minutes)
+    # if the place is not available at this time return false
+    if space.horarioAbierto.inicio > latest_begin or space.horarioAbierto.fin < earliest_end:
         return False
-    else:
-        return True
-        # TODO : agregar margen de tiempo
+    # get all the visits scheduled at this place
+    visits_this_place = Visita.objects.filter(espacio=space)
+    for visit in visits_this_place:
+        # if the visit ends before my latest start time or if it starts after my earliest end time then it's ok.
+        # (the negative) if it starts before my end and ends before my start then it's occupied
+        if not (visit.horario.fin <= latest_begin or
+                visit.horario.inicio >= earliest_end):
+            return False
+    return True
 
 
 def get_walking_time(from_place, to_place):
@@ -64,8 +70,9 @@ def not_good_route(tour):
 class ObjectTour:
     def __init__(self, first_place, start_time):
         """
-        :param first_place: Espacio where the tour starts
-        :param start_time: start time in the first place (the tour starting time is 5-10 minutes before)
+        Args:
+            first_place: Espacio where the tour starts
+            start_time: start time in the first place (the tour starting time is 5-10 minutes before)
         """
         self.start_times = [start_time]
         self.duration = first_place.duracion
@@ -88,14 +95,14 @@ class ObjectTour:
         return False
 
 
-def get_tours(groups_places, start_time, number_people, duration=120,
+def get_tours(groups_places, start_time, number_people, target_duration=120,
               tours_count=5):
     """
     Args:
         groups_places: list of list of Espacio's
         start_time: start time of the tour
         number_people: integer
-        duration: integer representing minutes
+        target_duration: integer representing minutes
         tours_count: quantity of tours wanted
 
     Returns:
@@ -112,26 +119,29 @@ def get_tours(groups_places, start_time, number_people, duration=120,
     # select all places that are available at the start hour
     for group in groups_places:
         for place in group:
-            time_place_available = available_at(place, start_time)
-            if time_place_available is not None:
-                incomplete_tours.append(ObjectTour(place, time_place_available))
+            if available_at(place, start_time) is not None:
+                incomplete_tours.append(ObjectTour(place, start_time))
     # generate all possible tours according to time constraint
     while len(incomplete_tours) > 0:
         # get first
         curr_tour = incomplete_tours.pop()
-        if curr_tour.duration >= duration:
+        # already have the wanted duration, then we're done with this tour
+        if curr_tour.duration >= target_duration:
             complete_tours.append(curr_tour)
             continue
+        # create a new tour for each possible place that can go next
         for group in groups_places:
             for place in group:
+                # if the place cannot support the amount of people ignore it
                 if place.capacidad < number_people:
                     continue
+                # time arriving at the new place
                 next_hour = start_time + curr_tour.duration + get_walking_time(curr_tour.get_last_place(), place)
-                # the place is not already on the tour and it's available at this time
-                time_place_available = available_at(place, next_hour)
-                if not curr_tour.is_place_included(place) and time_place_available is not None:
+                # if the place is not already on the tour and it's available at this time
+                if not curr_tour.is_place_included(place) and available_at(place, next_hour):
+                    # create new tour with that place as next
                     next_curr_tour = copy.deepcopy(curr_tour)
-                    next_curr_tour.add_place(place, time_place_available)
+                    next_curr_tour.add_place(place, next_hour)
                     incomplete_tours.append(next_curr_tour)
     # tag tours with bad order of locations
     count_bad_locations = 0
@@ -141,11 +151,10 @@ def get_tours(groups_places, start_time, number_people, duration=120,
             tour.good_route = False
     # if possible delete tours with bad location
     if len(complete_tours) - count_bad_locations >= tours_count:
-        complete_tours = list(filter(lambda tour: tour.good_locations,
-                                     complete_tours))
+        complete_tours = list(filter(lambda this_tour: this_tour.good_route, complete_tours))
     # select tours to return randomly
     for i in range(tours_count):
         selected = randint(i, len(complete_tours) - 1)
-        tours_count[i], tours_count[selected] = tours_count[selected], tours_count[i]
+        complete_tours[i], complete_tours[selected] = complete_tours[selected], complete_tours[i]
     tours_selected = complete_tours[0:tours_count]
-    return [[(tour.start_times[i], place) for i, place in enumerate(tour.places)] for tour in tours_selected]
+    return [[tuple_time_place for tuple_time_place in zip(tour.start_times, tour.places)] for tour in tours_selected]
