@@ -72,7 +72,7 @@ class Espacio(models.Model):
 # Un tour es un conjunto de visitas
 class Visita(models.Model):
     horario = models.ManyToManyField(Horario)
-    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)x
+    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
 
 
 # Tour
