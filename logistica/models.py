@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fisica_civil", "quimica", "electrica",
                 "geo"]
 
+
 # Create your models here.
 def is_monitor_admin(self):
     return self.groups.filter(name='Monitor Admin').exists()
@@ -42,6 +43,15 @@ class Horario(models.Model):
         return str(self.inicio) + " -> " + str(self.fin)
 
 
+class Monitor(models.Model):
+    nombre = models.CharField(max_length=200)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    contacto = models.CharField(max_length=15)
+
+    def __str__(self):
+        return str(self.nombre)
+
+
 # Espacio
 # Contiene espacios físicos dentro de la facultad. Ej: Auditorio Gorbea
 class Espacio(models.Model):
@@ -57,13 +67,12 @@ class Espacio(models.Model):
         return str(self.nombre)
 
 
-class Monitor(models.Model):
-    nombre = models.CharField(max_length=200)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    contacto = models.CharField(max_length=15)
 
-    def __str__(self):
-        return str(self.nombre)
+# Visita
+# Un tour es un conjunto de visitas
+class Visita(models.Model):
+    horario = models.ManyToManyField(Horario)
+    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)x
 
 
 # Tour
@@ -78,12 +87,6 @@ class Tour(models.Model):
     def __str__(self):
         return str(self.nombre)
 
-
-# Visita
-# Un tour es un conjunto de visitas
-class Visita(models.Model):
-    horario = models.ManyToManyField(Horario)
-    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
 
 
 # Actividad

@@ -2,6 +2,7 @@ import copy
 from random import randint
 from logistica.models import Visita, Espacio, Tour, Horario
 import datetime
+from logistica.forms import get_available_spaces
 
 
 def available_at(space, init_time):
@@ -27,7 +28,6 @@ def available_at(space, init_time):
                 visit.horario.inicio >= earliest_end):
             return False
     return True
-
 
 def get_walking_time(from_place, to_place):
     """
