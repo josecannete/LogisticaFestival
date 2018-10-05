@@ -67,7 +67,6 @@ class Espacio(models.Model):
         return "{} en zona:{}".format(str(self.nombre), str(self.zona))
 
 
-
 # Visita
 # Un tour es un conjunto de visitas
 class Visita(models.Model):
@@ -110,6 +109,7 @@ Todo lo que esta abajo es para no tener que guardar los posibles tours en la bas
 
 '''
 
+
 # PosibleTour
 class PosibleTour(models.Model):
     nombre = models.CharField(max_length=200)
@@ -121,6 +121,7 @@ class PosibleTour(models.Model):
 
     def __str__(self):
         return str(self.nombre)
+
 
 # PosibleVisita
 # Un tour es un conjunto de visitas

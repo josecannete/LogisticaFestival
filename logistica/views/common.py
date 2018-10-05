@@ -116,8 +116,9 @@ def logout_user(request):
 
 def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
+        events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
         context = {
-            'events': get_event_by_monitor(pk_monitor),
+            'events': events,
             'monitores': Monitor.objects.all()
         }
         return render(request, 'app/monitor.html', context)
@@ -127,11 +128,11 @@ def monitor(request, pk_monitor=None):
 
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
+        events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
         context = {
-            'events': get_events_by_espacio(pk_espacio),
+            'events': events,
             'espacios': Espacio.objects.all()
         }
-        print(context)
         return render(request, 'app/espacio.html', context)
     else:
         return redirect('/')
