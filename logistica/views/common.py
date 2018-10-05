@@ -2,12 +2,13 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.utils import timezone
 from logistica.arma_tour import get_tours
 from logistica.models import Actividad, Monitor, Espacio, places_names, Tour
 from logistica.forms import NewTourForm
 import datetime
-from .calendar import get_event_by_monitor, get_events_by_espacio
+from .calendar import get_event_by_monitor, get_events_by_espacio, \
+    convert_object_tour_to_event
 
 
 def home(request):
@@ -35,6 +36,7 @@ def saveTourOption(request):
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
+
 def tour(request):
     user = request.user
     if user.is_authenticated:
@@ -42,25 +44,32 @@ def tour(request):
         tour = NewTourForm(request.POST)
         tour.save()
         print(tour.cleaned_data['alumnos'])
-        # groups_places = get_places_by_group()
-        # start_time = datetime.datetime.now()
-        # number_people = tour.cleaned_data['alumnos']
-        # duration = tour.cleaned_data['duracion']
-        # tours_disponibles = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+        groups_places = get_places_by_group()
+        start_time = timezone.now().replace(day=18)  # TODO: delete replace
+        number_people = tour.cleaned_data['alumnos']
+        duration = tour.cleaned_data['duracion']
+        tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+        print("Tours seleccionados: iniciando a las {}:{}".format(start_time.hour, start_time.minute))
+        print("\n\n".join(
+            ["\n".join(
+                ["{}/{} {}:{} - {}".format(this_time.day, this_time.month, this_time.hour, this_time.minute, space)
+                 for this_time, space in zip(tour_.start_times, tour_.places)]) for tour_ in tour_options]))
 
-        idTours = [1,2,3,4,5]
-        events = [str("[{title: 'event1',start: '2010-01-01'}]"),
-                  str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
-                  str("[{title: 'event3',start: '2010-01-09T12:30:00',allDay: 'false'}]"),
-                  str("[{title: 'event1',start: '2010-01-01'}]"),
-                  str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
-                  ]
+        idTours = [1, 2, 3, 4, 5]
+        #events = [str("[{title: 'event1',start: '2010-01-01'}]"),
+        #          str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
+        #          str("[{title: 'event3',start: '2010-01-09T12:30:00',allDay: 'false'}]"),
+        #          str("[{title: 'event1',start: '2010-01-01'}]"),
+        #          str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
+        #          ]
+        events = [convert_object_tour_to_event(tour_option) for tour_option in tour_options]
+        print("LIST EVENTS:")
+        print('\n'.join(events))
         context = {
             'range': range(7),
             'monitores': Monitor.objects.all(),
             'idTours': idTours,
             'events': events
-
         }
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))

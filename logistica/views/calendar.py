@@ -30,12 +30,13 @@ def visitaToEventforEspacio(visita):
     }
     return event
 
-def objectTourToEvent(object_tour):
+
+def convert_object_tour_to_event(object_tour):
     events = []
-    for i in range(object_tour.places):
+    for i in range(len(object_tour.places)):
         espacio = object_tour.places[i]
-        inicio = str(object_tour.start_time[i].isoformat())
-        fin = str(inicio + datetime.timedelta(espacio.duracion).isoformat())
+        inicio = object_tour.start_times[i].isoformat()
+        fin = (object_tour.start_times[i] + datetime.timedelta(minutes=espacio.duracion)).isoformat()
         title = str(espacio)
 
         event = {

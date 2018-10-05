@@ -64,7 +64,7 @@ class Espacio(models.Model):
     duracion = models.IntegerField()  # minutos
 
     def __str__(self):
-        return str(self.nombre)
+        return "{} en zona:{}".format(str(self.nombre), str(self.zona))
 
 
 
