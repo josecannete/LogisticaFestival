@@ -18,11 +18,16 @@ def home(request):
     return redirect(reverse(login_user))
 
 
+def not_allowed(request):
+    return render(request, 'app/not_authorized.html')
+
+
 def get_places_by_group():
     ans = []
     for name in places_names:
         ans.append(Espacio.objects.filter(zona__contains=name))
     return ans
+
 
 def saveTourOption(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
@@ -56,7 +61,7 @@ def tour(request):
                  for this_time, space in zip(tour_.start_times, tour_.places)]) for tour_ in tour_options]))
 
         idTours = [1, 2, 3, 4, 5]
-        #events = [str("[{title: 'event1',start: '2010-01-01'}]"),
+        # events = [str("[{title: 'event1',start: '2010-01-01'}]"),
         #          str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
         #          str("[{title: 'event3',start: '2010-01-09T12:30:00',allDay: 'false'}]"),
         #          str("[{title: 'event1',start: '2010-01-01'}]"),
@@ -88,7 +93,7 @@ def principal(request):
         }
         return render(request, 'app/principal.html', context)
     else:
-        redirect('/')
+        redirect(reverse(home))
 
 
 def login_user(request):
@@ -116,26 +121,54 @@ def logout_user(request):
 
 def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
-        events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
+        events = []
+        monitores = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
+            monitores = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_monitor_tour():
+            events = get_event_by_monitor(request.user.monitor.pk)
+        # El resto no tiene acceso
+        else:
+            return redirect(reverse(not_allowed))
         context = {
             'events': events,
-            'monitores': Monitor.objects.all()
+            'monitores': monitores,
+            'pk_monitor': int(pk_monitor) if pk_monitor is not None else None
         }
         return render(request, 'app/monitor.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
-        events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+        events = []
+        espacios = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+            espacios = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_encargado_espacio():
+            space = Espacio.objects.filter(encargado__pk=request.user.pk)
+            if space.exists():
+                events = get_events_by_espacio(space.all()[0].pk)
+            else:
+                return redirect(reverse(not_allowed))
+        # El resto no tiene acceso
+        else:
+            return redirect(reverse(not_allowed))
         context = {
             'events': events,
-            'espacios': Espacio.objects.all()
+            'espacios': Espacio.objects.all(),
+            'pk_espacio': int(pk_espacio) if pk_espacio is not None else None
         }
         return render(request, 'app/espacio.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def monitorProfile(request):
@@ -153,9 +186,9 @@ def monitorProfile(request):
                 context = {'actividades': actividades, 'act': act}
                 return render(request, 'app/profile_edit.html', context)
         except:
-            return redirect('/')
+            return redirect(reverse(home))
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def updateActividad(request):
@@ -163,4 +196,4 @@ def updateActividad(request):
     actividad.nombre = request.POST['nombre']
     actividad.capacidadActual = request.POST['asistentes']
     actividad.save()
-    return redirect('/profile/')
+    return redirect(reverse(monitorProfile))

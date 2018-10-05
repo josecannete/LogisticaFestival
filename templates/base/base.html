@@ -108,12 +108,16 @@
                         <a class="nav-link" href="{% url 'activities' %}"><i class="icon-puzzle"></i> Actividades</a>
                     </li>
                 {% endif %}
+                {% if user.is_monitor_stand or user.is_monitor_tour %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'monitor' %}"><i class="fa fa-user"></i> Monitores</a>
                 </li>
+                {% endif %}
+                {% if user.is_monitor_stand or user.is_encargado_espacio %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flask"></i> Espacios</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user"></i> Mis Actividades</a>
                 </li>
