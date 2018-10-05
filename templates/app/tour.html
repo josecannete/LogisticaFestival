@@ -34,11 +34,13 @@
 
 {% block content %}
 
+    {% for event in events %}
     <script>
         $(function (){
-        for (i = 1; i <= 10; i++)
-        {
-            $('#calendar'+i.toString()).fullCalendar({
+                {% with y=forloop.counter|stringformat:"s" %}
+            {% with template="'#calendar"|add:y|add:"'" %}
+                {% with eventos="events"|add:y %}
+            $({{ template|safe }}).fullCalendar({
                 columnHeader: 'false',
                 aspectRatio: 0,
                 minTime: "09:00:00",
@@ -47,25 +49,14 @@
                 header: 'false',
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
-                events: [
-    {
-      title  : 'event1',
-      start  : '2010-01-01'
-    },
-    {
-      title  : 'event2',
-      start  : '2010-01-05',
-      end    : '2010-01-07'
-    },
-    {
-      title  : 'event3',
-      start  : '2010-01-09T12:30:00',
-      allDay : false // will make the time show
-    }
-  ]
+                events: {{ event|safe }}
             });
-        }});
+            {% endwith%}
+            {% endwith%}
+            {% endwith %}
+        });
     </script>
+    {% endfor %}
 
 
 

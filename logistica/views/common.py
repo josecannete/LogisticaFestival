@@ -47,11 +47,20 @@ def tour(request):
         # number_people = tour.cleaned_data['alumnos']
         # duration = tour.cleaned_data['duracion']
         # tours_disponibles = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+
         idTours = [1,2,3,4,5]
+        events = [str("[{title: 'event1',start: '2010-01-01'}]"),
+                  str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
+                  str("[{title: 'event3',start: '2010-01-09T12:30:00',allDay: 'false'}]"),
+                  str("[{title: 'event1',start: '2010-01-01'}]"),
+                  str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
+                  ]
         context = {
             'range': range(7),
             'monitores': Monitor.objects.all(),
-            'idTours': idTours
+            'idTours': idTours,
+            'events': events
+
         }
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
