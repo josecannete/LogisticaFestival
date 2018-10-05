@@ -11,157 +11,16 @@
             <div>
                 <div class="animated fadeIn">
                     <div class="row">
-                    {% if user.is_monitor_admin or user.is_monitor_stand %}
+                    {% if user.is_monitor_stand %}
                         <div class="col-sm-12 col-l-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Tours
-                                </div>
-                                <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid"
-                                         style="background-color: white; padding: 0rem 2rem;">
-                                        <div id="div_for_alert"></div>
-
-                                        <div class="container" align="center">
-                                            <h1 class="display-3">Pide un Tour</h1>
-
-
-                                            <div class="card-body">
-                                                <form action="{% url 'tour' %}" method="post"
-                                                      enctype="multipart/form-data"
-                                                      class="form-horizontal"
-                                                      id="new_tour_form">
-                                                    {% csrf_token %}
-
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 col-form-label"
-                                                               for="{{ tour.nombre.id_for_label }}">Nombre</label>
-                                                        <div class="col-md-9">
-                                                            {{ tour.nombre }}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 col-form-label"
-                                                               for="{{ tour.duracion.id_for_label }}">Duración
-                                                            (Minutos)</label>
-                                                        <div class="col-md-9">
-                                                            {{ tour.duracion }}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label class="col-md-3 col-form-label"
-                                                               for="{{ tour.alumnos.id_for_label }}">Cantidad
-                                                            de Alumnos</label>
-                                                        <div class="col-md-9">
-                                                            {{ tour.alumnos }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="">
-                                                        <button type="submit" class="btn btn-success btn-primary">
-                                                            <i class="fa fa-dot-circle-o"></i> Enviar
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'card/pide_un_tour.html' %}
                         </div>
                     {% endif %}
                         <div class="col-sm-12 col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Charlas
-                                </div>
-                                <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid"
-                                         style="background-color: white; padding: 1rem 2rem">
-                                        <div class="container">
-                                            <h1 class="display-3">Charlas</h1>
-                                            {% if charlas %}
-                                                <div class="table-wrapper-scroll-y"
-                                                     style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
-
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">Charla</th>
-                                                            <th scope="col">Hora inicio</th>
-                                                            <th scope="col">Hora término</th>
-                                                            <th scope="col">Asistentes</th>
-                                                            <th scope="col">Capacidad</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for charla in charlas %}
-                                                            <tr style="text-align: center">
-                                                                <td class="filterable-cell">{{ charla.nombre }}</td>
-                                                                <td class="filterable-cell">{{ charla.horario.inicio.time }}</td>
-                                                                <td class="filterable-cell">{{ charla.horario.fin.time }}</td>
-                                                                <td class="filterable-cell">{{ charla.capacidadActual }}</td>
-                                                                <td class="filterable-cell">{{ charla.capacidadTotal }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-                                            {% else %}
-                                                No hay charlas para mostrar
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'card/charlas.html' %}
                         </div>
                         <div class="col-sm-12 col-xl-6 ml-auto">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Talleres
-                                </div>
-                                <div class="card-body">
-                                    <div class="jumbotron jumbotron-fluid"
-                                         style="background-color: white; padding: 1rem 2rem;">
-                                        <div class="container">
-                                            <h1 class="display-3">Talleres</h1>
-                                            {% if talleres %}
-                                                <div class="table-wrapper-scroll-y"
-                                                     style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
-
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">Taller</th>
-                                                            <th scope="col">Hora inicio</th>
-                                                            <th scope="col">Hora término</th>
-                                                            <th scope="col">Inscritos</th>
-                                                            <th scope="col">Capacidad</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for taller in talleres %}
-                                                            <tr style="text-align: center">
-                                                                <td class="filterable-cell">{{ taller.nombre }}</td>
-                                                                <td class="filterable-cell">{{ taller.horario.inicio.time }}</td>
-                                                                <td class="filterable-cell">{{ taller.horario.fin.time }}</td>
-                                                                <td class="filterable-cell">{{ taller.capacidadActual }}</td>
-                                                                <td class="filterable-cell">{{ taller.capacidadTotal }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-                                            {% else %}
-                                                No hay talleres para mostrar
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'card/talleres.html' %}
                         </div>
                     </div>
                 </div>
