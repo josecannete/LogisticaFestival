@@ -64,7 +64,10 @@ class Espacio(models.Model):
     duracion = models.IntegerField()  # minutos
 
     def __str__(self):
-        return "{} en zona:{}".format(str(self.nombre), str(self.zona))
+        #horarios_str = ["{}-{}/{}".format(this_horario.inicio.hour-3, this_horario.fin.hour-3, this_horario.inicio.day)
+        #                for this_horario in self.horarioAbierto.all()]
+        #return "{} \ zona:{} \ {} \ capacidad:{}".format(str(self.nombre), str(self.zona), horarios_str, self.capacidad)
+        return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
 
 
 

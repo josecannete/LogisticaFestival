@@ -33,8 +33,8 @@ urlpatterns = [
 
     url(r'^actividades/', logistica.activities, name='activities'),
     url(r'^principal/', logistica.principal, name='principal'),
-    url(r'^tour/', logistica.tour, name='tour'),
-    url(r'^showTour/', logistica.saveTourOption, name='showTour'),
+    url(r'^tour/', logistica.create_tour_request, name='tour'),
+    url(r'^showTour/', logistica.save_tour_option, name='showTour'),
 
     url(r'^edit_activity_capacity/', logistica.edit_activity_capacity, name='edit_activity_capacity'),
 
