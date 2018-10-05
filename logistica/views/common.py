@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from logistica.arma_tour import get_tours, ObjectTour
-from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, PosibleVisita, Horario, PosibleTour
+from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, PosibleVisita, Horario, PosibleTour, Visita
 from logistica.forms import NewTourForm
 import datetime
 from .calendar import get_event_by_monitor, get_events_by_espacio, \
@@ -24,9 +24,8 @@ def get_places_by_group():
         ans.append(Espacio.objects.filter(zona__contains=name))
     return ans
 
-def saveTourOption(request):
-    print("la request es")
-    print(request.POST)
+
+def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
@@ -56,7 +55,7 @@ def add_to_fakedb(objectTour, nombre, alumnos):
     return posible_tour.id
 
 
-def tour(request):
+def create_tour_request(request):
     user = request.user
     if user.is_authenticated:
         print(request.POST)
@@ -80,12 +79,6 @@ def tour(request):
 
 
         idTours = [1, 2, 3, 4, 5]
-        #events = [str("[{title: 'event1',start: '2010-01-01'}]"),
-        #          str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
-        #          str("[{title: 'event3',start: '2010-01-09T12:30:00',allDay: 'false'}]"),
-        #          str("[{title: 'event1',start: '2010-01-01'}]"),
-        #          str("[{title: 'event2',start: '2010-01-05',end: '2010-01-07'}]"),
-        #          ]
         events = [convert_object_tour_to_event(tour_option) for tour_option in tour_options]
         print("LIST EVENTS:")
         print('\n'.join(events))
