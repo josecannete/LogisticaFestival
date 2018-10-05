@@ -4,8 +4,8 @@ import datetime
 
 
 def visitaToEventforMonitor(visita):
-    inicio = str(visita.horarioDisponible.all()[0].inicio.isoformat())
-    fin = str(visita.horarioDisponible.all()[0].fin.isoformat())
+    inicio = str(visita.horario.all()[0].inicio.isoformat())
+    fin = str(visita.horario.all()[0].fin.isoformat())
     title = str(visita.espacio)
 
     event = {
@@ -17,8 +17,8 @@ def visitaToEventforMonitor(visita):
 
 
 def visitaToEventforEspacio(visita):
-    inicio = str(visita.horarioDisponible.all()[0].inicio.isoformat())
-    fin = str(visita.horarioDisponible.all()[0].fin.isoformat())
+    inicio = str(visita.horario.all()[0].inicio.isoformat())
+    fin = str(visita.horario.all()[0].fin.isoformat())
     title = str(visita.monitor.nombre)
     contacto = str(visita.monitor.contacto)
 

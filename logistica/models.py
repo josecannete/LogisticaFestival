@@ -83,6 +83,7 @@ class Tour(models.Model):
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
     visitas = models.ManyToManyField(Visita)
+    confirmado = models.BooleanField # False si es opcion, True si esta confirmado
 
     def __str__(self):
         return str(self.nombre)

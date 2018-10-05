@@ -2,7 +2,6 @@ import copy
 from random import randint
 from logistica.models import Visita, Espacio, Tour, Horario
 import datetime
-from logistica.forms import get_available_spaces
 
 
 def available_at(space, init_time):

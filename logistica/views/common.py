@@ -2,9 +2,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-
+from django.http import HttpResponse
 from logistica.arma_tour import get_tours
-from logistica.models import Actividad, Monitor, Espacio, places_names
+from logistica.models import Actividad, Monitor, Espacio, places_names, Tour
 from logistica.forms import NewTourForm
 import datetime
 from .calendar import get_event_by_monitor, get_events_by_espacio
@@ -23,24 +23,36 @@ def get_places_by_group():
         ans.append(Espacio.objects.filter(zona__contains=name))
     return ans
 
+def saveTourOption(request):
+    if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
+        idMonitor = request.POST.get('select_monitor')
+        idTour = request.POST.get('optionTourId')
+        tour = Tour.objects.get(idTour)
+        tour.confirmado = True
+        tour.monitor = Monitor.objects.get(idMonitor)
+        tour.save()
+        context = {}
+        return render(request, 'app/showTour.html', context)
+    return redirect(reverse(principal))
 
 def tour(request):
     user = request.user
     if user.is_authenticated:
-        #tour = NewTourForm(request.POST)
-        #tour.is_valid()
-        #tour.save()
+        print(request.POST)
+        tour = NewTourForm(request.POST)
+        tour.save()
+        print(tour.cleaned_data['alumnos'])
         # groups_places = get_places_by_group()
         # start_time = datetime.datetime.now()
         # number_people = tour.cleaned_data['alumnos']
         # duration = tour.cleaned_data['duracion']
         # tours_disponibles = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
-        # context = {'tours_disponibles': tours_disponibles}
-        divcalendarios = []
-        for i in range(1,6):
-            divcalendarios.append('calendar'+str(i))
-            print('"calendar'+str(i)+'"')
-        context = {'divcalendarios': divcalendarios}
+        idTours = [1,2,3,4,5]
+        context = {
+            'range': range(7),
+            'monitores': Monitor.objects.all(),
+            'idTours': idTours
+        }
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
 
@@ -101,6 +113,7 @@ def espacio(request, pk_espacio=None):
             'events': get_events_by_espacio(pk_espacio),
             'espacios': Espacio.objects.all()
         }
+        print(context)
         return render(request, 'app/espacio.html', context)
     else:
         return redirect('/')
