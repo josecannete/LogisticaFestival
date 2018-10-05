@@ -41,6 +41,7 @@
             {% with template="'#calendar"|add:y|add:"'" %}
                 {% with eventos="events"|add:y %}
             $({{ template|safe }}).fullCalendar({
+                timezone: 'America/Santiago',
                 defaultDate: '2018-10-18',
                 columnHeader: 'false',
                 aspectRatio: 0,

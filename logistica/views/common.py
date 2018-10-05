@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
-from logistica.arma_tour import get_tours
-from logistica.models import Actividad, Monitor, Espacio, places_names, Tour
+from logistica.arma_tour import get_tours, ObjectTour
+from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, PosibleVisita, Horario, PosibleTour
 from logistica.forms import NewTourForm
 import datetime
 from .calendar import get_event_by_monitor, get_events_by_espacio, \
@@ -25,6 +25,8 @@ def get_places_by_group():
     return ans
 
 def saveTourOption(request):
+    print("la request es")
+    print(request.POST)
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
@@ -36,6 +38,23 @@ def saveTourOption(request):
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
+def add_to_fakedb(objectTour, nombre, alumnos):
+    horaInicio = objectTour.start_times[0]
+    duracion = objectTour.end_time - horaInicio
+    monitor = Monitor.objects.get(1)
+
+    posible_tour = PosibleTour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
+                               duracion=duracion, confirmado=False)
+
+    for i in range(objectTour.places):
+        start_time = objectTour.start_times[i]
+        end_time = start_time + objectTour.places[i].duracion
+        horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)
+        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i]).horario.add(horario)
+        posible_tour.visitas.add(posible_visita)
+
+    return posible_tour.id
+
 
 def tour(request):
     user = request.user
@@ -45,7 +64,7 @@ def tour(request):
         tour.save()
         print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now().replace(day=18)  # TODO: delete replace
+        start_time = timezone.now().replace(day=18, hour=13)  # TODO: delete replace
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
@@ -54,6 +73,11 @@ def tour(request):
             ["\n".join(
                 ["{}/{} {}:{} - {}".format(this_time.day, this_time.month, this_time.hour, this_time.minute, space)
                  for this_time, space in zip(tour_.start_times, tour_.places)]) for tour_ in tour_options]))
+
+        nombre = tour.cleaned_data['nombre']
+        for object_tour in tour_options:
+            print(add_to_fakedb(object_tour, nombre, number_people))
+
 
         idTours = [1, 2, 3, 4, 5]
         #events = [str("[{title: 'event1',start: '2010-01-01'}]"),
