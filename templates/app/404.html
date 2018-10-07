@@ -1,0 +1,7 @@
+{% extends 'base/base_login.html' %}
+{% load static %}
+
+{% block main_card %}
+    <h1>Error 404</h1>
+    <p>Esta dirección no fue encontrada en nuestro servidor. Y si intentas ingresando al <a href="{% url 'home' %}">inicio</a>?</p>
+{% endblock %}

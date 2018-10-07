@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse
+from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from logistica.arma_tour import get_tours, ObjectTour
@@ -9,8 +10,19 @@ from logistica.forms import NewTourForm
 from logistica.views.constants import *
 from .calendar import get_event_by_monitor, get_events_by_espacio, \
     convert_object_tour_to_event, visitaToEventforEspacio
-
+from random import randint
 import datetime
+
+
+def error_404(request, exception):
+    return render(request, 'app/404.html')
+
+
+def error_500(request, exception):
+    context = {
+        'gif_number': str(randint(1, 4))
+    }
+    return render(request, 'app/500.html', context)
 
 
 def home(request):
@@ -40,6 +52,7 @@ def save_tour_option(request):
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
+
 def add_to_realdb(optionTourId, selectedMonitorId):
     posibleTour = PosibleTour.objects.get(pk=optionTourId)
     monitor = Monitor.objects.get(pk=selectedMonitorId)
@@ -66,7 +79,7 @@ def add_to_fakedb(objectTour, nombre, alumnos):
     monitor = Monitor.objects.get(pk=1)
 
     posible_tour = PosibleTour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
-                               duracion=duracion)
+                                              duracion=duracion)
 
     for i in range(len(objectTour.places)):
         start_time = objectTour.start_times[i]
