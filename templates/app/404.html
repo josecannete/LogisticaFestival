@@ -3,5 +3,8 @@
 
 {% block main_card %}
     <h1>Error 404</h1>
-    <p>Esta dirección no fue encontrada en nuestro servidor. Y si intentas ingresando al <a href="{% url 'home' %}">inicio</a>?</p>
+    <img src="{% static 'src/gif/404_'|add:gif_number|add:'.gif' %}" alt="You're lost, aren't you?"
+         style="width: 100%; padding-bottom: 10px">
+    <p>Esta dirección no fue encontrada en nuestro servidor. Y si intentas ingresando al <a href="{% url 'home' %}">inicio</a>?
+    </p>
 {% endblock %}

@@ -15,7 +15,10 @@ import datetime
 
 
 def error_404(request, exception):
-    return render(request, 'app/404.html')
+    context = {
+        'gif_number': str(randint(1, 4))
+    }
+    return render(request, 'app/404.html', context)
 
 
 def error_500(request, exception):
