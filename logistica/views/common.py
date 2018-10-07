@@ -83,7 +83,7 @@ def add_to_fakedb(objectTour, nombre, alumnos):
 
     for i in range(len(objectTour.places)):
         start_time = objectTour.start_times[i]
-        end_time = start_time + datetime.timedelta(objectTour.places[i].duracion)
+        end_time = start_time + datetime.timedelta(minutes=objectTour.places[i].duracion)
         horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
         posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i])[0]
         posible_visita.horario.add(horario)
