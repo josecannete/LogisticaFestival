@@ -1,25 +1,21 @@
 {% load static %}
-<header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="#"></a>
-    <button class="brand-minimizer navbar-toggler sidebar-toggler d-md-down-none" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<a class="navbar-brand" href="{% url 'principal' %}"></a>
+<button class="brand-minimizer navbar-toggler sidebar-toggler d-md-down-none" type="button">
+    <span class="navbar-toggler-icon"></span>
+</button>
 
-    <ul class="nav navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">Options
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{% url 'logout_user' %}"><i class="fa fa-lock"></i> Logout</a>
-            </div>
-        </li>
-    </ul>
+<ul class="nav navbar-nav ml-auto">
+    <li id="name_user">{{ user.monitor.nombre }}</li>
 
-    {% block navbar %}
-    {% endblock %}
-
-</header>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
+           aria-haspopup="true" aria-expanded="false">Opciones
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="{% url 'logout_user' %}"><i class="fa fa-lock"></i> Cerrar Sesión</a>
+        </div>
+    </li>
+</ul>

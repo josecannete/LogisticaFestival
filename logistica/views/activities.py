@@ -4,12 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from logistica.models import Actividad, Monitor
+from logistica.views.common import error_page
+from logistica.views.constants import *
 
 
 @login_required
 def activities(request):
+    if not request.user.is_encargado_actividad():
+        return error_page(request, ERR_NOT_AUTH)
+    act = generate_activity_id_list(request.user)
+    if not act:
+        return error_page(request, ALERT_NO_ACTIVITIES)
     context = {
-        'activities': generate_activity_id_list(request.user),
+        'activities': act,
         'monitores': Monitor.objects.all()
     }
     return render(request, 'app/activity.html', context)

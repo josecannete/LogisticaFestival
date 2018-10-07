@@ -26,9 +26,9 @@ SECRET_KEY = 'n&*9=_1x&$rmbxi))vr#vu+o=uc7ehc^idfzo%o3yf9@$_0dbn'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    #'167.99.12.214',
+    '167.99.12.214',
+    'localhost'
 ]
-
 
 # Application definition
 
@@ -127,3 +127,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'logisticafcfm@gmail.com'
+EMAIL_HOST_PASSWORD = 'toursfcfm'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Equipo IV° Festival Ingeniería y Ciencias <logisticafcfm@gmail.com>'
+
+handler404 = 'app.views.handler404'

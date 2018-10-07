@@ -29,12 +29,9 @@
     <script src='{% static 'fullcalendar/es.js' %}'></script>
     <script src='{% static 'src/js/monitor.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
-
-
 {% endblock extrascript %}
 
 {% block content %}
-
     <script>
         $(function () {
             $('#calendar').fullCalendar({
@@ -45,30 +42,9 @@
             });
         });
     </script>
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    Visión Monitor
-                </div>
-
-                <div class="card-body" id="card_id">
-
-                    <select class="form-control"
-                            id="select_monitor" data-parsley-multiple="tabs">
-                        <option disabled selected value>Seleccionar Monitor</option>
-                        {% for monitor in monitores %}
-                            <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <br>
-
-                    <div id='calendar'></div>
-
-                </div>
-            </div>
+            {% include 'card/monitor_calendar.html' %}
         </div>
     </div>
 

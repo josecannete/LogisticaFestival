@@ -46,30 +46,9 @@
             });
         });
     </script>
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    Visión Espacios
-                </div>
-
-                <div class="card-body" id="card_id">
-
-                    <select class="form-control"
-                            id="select_espacio" data-parsley-multiple="tabs">
-                        <option disabled selected value>Seleccionar Espacio</option>
-                        {% for espacio in espacios %}
-                            <option value="{{ espacio.id }}">{{ espacio.nombre }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <br>
-
-                    <div id='calendar'></div>
-
-                </div>
-            </div>
+            {% include 'card/espacio_calendar.html' %}
         </div>
     </div>
 

@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    <script src="{% static 'src/js/general.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div id="ui-view">
+            <div>
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {% if info.err %}
+                                {% include 'card/error.html' %}
+                            {% else %}
+                                {% include 'card/alert.html' %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

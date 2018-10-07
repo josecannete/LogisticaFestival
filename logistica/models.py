@@ -70,7 +70,6 @@ class Espacio(models.Model):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
 
 
-
 # Visita
 # Un tour es un conjunto de visitas
 class Visita(models.Model):

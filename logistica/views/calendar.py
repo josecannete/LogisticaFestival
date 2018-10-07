@@ -49,10 +49,12 @@ def convert_object_tour_to_event(object_tour):
 
 
 def get_event_by_monitor(pk_monitor):
-    visitas = Visita.objects.filter(monitor__pk=pk_monitor)
+    tours = Tour.objects.filter(monitor__pk=pk_monitor)
     events = []
-    for visita in visitas:
-        events.append(visitaToEventforMonitor(visita))
+    for tour in tours:
+        visitas = tour.visitas.all()
+        for visita in visitas:
+            events.append(visitaToEventforMonitor(visita))
     return json.dumps(events)
 
 

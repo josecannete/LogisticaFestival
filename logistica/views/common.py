@@ -4,11 +4,13 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from logistica.arma_tour import get_tours, ObjectTour
-from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, PosibleVisita, Horario, PosibleTour, Visita
+from logistica.models import *
 from logistica.forms import NewTourForm
-import datetime
+from logistica.views.constants import *
 from .calendar import get_event_by_monitor, get_events_by_espacio, \
     convert_object_tour_to_event, visitaToEventforEspacio
+
+import datetime
 
 
 def home(request):
@@ -16,6 +18,10 @@ def home(request):
     if user.is_authenticated:
         return redirect(reverse(principal))
     return redirect(reverse(login_user))
+
+
+def error_page(request, err):
+    return render(request, 'app/error_page.html', {'info': err})
 
 
 def get_places_by_group():
@@ -123,7 +129,7 @@ def principal(request):
         }
         return render(request, 'app/principal.html', context)
     else:
-        redirect('/')
+        redirect(reverse(home))
 
 
 def login_user(request):
@@ -151,45 +157,81 @@ def logout_user(request):
 
 def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
+        events = []
+        monitores = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
+            monitores = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_monitor_tour():
+            events = get_event_by_monitor(request.user.monitor.pk)
+        # El resto no tiene acceso
+        else:
+            return error_page(request, ERR_NOT_AUTH)
         context = {
-            'events': get_event_by_monitor(pk_monitor),
-            'monitores': Monitor.objects.all()
+            'events': events,
+            'monitores': monitores,
+            'pk_monitor': int(pk_monitor) if pk_monitor is not None else None
         }
         return render(request, 'app/monitor.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
+        events = []
+        espacios = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+            espacios = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_encargado_espacio():
+            space = Espacio.objects.filter(encargado__pk=request.user.pk)
+            if space.exists():
+                events = get_events_by_espacio(space.all()[0].pk)
+            else:
+                return error_page(request, ALERT_NO_SPACES)
+        # El resto no tiene acceso
+        else:
+            return error_page(request, ERR_NOT_AUTH)
         context = {
-            'events': get_events_by_espacio(pk_espacio),
-            'espacios': Espacio.objects.all()
+            'events': events,
+            'espacios': Espacio.objects.all(),
+            'pk_espacio': int(pk_espacio) if pk_espacio is not None else None
         }
-        print(context)
         return render(request, 'app/espacio.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def monitorProfile(request):
     if request.user.is_authenticated:
+        if not request.user.is_encargado_actividad():
+            return error_page(request, ERR_NOT_AUTH)
         try:
             if request.method == 'GET':
-                context = {
-                    'actividades': Actividad.objects.filter(monitor=request.user.monitor)
-                }
-                return render(request, 'app/profile.html', context)
-            if request.method == 'POST':
-                monitorActivo = request.user.monitor
-                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                actividades = Actividad.objects.filter(monitor=request.user.monitor)
+                if not actividades:
+                    return error_page(request, ALERT_NO_ACTIVITIES)
+                return render(request, 'app/profile.html', {'actividades': actividades})
+            elif request.method == 'POST':
+                monitor_activo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitor_activo)
                 act = Actividad.objects.get(id=request.POST['actividad'])
-                context = {'actividades': actividades, 'act': act}
+                if not act:
+                    return error_page(request, ALERT_NO_ACTIVITIES)
+                context = {
+                    'actividades': actividades,
+                    'act': act
+                }
                 return render(request, 'app/profile_edit.html', context)
         except:
-            return redirect('/')
+            return redirect(reverse(home))
     else:
-        return redirect('/')
+        return redirect(reverse(login_user))
 
 
 def updateActividad(request):
@@ -197,7 +239,7 @@ def updateActividad(request):
     actividad.nombre = request.POST['nombre']
     actividad.capacidadActual = request.POST['asistentes']
     actividad.save()
-    return redirect('/profile/')
+    return redirect(reverse(monitorProfile))
 
 
 def espacio_master(request):
