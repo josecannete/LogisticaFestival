@@ -6,7 +6,7 @@ from logistica.models import Visita, Espacio, Tour, Horario
 import datetime
 import collections
 
-def available_at(space, init_time, debug=False):
+def available_at(space, init_time):
     """
     Args:
         space: Espacio
@@ -20,30 +20,24 @@ def available_at(space, init_time, debug=False):
     # if the place is not available at this time return false
     place_is_open = False
     for block_open in space.horarioAbierto.all():
-        if debug:
-            print("Abierto: {} - {}".format(block_open.inicio, block_open.fin))
-            print("Mi horario: {} - {}".format(latest_begin, earliest_end))
         if block_open.inicio <= latest_begin and block_open.fin >= earliest_end:
             place_is_open = True
     if not place_is_open:
-        if debug:
-            print("Not available")
         return False
     # get all the visits scheduled at this place
-    visits_this_place = Visita.objects.filter(espacio=space)
-    for visit in visits_this_place:
+    hours_visits_this_place = Visita.objects.filter(espacio=space)
+    if len(hours_visits_this_place) > 0:
+        hours_visits_this_place = hours_visits_this_place[0].horario.all()
+    for hours_visit in hours_visits_this_place:
         # TODO: test
         # if the visit ends before my latest start time or if it starts after my earliest end time then it's ok.
         # (the negative) if it starts before my end and ends before my start then it's occupied
-        if debug:
-            print("Horario visita {} - {}".format(visit.horario.inicio, visit.horario.fin))
-        if not (visit.horario.fin <= latest_begin or
-                visit.horario.inicio >= earliest_end):
-            if debug:
-                print("Not available")
+        if not (hours_visit.fin <= latest_begin or
+                hours_visit.inicio >= earliest_end):
+            #print("{} already has visit. Requesting {}:{}-{}:{}, overlaps with {}:{}-{}:{}".format(
+            #    space, latest_begin.hour, latest_begin.minute, earliest_end.hour, earliest_end.minute,
+            #    hours_visit.inicio.hour, hours_visit.inicio.minute, hours_visit.fin.hour, hours_visit.fin.minute))
             return False
-    if debug:
-        print("Available")
     return True
 
 
@@ -139,7 +133,7 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
     print("Adding all possibles starts")
     for group in groups_places:
         for place in group:
-            if available_at(place, start_time, debug=False):
+            if available_at(place, start_time):
                 incomplete_tours.append(ObjectTour(place, start_time))
     # generate all possible tours according to time constraint
     print("..Creating all possible tours, len(seeds)=", len(incomplete_tours))
