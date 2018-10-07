@@ -35,66 +35,62 @@
 {% block content %}
 
     {% for event in events %}
-    <script>
-        $(function (){
+        <script>
+            $(function () {
                 {% with y=forloop.counter|stringformat:"s" %}
-            {% with template="'#calendar"|add:y|add:"'" %}
-                {% with eventos="events"|add:y %}
-            $({{ template|safe }}).fullCalendar({
-                defaultDate: '2018-10-18',
-                columnHeader: 'false',
-                aspectRatio: 0,
-                minTime: "09:00:00",
-                maxTime: "19:00:00",
-                theme: 'bootstrap4',
-                header: 'false',
-                nowIndicator: 'true',
-                defaultView: 'agendaDay',
-                events: {{ event|safe }}
+                    {% with template="'#calendar"|add:y|add:"'" %}
+                        {% with eventos="events"|add:y %}
+                            $({{ template|safe }}).fullCalendar({
+                                defaultDate: '2018-10-18',
+                                columnHeader: 'false',
+                                aspectRatio: 0,
+                                minTime: "09:00:00",
+                                maxTime: "19:00:00",
+                                theme: 'bootstrap4',
+                                header: 'false',
+                                nowIndicator: 'true',
+                                defaultView: 'agendaDay',
+                                events: {{ event|safe }}
+                            });
+                        {% endwith%}
+                    {% endwith%}
+                {% endwith %}
             });
-            {% endwith%}
-            {% endwith%}
-            {% endwith %}
-        });
-    </script>
+        </script>
     {% endfor %}
 
-
-
     <div class="container-fluid">
-    <form method="POST" action="{% url 'showTour' %}">
-    {% csrf_token %}
-    <div class="form-group">
-    <div class="row">
-        {% for id in idTours %}
-            {% with y=forloop.counter|stringformat:"s" %}
-            {% with template="calendar"|add:y %}
-        <div class="col">
-            <div id={{ template }}></div>
-        <center>  <input class="form-check-input" type="radio" name="optionTourId" id={{ id }} value={{ id }} checked>
-  <label class="form-check-label" for="exampleRadios1">
-  </label></center>
+        <form method="POST" action="{% url 'showTour' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="row">
+                    {% for id in idTours %}
+                        {% with y=forloop.counter|stringformat:"s" %}
+                            {% with template="calendar"|add:y %}
+                                <div class="col">
+                                    <div id={{ template }}></div>
+                                    <center><input class="form-check-input" type="radio" name="optionTourId"
+                                                   id={{ id }} value={{ id }} checked>
+                                        <label class="form-check-label" for="exampleRadios1">
+                                        </label></center>
+                                </div>
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+                <div class="row"></div>
+                <select class="form-control"
+                        id="select_monitor" name="select_monitor">
+                    {% for monitor in monitores %}
+                        <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            {% endwith%}
-            {% endwith %}
-        {% endfor %}
+            <div class="form-row text-center">
+                <div class="col mx-auto"><input type="submit" class="btn btn-info btn-lg"
+                                                value="Selecciona tour y monitor"></div>
+            </div>
+        </form>
     </div>
-    <div class="row"></div>
-                    <select class="form-control"
-                            id="select_monitor" name="select_monitor">
-                        {% for monitor in monitores %}
-                            <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
-                        {% endfor %}
-                    </select>
-    </div>
-    <div class="form-row text-center"> <div class="col mx-auto"><input type="submit" class="btn btn-info btn-lg" value="Selecciona tour y monitor"></div></div>
-    </form>
-    </div>
-    </div>
-
-
-
-
-
 
 {% endblock %}

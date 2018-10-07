@@ -47,8 +47,6 @@ urlpatterns = [
     url(r'^profile/', logistica.monitorProfile, name='profile'),
     url(r'^update/', logistica.updateActividad, name='update'),
 
-    url(r'^not_allowed/', logistica.not_allowed, name='not_allowed'),
-
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

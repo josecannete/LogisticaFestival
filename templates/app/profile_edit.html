@@ -4,71 +4,65 @@
 {% block content %}
     <div class="row">
         <div class="col-md-12">
-            {% if user.is_encargado_actividad and act %}
-                <div class="card">
-                    <div class="card-header">
-                        Asistentes Actividad
-                    </div>
-                    <div id="div_for_alert"></div>
-
-                    <div class="card-body" id="card_id">
-                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
-                              id="edit_capacity_form">
-                            {% csrf_token %}
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="activity">Actividad</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="actividad" name="actividad"
-                                            onchange="document.edit.submit();">
-                                        <option disabled selected value> --</option>
-                                        {% for actividad in actividades %}
-                                            <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                        <form action="{% url 'update' %}" method="post">
-                            {% csrf_token %}
-
-                            <input type="number" class="form-control" name="id" value="{{ act.pk }}" hidden>
-                            <div class="form-group row" id="ca_div">
-                                <label class="col-md-3 col-form-label" for="text-input">Nombre</label>
-
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="nombre" id="activity_name"
-                                           value="{{ act.nombre }}">
-                                </div>
-                            </div>
-
-                            <div class="form-group row" id="act_type_div">
-                                <label class="col-md-3 col-form-label" for="text-input">Tipo</label>
-                                <div class="col-md-9 col-form-label" id="activity_type">{{ act.tipo }}</div>
-                            </div>
-
-                            <div class="form-group row" id="ct_div">
-                                <label class="col-md-3 col-form-label" for="text-input">Capacidad Total</label>
-                                <div class="col-md-9 col-form-label" id="ct_value">{{ act.capacidadTotal }}</div>
-                            </div>
-
-                            <div class="form-group row" id="ca_div">
-                                <label class="col-md-3 col-form-label" for="text-input">Asistentes</label>
-
-                                <div class="col-md-9">
-                                    <input type="number" class="form-control" name="asistentes" id="activity_ca"
-                                           value="{{ act.capacidadActual }}">
-                                </div>
-                            </div>
-                            <button class="button" type="submit">Actualizar</button>
-
-                        </form>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    Asistentes Actividad
                 </div>
-            {% elif user.is_encargado_actividad %}
-                {% include 'card/no_activities.html' %}
-            {% else %}
-                {% include 'card/not_authorized.html' %}
-            {% endif %}
+                <div id="div_for_alert"></div>
+
+                <div class="card-body" id="card_id">
+                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"
+                          id="edit_capacity_form">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="activity">Actividad</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="actividad" name="actividad"
+                                        onchange="document.edit.submit();">
+                                    <option disabled selected value> --</option>
+                                    {% for actividad in actividades %}
+                                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="{% url 'update' %}" method="post">
+                        {% csrf_token %}
+
+                        <input type="number" class="form-control" name="id" value="{{ act.pk }}" hidden>
+                        <div class="form-group row" id="ca_div">
+                            <label class="col-md-3 col-form-label" for="text-input">Nombre</label>
+
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="nombre" id="activity_name"
+                                       value="{{ act.nombre }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row" id="act_type_div">
+                            <label class="col-md-3 col-form-label" for="text-input">Tipo</label>
+                            <div class="col-md-9 col-form-label" id="activity_type">{{ act.tipo }}</div>
+                        </div>
+
+                        <div class="form-group row" id="ct_div">
+                            <label class="col-md-3 col-form-label" for="text-input">Capacidad Total</label>
+                            <div class="col-md-9 col-form-label" id="ct_value">{{ act.capacidadTotal }}</div>
+                        </div>
+
+                        <div class="form-group row" id="ca_div">
+                            <label class="col-md-3 col-form-label" for="text-input">Asistentes</label>
+
+                            <div class="col-md-9">
+                                <input type="number" class="form-control" name="asistentes" id="activity_ca"
+                                       value="{{ act.capacidadActual }}">
+                            </div>
+                        </div>
+                        <button class="button" type="submit">Actualizar</button>
+
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     {#    <div class="container-fluid">#}
