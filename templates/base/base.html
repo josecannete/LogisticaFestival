@@ -4,35 +4,7 @@
 
 <!--Headers-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-    <meta name="author" content="Circle Fintech">
-    <meta name="keyword" content="">
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'dist/img/favicon/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'dist/img/favicon/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dist/img/favicon/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'dist/img/favicon/site.webmanifest' %}">
-    <link rel="mask-icon" href="{% static 'dist/img/favicon/safari-pinned-tab.svg' %}" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-    <title>IV° Festival Ingeniería y Ciencias</title>
-    <style>
-        .container-fluid {
-            margin-top: 24px;
-        }
-    </style>
-
-    <!-- Icons -->
-    <link href="{% static 'dist/vendors/css/font-awesome.min.css' %}" rel="stylesheet">
-    <link href="{% static 'dist/vendors/css/simple-line-icons.min.css' %}" rel="stylesheet">
-
-    <!-- Main styles for this application -->
-    <link href="{% static 'dist/css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'src/css/extra_main.css' %}" rel="stylesheet">
-    <script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>
-
+    {% include 'base/header.html' %}
     {% block extrahead %}
     {% endblock %}
 </head>
@@ -69,115 +41,44 @@
 <!--Navbar-->
 
 <header class="app-header navbar">
-    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="{% url 'principal' %}"></a>
-    <button class="brand-minimizer navbar-toggler sidebar-toggler d-md-down-none" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <ul class="nav navbar-nav ml-auto">
-        <li id="name_user">{{ user.monitor.nombre }}</li>
-
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
-               aria-haspopup="true" aria-expanded="false">Opciones
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{% url 'logout_user' %}"><i class="fa fa-lock"></i> Cerrar Sesión</a>
-            </div>
-        </li>
-    </ul>
-
+    {% include 'base/navbar.html' %}
     {% block navbar %}
     {% endblock %}
-
 </header>
 
 <div class="app-body">
+
     <!--Sidebar-->
     <div class="sidebar">
-        <nav class="sidebar-nav">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'principal' %}"><i class="icon-speedometer"></i> Principal</a>
-                </li>
-                {% if user.is_encargado_actividad %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'activities' %}"><i class="icon-puzzle"></i> Actividades</a>
-                    </li>
-                {% endif %}
-                {% if user.is_monitor_stand or user.is_monitor_tour %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'monitor' %}"><i class="fa fa-user"></i> Monitores</a>
-                    </li>
-                {% endif %}
-                {% if user.is_monitor_stand or user.is_encargado_espacio %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flask"></i> Espacios</a>
-                    </li>
-                {% endif %}
-                {% if user.is_encargado_actividad %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user"></i> Mis Actividades</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-
+        {% include 'base/sidebar.html' %}
         {% block sidebar %}
         {% endblock %}
     </div>
 
     <!-- Main content -->
     <main class="main">
-
         <!-- Page contents -->
         <div class="container-fluid">
             <div class="animated fadeIn">
                 {% block content %}
                 {% endblock %}
             </div>
-
         </div>
         <!-- /.conainer-fluid -->
     </main>
-
 
 </div>
 
 <!--Footer-->
 <footer class="app-footer">
-    <span><a href="#">Difusión</a> © 2018</span>
+    {% include 'base/footer.html' %}
     {% block extrafooter %}
     {% endblock %}
 </footer>
 
 <!--JS-->
-
-<!-- Bootstrap and necessary plugins -->
-{#<script src="{% static 'dist/vendors/js/jquery.min.js' %}"></script>#}
-<script src="{% static 'dist/vendors/js/popper.min.js' %}"></script>
-<script src="{% static 'dist/vendors/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'dist/vendors/js/pace.min.js' %}"></script>
-
-<!-- Plugins and scripts required by all views -->
-<!--Chart JS is commented out due to console errors-->
-<!--<script src="{% static 'dist/vendors/js/Chart.min.js' %}"></script>-->
-
-<!-- CoreUI main scripts -->
-
-<script src="{% static 'dist/js/app.js' %}"></script>
-
-<!-- Plugins and scripts required by this views -->
-
-<!-- Custom scripts required by this view -->
-<script src="{% static 'dist/js/views/main.js' %}"></script>
-
+{% include 'base/js.html' %}
 {% block extrascript %}
-
 {% endblock %}
 
 
