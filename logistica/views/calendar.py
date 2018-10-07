@@ -1,4 +1,4 @@
-from logistica.models import Visita
+from logistica.models import Visita, Tour
 import json
 import datetime
 
@@ -16,11 +16,11 @@ def visitaToEventforMonitor(visita):
     return event
 
 
-def visitaToEventforEspacio(visita):
+def visitaToEventforEspacio(visita, monitor):
     inicio = str(visita.horario.all()[0].inicio.isoformat())
     fin = str(visita.horario.all()[0].fin.isoformat())
-    title = str(visita.monitor.nombre)
-    contacto = str(visita.monitor.contacto)
+    title = str(monitor.nombre)
+    contacto = str(monitor.contacto)
 
     event = {
         "title": title,
@@ -57,8 +57,10 @@ def get_event_by_monitor(pk_monitor):
 
 
 def get_events_by_espacio(pk_espacio):
-    visitas = Visita.objects.filter(espacio__pk=pk_espacio)
+    tours = Tour.objects.filter(visitas__espacio__pk=pk_espacio)
     events = []
-    for visita in visitas:
-        events.append(visitaToEventforEspacio(visita))
+    for tour in tours:
+        visita = tour.visitas.filter(espacio__pk=pk_espacio)[0]
+        monitor = tour.monitor
+        events.append(visitaToEventforEspacio(visita,monitor))
     return json.dumps(events)
