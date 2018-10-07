@@ -175,7 +175,7 @@ def espacio(request, pk_espacio=None):
 
 def monitorProfile(request):
     if request.user.is_authenticated:
-        if not request.user.is_encargado_actividad:
+        if not request.user.is_encargado_actividad():
             return error_page(request, ERR_NOT_AUTH)
         try:
             if request.method == 'GET':
