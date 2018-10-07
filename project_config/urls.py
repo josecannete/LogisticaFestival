@@ -18,11 +18,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.views.defaults import page_not_found
+from django.views.static import serve
 
 import logistica.views as logistica
 
-
+handler500 = 'logistica.views.common.error_500'
+handler404 = 'logistica.views.common.error_404'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -54,6 +55,8 @@ urlpatterns = [
     url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
+
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

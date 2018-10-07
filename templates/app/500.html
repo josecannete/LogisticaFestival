@@ -1,0 +1,15 @@
+{% extends 'base/base_login.html' %}
+{% load static %}
+
+{% block main_card %}
+    <h1>Error 500</h1>
+    <p>El server está fallando!</p>
+    <img src="{% static 'src/gif/500_'|add:gif_number|add:'.gif' %}" alt="Inserte gif de pánico acá" style="width: 100%; padding-bottom: 10px">
+    <p>Por favor contacta a uno de los desarrolladores antes que el festival explote:</p>
+    <ul class="list-group">
+        <li class="list-group-item">José Cañete: +569 8438 7585</li>
+        <li class="list-group-item">Constanza Fierro: +569 4890 1996</li>
+        <li class="list-group-item">Javier Gómez: +569 8190 1224</li>
+        <li class="list-group-item">Franco Sepúlveda: +569 8642 8462</li>
+    </ul>
+{% endblock %}
