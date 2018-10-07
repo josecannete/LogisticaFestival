@@ -127,3 +127,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'logisticafcfm@gmail.com'
+EMAIL_HOST_PASSWORD = 'toursfcfm'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Logística IV° Festival Ingeniería y Ciencias <logisticafcfm@gmail.com>'
