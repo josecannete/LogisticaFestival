@@ -7,7 +7,7 @@ from logistica.arma_tour import get_tours, ObjectTour
 from logistica.models import *
 from logistica.forms import NewTourForm
 from logistica.views.constants import *
-from .calendar import get_event_by_monitor, get_events_by_espacio, \
+from .calendar import get_event_by_monitor, get_events_by_espacio, get_events_by_tour, \
     convert_object_tour_to_event, visitaToEventforEspacio
 
 import datetime
@@ -35,8 +35,8 @@ def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
-        add_to_realdb(idTour, idMonitor)
-        context = {}
+        tour = add_to_realdb(idTour, idMonitor)
+        context = {'events': get_events_by_tour(tour.pk)}
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 

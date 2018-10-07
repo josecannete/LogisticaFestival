@@ -66,3 +66,10 @@ def get_events_by_espacio(pk_espacio):
         monitor = tour.monitor
         events.append(visitaToEventforEspacio(visita,monitor))
     return json.dumps(events)
+
+def get_events_by_tour(pk_tour):
+    tour = Tour.objects.get(pk=pk_tour)
+    events = []
+    for visita in tour.visitas.all():
+        events.append(visitaToEventforMonitor(visita))
+    return json.dumps(events)
