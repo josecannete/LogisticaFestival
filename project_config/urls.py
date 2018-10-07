@@ -44,6 +44,8 @@ urlpatterns = [
     url(r'^espacio/(?P<pk_espacio>[0-9A-Za-z_\-]+)/$', logistica.espacio, name='espacio'),
     url(r'^espacio/', logistica.espacio, name='espacio'),
 
+    url(r'^espacio_master/', logistica.espacio_master, name='espacio_master'),
+
     url(r'^profile/', logistica.monitorProfile, name='profile'),
     url(r'^update/', logistica.updateActividad, name='update'),
 

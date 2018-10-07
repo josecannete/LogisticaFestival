@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load staticfiles %}
+
+
+{# END OF CONTENT #}
+{% block extrahead %}
+
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
+    <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
+    <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
+    <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
+{% endblock %}
+
+{% block extrascript %}
+
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
+    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
+    <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
+    <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
+    <script src='{% static 'fullcalendar/es.js' %}'></script>
+    <script src='{% static 'src/js/espacio.js' %}'></script>
+    <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
+
+{% endblock %}
+
+{% block content %}
+
+    {% for event in events %}
+    <script>
+        $(function (){
+                {% with y=forloop.counter|stringformat:"s" %}
+            {% with template="'#calendar"|add:y|add:"'" %}
+                {% with eventos="events"|add:y %}
+            $({{ template|safe }}).fullCalendar({
+                timezone: 'America/Santiago',
+                defaultDate: '2018-10-18',
+                columnHeader: 'false',
+                aspectRatio: 0,
+                minTime: "09:00:00",
+                maxTime: "19:00:00",
+                contentHeight: 'auto',
+                theme: 'bootstrap4',
+                header: 'false',
+                nowIndicator: 'true',
+                defaultView: 'agendaDay',
+                events: {{ event|safe }}
+            });
+            {% endwith%}
+            {% endwith%}
+            {% endwith %}
+        });
+    </script>
+    {% endfor %}
+
+
+
+    <div class="row">
+        <div class="col-md-12 d-flex flex-row flex-wrap">
+            {% for nombre_espacio in name_places %}
+                {% with y=forloop.counter|stringformat:"s" %}
+                {% with template="calendar"|add:y %}
+            <div class="col-md-4 col-sm-6 card">
+                <div class="card-header">
+                   {{ nombre_espacio }}
+                </div>
+                <div class="card-body" id={{ template }}>
+                    <div id='calendar'></div>
+                </div>
+            </div>
+                {% endwith%}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+{% endblock %}

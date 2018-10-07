@@ -8,7 +8,7 @@ from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, Po
 from logistica.forms import NewTourForm
 import datetime
 from .calendar import get_event_by_monitor, get_events_by_espacio, \
-    convert_object_tour_to_event
+    convert_object_tour_to_event, visitaToEventforEspacio
 
 
 def home(request):
@@ -198,3 +198,17 @@ def updateActividad(request):
     actividad.capacidadActual = request.POST['asistentes']
     actividad.save()
     return redirect('/profile/')
+
+
+def espacio_master(request):
+    if request.user.is_authenticated:
+        all_places = Espacio.objects.all()
+        context = {
+            'name_places': [place.nombre for place in all_places],
+            'events': [[visitaToEventforEspacio(visit, Monitor.objects.get(nombre="Monitor_1"))
+                        for visit in Visita.objects.filter(espacio=place)]
+                       for place in all_places]
+        }
+        return render(request, 'app/espacio_master.html', context)
+    else:
+        return redirect('/')
