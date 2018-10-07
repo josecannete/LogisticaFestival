@@ -29,30 +29,48 @@ def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
-        tour = Tour.objects.get(idTour)
-        tour.confirmado = True
-        tour.monitor = Monitor.objects.get(idMonitor)
-        tour.save()
+        add_to_realdb(idTour, idMonitor)
         context = {}
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
+def add_to_realdb(optionTourId, selectedMonitorId):
+    posibleTour = PosibleTour.objects.get(pk=optionTourId)
+    monitor = Monitor.objects.get(pk=selectedMonitorId)
+    nombre = posibleTour.nombre
+    horaInicio = posibleTour.horaInicio
+    duracion = posibleTour.duracion
+    alumnos = posibleTour.alumnos
+    realTour = Tour.objects.get_or_create(monitor=monitor, nombre=nombre, horaInicio=horaInicio, duracion=duracion,
+                                          alumnos=alumnos)[0]
+    posiblesVisitas = posibleTour.visitas.all()
+    for posibleVisita in posiblesVisitas:
+        espacio = posibleVisita.espacio
+        horario = list(posibleVisita.horario.all())
+        realVisita = Visita.objects.get_or_create(espacio=espacio)[0]
+        realVisita.horario.add(*horario)
+        realTour.visitas.add(realVisita)
+
+    return realTour
+
+
 def add_to_fakedb(objectTour, nombre, alumnos):
     horaInicio = objectTour.start_times[0]
-    duracion = objectTour.end_time - horaInicio
-    monitor = Monitor.objects.get(1)
+    duracion = (objectTour.end_time - horaInicio).seconds / 60
+    monitor = Monitor.objects.get(pk=1)
 
     posible_tour = PosibleTour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
-                               duracion=duracion, confirmado=False)
+                               duracion=duracion)
 
-    for i in range(objectTour.places):
+    for i in range(len(objectTour.places)):
         start_time = objectTour.start_times[i]
-        end_time = start_time + objectTour.places[i].duracion
-        horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)
-        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i]).horario.add(horario)
+        end_time = start_time + datetime.timedelta(objectTour.places[i].duracion)
+        horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
+        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i])[0]
+        posible_visita.horario.add(horario)
         posible_tour.visitas.add(posible_visita)
 
-    return posible_tour.id
+    return posible_tour
 
 
 def create_tour_request(request):
@@ -74,11 +92,11 @@ def create_tour_request(request):
                  for this_time, space in zip(tour_.start_times, tour_.places)]) for tour_ in tour_options]))
 
         nombre = tour.cleaned_data['nombre']
+        idTours = []
+
         for object_tour in tour_options:
-            print(add_to_fakedb(object_tour, nombre, number_people))
+            idTours.append(add_to_fakedb(object_tour, nombre, number_people).id)
 
-
-        idTours = [1, 2, 3, 4, 5]
         events = [convert_object_tour_to_event(tour_option) for tour_option in tour_options]
         print("LIST EVENTS:")
         print('\n'.join(events))
