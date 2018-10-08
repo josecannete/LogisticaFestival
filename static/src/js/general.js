@@ -16,3 +16,16 @@ function htmlToElement(html) {
     template.innerHTML = html;
     return template.content.firstChild;
 }
+
+function myFunction(){
+    console.log("form submitted!")
+}
+
+$('#new_tour_form').on('submit', function(event) {
+        console.log("form submitted!")
+        var $this = $(document.getElementById("load"));
+      $this.button('loading');
+        setTimeout(function() {
+           $this.button('reset');
+       }, 8000);
+});
