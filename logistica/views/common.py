@@ -205,7 +205,7 @@ def espacio_master(request):
         all_places = Espacio.objects.all()
         context = {
             'name_places': [place.nombre for place in all_places],
-            'events': [[visitaToEventforEspacio(visit, Monitor.objects.get(nombre="Monitor_1"))
+            'events': [[visitaToEventforEspacio(visit, Monitor.objects.get(nombre="Monitor_1"), "")
                         for visit in Visita.objects.filter(espacio=place)]
                        for place in all_places]
         }

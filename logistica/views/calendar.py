@@ -1,4 +1,4 @@
-from logistica.models import Visita, Tour
+from logistica.models import Visita, Tour, Espacio
 import json
 import datetime
 
@@ -16,17 +16,18 @@ def visitaToEventforMonitor(visita):
     return event
 
 
-def visitaToEventforEspacio(visita, monitor):
+def visitaToEventforEspacio(visita, monitor, name_tour):
     inicio = str(visita.horario.all()[0].inicio.isoformat())
     fin = str(visita.horario.all()[0].fin.isoformat())
-    title = str(monitor.nombre)
+    name_monitor = str(monitor.nombre)
     contacto = str(monitor.contacto)
 
     event = {
-        "title": title,
+        "title": name_tour,
         "start": inicio,
         "end": fin,
-        "contacto": contacto
+        "contacto": contacto,
+        "description": name_monitor
     }
     return event
 
@@ -62,5 +63,19 @@ def get_events_by_espacio(pk_espacio):
     for tour in tours:
         visita = tour.visitas.filter(espacio__pk=pk_espacio)[0]
         monitor = tour.monitor
-        events.append(visitaToEventforEspacio(visita,monitor))
+        events.append(visitaToEventforEspacio(visita, monitor, tour.nombre))
     return json.dumps(events)
+
+
+def get_name_and_events_by_espacio():
+    tours = Tour.objects.all()
+    espacios = Espacio.objects.all()
+    espacios_id = {}
+    for espacio in espacios:
+        espacios_id[espacio.nombre] = []
+    for tour in tours:
+        visitas = tour.visitas.all()
+        print("here--->", len(visitas))
+        for visita in visitas:
+            espacios_id[visita.espacio.nombre].append(visitaToEventforEspacio(visita, tour.monitor, tour.nombre))
+    return [espacios_id.keys(), [json.dumps(events_by_espacio) for events_by_espacio in espacios_id.values()]]

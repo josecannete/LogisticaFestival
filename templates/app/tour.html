@@ -51,6 +51,8 @@
                 header: 'false',
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
+                contentHeight: 'auto',
+                allDaySlot: false,
                 events: {{ event|safe }}
             });
             {% endwith%}
@@ -66,29 +68,34 @@
     <form method="POST" action="{% url 'showTour' %}">
     {% csrf_token %}
     <div class="form-group">
-    <div class="row">
+    <div class="row d-flex flex-row flex-wrap justify-content-around">
         {% for id in idTours %}
             {% with y=forloop.counter|stringformat:"s" %}
             {% with template="calendar"|add:y %}
-        <div class="col">
-            <div id={{ template }}></div>
-        <center>  <input class="form-check-input" type="radio" name="optionTourId" id={{ id }} value={{ id }} checked>
-  <label class="form-check-label" for="exampleRadios1">
-  </label></center>
+            <div class="col-md-2 card" style="padding: 0.7em;">
+                <div class="text-center">Opción {{y}}</div>
+                <div id={{ template }} style="margin-bottom: 1em"></div>
+                <div class="align-self-center">
+                    <input class="form-check-input" type="radio" name="optionTourId" id={{ id }} value={{ id }} checked>
+                    <label class="form-check-label" for="exampleRadios1"></label>
+                </div>
             </div>
             {% endwith%}
             {% endwith %}
         {% endfor %}
     </div>
     <div class="row"></div>
-                    <select class="form-control"
-                            id="select_monitor" name="select_monitor">
-                        {% for monitor in monitores %}
-                            <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
-                        {% endfor %}
-                    </select>
+        <select class="form-control" id="select_monitor" name="select_monitor">
+            {% for monitor in monitores %}
+            <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
+            {% endfor %}
+        </select>
     </div>
-    <div class="form-row text-center"> <div class="col mx-auto"><input type="submit" class="btn btn-info btn-lg" value="Selecciona tour y monitor"></div></div>
+    <div class="form-row text-center" style="margin-bottom: 2em">
+        <div class="col mx-auto">
+            <input type="submit" class="btn btn-primary btn-lg" value="Selecciona tour y monitor"
+                   style="border-radius: 0.4em;">
+        </div></div>
     </form>
     </div>
     </div>
