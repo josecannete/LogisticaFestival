@@ -68,9 +68,8 @@ def add_to_realdb(optionTourId, selectedMonitorId):
     posiblesVisitas = posibleTour.visitas.all()
     for posibleVisita in posiblesVisitas:
         espacio = posibleVisita.espacio
-        horario = list(posibleVisita.horario.all())
-        realVisita = Visita.objects.get_or_create(espacio=espacio)[0]
-        realVisita.horario.add(*horario)
+        horario = posibleVisita.horario
+        realVisita = Visita.objects.get_or_create(espacio=espacio, horario=horario)[0]
         realTour.visitas.add(realVisita)
 
     return realTour
@@ -88,8 +87,7 @@ def add_to_fakedb(objectTour, nombre, alumnos):
         start_time = objectTour.start_times[i]
         end_time = start_time + datetime.timedelta(minutes=objectTour.places[i].duracion)
         horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
-        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i])[0]
-        posible_visita.horario.add(horario)
+        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i], horario=horario)[0]
         posible_tour.visitas.add(posible_visita)
 
     return posible_tour
@@ -103,7 +101,7 @@ def create_tour_request(request):
         tour.save()
         print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now().replace(day=18, hour=13)  # TODO: delete replace
+        start_time = timezone.now().replace(day=18, hour=12)  # TODO: delete replace
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
@@ -134,10 +132,12 @@ def create_tour_request(request):
 
 def principal(request):
     if request.user.is_authenticated:
-        charlas = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
-                                           horario__inicio__day=datetime.datetime.now().day, tipo='charla')
-        talleres = Actividad.objects.filter(horario__inicio__gt=datetime.datetime.now(),
-                                            horario__inicio__day=datetime.datetime.now().day, tipo='taller')
+        # start_time = datetime.datetime.now()
+        start_time = timezone.now().replace(day=18, hour=12)    # TODO: Eliminar
+        charlas = Actividad.objects.filter(horario__inicio__gt=start_time,
+                                           horario__inicio__day=start_time.day, tipo='charla')
+        talleres = Actividad.objects.filter(horario__inicio__gt=start_time,
+                                            horario__inicio__day=start_time.day, tipo='taller')
         context = {
             'charlas': charlas,
             'talleres': talleres,

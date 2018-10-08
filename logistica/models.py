@@ -40,7 +40,7 @@ class Horario(models.Model):
     fin = models.DateTimeField()
 
     def __str__(self):
-        return str(self.inicio) + " -> " + str(self.fin)
+        return self.inicio.strftime("%d/%m %H:%M") + " -> " + self.fin.strftime("%H:%M")
 
 
 class Monitor(models.Model):
@@ -64,17 +64,17 @@ class Espacio(models.Model):
     duracion = models.IntegerField()  # minutos
 
     def __str__(self):
-        #horarios_str = ["{}-{}/{}".format(this_horario.inicio.hour-3, this_horario.fin.hour-3, this_horario.inicio.day)
-        #                for this_horario in self.horarioAbierto.all()]
-        #return "{} \ zona:{} \ {} \ capacidad:{}".format(str(self.nombre), str(self.zona), horarios_str, self.capacidad)
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
 
 
 # Visita
 # Un tour es un conjunto de visitas
 class Visita(models.Model):
-    horario = models.ManyToManyField(Horario)
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.espacio) + " - " + str(self.horario)
 
 
 # Tour
@@ -116,8 +116,12 @@ Todo lo que esta abajo es para no tener que guardar los posibles tours en la bas
 # PosibleVisita
 # Un tour es un conjunto de visitas
 class PosibleVisita(models.Model):
-    horario = models.ManyToManyField(Horario)
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE, null=True)
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.espacio) + " - " + str(self.horario)
+
 
 # PosibleTour
 class PosibleTour(models.Model):
