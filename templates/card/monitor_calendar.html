@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header">
+        Visión Monitor
+    </div>
+    <div class="card-body" id="card_id">
+        {% if user.is_monitor_stand %}
+            <select class="form-control"
+                    id="select_monitor" data-parsley-multiple="tabs">
+                <option disabled {% if not pk_monitor %}selected{% endif %}>Seleccionar Monitor</option>
+                {% for monitor in monitores %}
+                    <option value="{{ monitor.id }}"
+                            {% if monitor.id == pk_monitor %}selected{% endif %}>{{ monitor.nombre }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        <br>
+        <div id='calendar'></div>
+    </div>
+</div>

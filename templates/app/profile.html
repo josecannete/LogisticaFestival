@@ -3,56 +3,51 @@
 
 {% block content %}
 
-{#    <div class="container-fluid">#}
-{#        <div id="ui-view" align="center">#}
-{#            <form method="post" action="" name="edit" style="width: 60%">#}
-{#            {% csrf_token %}#}
-{#                <label for="actividad">Selecciona una actividad</label>#}
-{#                <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">#}
-{#                <option disabled selected value> -- </option>#}
-{#                    {% for actividad in actividades %}#}
-{#                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{##}
-{#            </form>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="container-fluid">#}
+    {#        <div id="ui-view" align="center">#}
+    {#            <form method="post" action="" name="edit" style="width: 60%">#}
+    {#            {% csrf_token %}#}
+    {#                <label for="actividad">Selecciona una actividad</label>#}
+    {#                <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">#}
+    {#                <option disabled selected value> -- </option>#}
+    {#                    {% for actividad in actividades %}#}
+    {#                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>#}
+    {#                    {% endfor %}#}
+    {#                </select>#}
+    {##}
+    {#            </form>#}
+    {#        </div>#}
+    {#    </div>#}
 
 
 
     <div class="row">
         <div class="col-md-12">
-            {% if  user.is_encargado_actividad and actividades %}
-                <div class="card">
-                    <div class="card-header">
-                        Asistentes Actividad
-                    </div>
-
-                    <div class="card-body" id="card_id">
-                        <form action="" name="edit" method="post" enctype="multipart/form-data" class="form-horizontal"
-                              id="edit_capacity_form">
-                            {% csrf_token %}
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label" for="activity">Actividad</label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="actividad" name="actividad" onchange="document.edit.submit();">
-                                        <option disabled selected value> --</option>
-                                        {% for actividad in actividades %}
-                                            <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    Asistentes Actividad
                 </div>
-            {% elif user.is_encargado_actividad %}
-                {% include 'card/no_activities.html' %}
-            {% else %}
-                {% include 'card/not_authorized.html' %}
-            {% endif %}
+
+                <div class="card-body" id="card_id">
+                    <form action="" name="edit" method="post" enctype="multipart/form-data" class="form-horizontal"
+                          id="edit_capacity_form">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="activity">Actividad</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="actividad" name="actividad"
+                                        onchange="document.edit.submit();">
+                                    <option disabled selected value> --</option>
+                                    {% for actividad in actividades %}
+                                        <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

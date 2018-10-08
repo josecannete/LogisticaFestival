@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-header">
+        <i class="fa fa-align-justify"></i> Charlas
+    </div>
+    <div class="card-body">
+        <div class="jumbotron jumbotron-fluid"
+             style="background-color: white; padding: 1rem 2rem">
+            <div class="container">
+                <h1 class="display-3">Charlas</h1>
+                {% if charlas %}
+                    <div class="table-wrapper-scroll-y"
+                         style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Charla</th>
+                                <th scope="col">Hora inicio</th>
+                                <th scope="col">Hora término</th>
+                                <th scope="col">Asistentes</th>
+                                <th scope="col">Capacidad</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for charla in charlas %}
+                                <tr style="text-align: center">
+                                    <td class="filterable-cell">{{ charla.nombre }}</td>
+                                    <td class="filterable-cell">{{ charla.horario.inicio.time }}</td>
+                                    <td class="filterable-cell">{{ charla.horario.fin.time }}</td>
+                                    <td class="filterable-cell">{{ charla.capacidadActual }}</td>
+                                    <td class="filterable-cell">{{ charla.capacidadTotal }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                {% else %}
+                    No hay charlas para mostrar
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

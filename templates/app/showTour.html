@@ -2,10 +2,7 @@
 {% load static %}
 {% load staticfiles %}
 
-
-{# END OF CONTENT #}
 {% block extrahead %}
-
     <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
@@ -18,7 +15,6 @@
 {% endblock %}
 
 {% block extrascript %}
-
     <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
@@ -29,16 +25,16 @@
     <script src='{% static 'fullcalendar/es.js' %}'></script>
     <script src='{% static 'src/js/espacio.js' %}'></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>-->
-
 {% endblock %}
 
 {% block content %}
-
     <script>
         $(function (){
         for (i = 1; i <= 1; i++)
         {
             $('#calendar'+i.toString()).fullCalendar({
+                timezone: 'America/Santiago',
+                defaultDate: '2018-10-18',
                 columnHeader: 'false',
                 aspectRatio: 0,
                 minTime: "09:00:00",
@@ -51,18 +47,8 @@
             });
         }});
     </script>
-
-
-
-    <div class="row"></div>
     <div class="container-fluid">
-    <div id="calendar1"></div>
+    <div class="row"><div class="col text-center">    <h1> Tu Tour es el siguiente: </h1> </div></div>
+        <div id="calendar1"></div>
     </div>
-    </div>
-
-
-
-
-
-
 {% endblock %}

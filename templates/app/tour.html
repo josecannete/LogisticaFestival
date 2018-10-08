@@ -35,8 +35,8 @@
 {% block content %}
 
     {% for event in events %}
-    <script>
-        $(function (){
+        <script>
+            $(function () {
                 {% with y=forloop.counter|stringformat:"s" %}
             {% with template="'#calendar"|add:y|add:"'" %}
                 {% with eventos="events"|add:y %}
@@ -55,14 +55,12 @@
                 allDaySlot: false,
                 events: {{ event|safe }}
             });
-            {% endwith%}
-            {% endwith%}
+            {% endwith %}
+            {% endwith %}
             {% endwith %}
         });
     </script>
     {% endfor %}
-
-
 
     <div class="container-fluid">
     <form method="POST" action="{% url 'showTour' %}">
@@ -97,12 +95,7 @@
                    style="border-radius: 0.4em;">
         </div></div>
     </form>
+
     </div>
-    </div>
-
-
-
-
-
 
 {% endblock %}

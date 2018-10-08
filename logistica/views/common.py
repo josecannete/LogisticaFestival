@@ -1,14 +1,31 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse
+from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from logistica.arma_tour import get_tours, ObjectTour
-from logistica.models import Actividad, Monitor, Espacio, places_names, Tour, PosibleVisita, Horario, PosibleTour, Visita
+from logistica.models import *
 from logistica.forms import NewTourForm
-import datetime
-from .calendar import get_event_by_monitor, get_events_by_espacio, \
+from logistica.views.constants import *
+from .calendar import get_event_by_monitor, get_events_by_espacio, get_events_by_tour, \
     convert_object_tour_to_event, visitaToEventforEspacio
+from random import randint
+import datetime
+
+
+def error_404(request, exception):
+    context = {
+        'gif_number': str(randint(1, 4))
+    }
+    return render(request, 'app/404.html', context)
+
+
+def error_500(request, exception):
+    context = {
+        'gif_number': str(randint(1, 4))
+    }
+    return render(request, 'app/500.html', context)
 
 
 def home(request):
@@ -16,6 +33,10 @@ def home(request):
     if user.is_authenticated:
         return redirect(reverse(principal))
     return redirect(reverse(login_user))
+
+
+def error_page(request, err):
+    return render(request, 'app/error_page.html', {'info': err})
 
 
 def get_places_by_group():
@@ -29,10 +50,11 @@ def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
-        add_to_realdb(idTour, idMonitor)
-        context = {}
+        tour = add_to_realdb(idTour, idMonitor)
+        context = {'events': get_events_by_tour(tour.pk)}
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
+
 
 def add_to_realdb(optionTourId, selectedMonitorId):
     posibleTour = PosibleTour.objects.get(pk=optionTourId)
@@ -60,11 +82,11 @@ def add_to_fakedb(objectTour, nombre, alumnos):
     monitor = Monitor.objects.get(pk=1)
 
     posible_tour = PosibleTour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
-                               duracion=duracion)
+                                              duracion=duracion)
 
     for i in range(len(objectTour.places)):
         start_time = objectTour.start_times[i]
-        end_time = start_time + datetime.timedelta(objectTour.places[i].duracion)
+        end_time = start_time + datetime.timedelta(minutes=objectTour.places[i].duracion)
         horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
         posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i])[0]
         posible_visita.horario.add(horario)
@@ -123,7 +145,7 @@ def principal(request):
         }
         return render(request, 'app/principal.html', context)
     else:
-        redirect('/')
+        redirect(reverse(home))
 
 
 def login_user(request):
@@ -151,45 +173,81 @@ def logout_user(request):
 
 def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
+        events = []
+        monitores = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
+            monitores = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_monitor_tour():
+            events = get_event_by_monitor(request.user.monitor.pk)
+        # El resto no tiene acceso
+        else:
+            return error_page(request, ERR_NOT_AUTH)
         context = {
-            'events': get_event_by_monitor(pk_monitor),
-            'monitores': Monitor.objects.all()
+            'events': events,
+            'monitores': monitores,
+            'pk_monitor': int(pk_monitor) if pk_monitor is not None else None
         }
         return render(request, 'app/monitor.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
+        events = []
+        espacios = None
+        # Si es monitor_stand, se permite ver listado de monitores
+        if request.user.is_monitor_stand():
+            events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+            espacios = Monitor.objects.all()
+        # Si es monitor tour. puede ver sólo su tour
+        elif request.user.is_encargado_espacio():
+            space = Espacio.objects.filter(encargado__pk=request.user.pk)
+            if space.exists():
+                events = get_events_by_espacio(space.all()[0].pk)
+            else:
+                return error_page(request, ALERT_NO_SPACES)
+        # El resto no tiene acceso
+        else:
+            return error_page(request, ERR_NOT_AUTH)
         context = {
-            'events': get_events_by_espacio(pk_espacio),
-            'espacios': Espacio.objects.all()
+            'events': events,
+            'espacios': Espacio.objects.all(),
+            'pk_espacio': int(pk_espacio) if pk_espacio is not None else None
         }
-        print(context)
         return render(request, 'app/espacio.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
 
 
 def monitorProfile(request):
     if request.user.is_authenticated:
+        if not request.user.is_encargado_actividad():
+            return error_page(request, ERR_NOT_AUTH)
         try:
             if request.method == 'GET':
-                context = {
-                    'actividades': Actividad.objects.filter(monitor=request.user.monitor)
-                }
-                return render(request, 'app/profile.html', context)
-            if request.method == 'POST':
-                monitorActivo = request.user.monitor
-                actividades = Actividad.objects.filter(monitor=monitorActivo)
+                actividades = Actividad.objects.filter(monitor=request.user.monitor)
+                if not actividades:
+                    return error_page(request, ALERT_NO_ACTIVITIES)
+                return render(request, 'app/profile.html', {'actividades': actividades})
+            elif request.method == 'POST':
+                monitor_activo = request.user.monitor
+                actividades = Actividad.objects.filter(monitor=monitor_activo)
                 act = Actividad.objects.get(id=request.POST['actividad'])
-                context = {'actividades': actividades, 'act': act}
+                if not act:
+                    return error_page(request, ALERT_NO_ACTIVITIES)
+                context = {
+                    'actividades': actividades,
+                    'act': act
+                }
                 return render(request, 'app/profile_edit.html', context)
         except:
-            return redirect('/')
+            return redirect(reverse(home))
     else:
-        return redirect('/')
+        return redirect(reverse(login_user))
 
 
 def updateActividad(request):
@@ -197,7 +255,7 @@ def updateActividad(request):
     actividad.nombre = request.POST['nombre']
     actividad.capacidadActual = request.POST['asistentes']
     actividad.save()
-    return redirect('/profile/')
+    return redirect(reverse(monitorProfile))
 
 
 def espacio_master(request):

@@ -1,7 +1,5 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% load staticfiles %}
-
 
 {# END OF CONTENT #}
 {% block extrahead %}
@@ -35,24 +33,24 @@
 {% block content %}
 
     {% for event in events %}
-    <script>
-        $(function (){
+        <script>
+            $(function () {
                 {% with y=forloop.counter|stringformat:"s" %}
-            {% with template="'#calendar"|add:y|add:"'" %}
-                {% with eventos="events"|add:y %}
-            $({{ template|safe }}).fullCalendar({
-                timezone: 'America/Santiago',
-                defaultDate: '2018-10-18',
-                columnHeader: 'false',
-                aspectRatio: 0,
-                minTime: "09:00:00",
-                maxTime: "19:00:00",
-                contentHeight: 'auto',
-                theme: 'bootstrap4',
-                header: 'false',
-                nowIndicator: 'true',
-                defaultView: 'agendaDay',
-                allDaySlot: false,
+                    {% with template="'#calendar"|add:y|add:"'" %}
+                        {% with eventos="events"|add:y %}
+                            $({{ template|safe }}).fullCalendar({
+                                timezone: 'America/Santiago',
+                                defaultDate: '2018-10-18',
+                                columnHeader: 'false',
+                                aspectRatio: 0,
+                                minTime: "09:00:00",
+                                maxTime: "19:00:00",
+                                contentHeight: 'auto',
+                                theme: 'bootstrap4',
+                                header: 'false',
+                                nowIndicator: 'true',
+                                defaultView: 'agendaDay',
+                                allDaySlot: false,
                 displayEventEnd: true,
                 events: {{ event|safe }}
             });
@@ -63,30 +61,22 @@
     </script>
     {% endfor %}
 
-
-
     <div class="row">
         <div class="col-md-12 d-flex flex-row flex-wrap">
             {% for nombre_espacio in name_places %}
                 {% with y=forloop.counter|stringformat:"s" %}
-                {% with template="calendar"|add:y %}
-            <div class="col-md-4 col-sm-6 card">
-                <div class="card-header">
-                   {{ nombre_espacio }}
-                </div>
-                <div class="card-body" id={{ template }}>
-                    <div id='calendar'></div>
-                </div>
-            </div>
-                {% endwith%}
+                    {% with template="calendar"|add:y %}
+                        <div class="col-md-4 col-sm-6 card">
+                            <div class="card-header">
+                                {{ nombre_espacio }}
+                            </div>
+                            <div class="card-body" id={{ template }}>
+                                <div id='calendar'></div>
+                            </div>
+                        </div>
+                    {% endwith %}
                 {% endwith %}
             {% endfor %}
         </div>
     </div>
-    </div>
-
-
-
-
-
 {% endblock %}
