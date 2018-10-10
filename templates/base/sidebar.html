@@ -26,11 +26,11 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'espacio_master' %}"><i class="fa fa-bullseye"></i> Espacios Master</a>
         </li>
-        {% if user.is_encargado_actividad %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user"></i> Mis Actividades</a>
-            </li>
-        {% endif %}
+{#        {% if user.is_encargado_actividad %}#}
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user"></i> Mis Actividades</a>#}
+{#            </li>#}
+{#        {% endif %}#}
     </ul>
 </nav>
 <button class="sidebar-minimizer brand-minimizer" type="button"></button>

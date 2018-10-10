@@ -133,7 +133,7 @@ def create_tour_request(request):
 def principal(request):
     if request.user.is_authenticated:
         # start_time = datetime.datetime.now()
-        start_time = timezone.now().replace(day=18, hour=12)    # TODO: Eliminar
+        start_time = timezone.now().replace(day=18, hour=12)  # TODO: Eliminar
         charlas = Actividad.objects.filter(horario__inicio__gt=start_time,
                                            horario__inicio__day=start_time.day, tipo='charla')
         talleres = Actividad.objects.filter(horario__inicio__gt=start_time,
@@ -223,41 +223,6 @@ def espacio(request, pk_espacio=None):
         return redirect(reverse(home))
 
 
-def monitorProfile(request):
-    if request.user.is_authenticated:
-        if not request.user.is_encargado_actividad():
-            return error_page(request, ERR_NOT_AUTH)
-        try:
-            if request.method == 'GET':
-                actividades = Actividad.objects.filter(monitor=request.user.monitor)
-                if not actividades:
-                    return error_page(request, ALERT_NO_ACTIVITIES)
-                return render(request, 'app/profile.html', {'actividades': actividades})
-            elif request.method == 'POST':
-                monitor_activo = request.user.monitor
-                actividades = Actividad.objects.filter(monitor=monitor_activo)
-                act = Actividad.objects.get(id=request.POST['actividad'])
-                if not act:
-                    return error_page(request, ALERT_NO_ACTIVITIES)
-                context = {
-                    'actividades': actividades,
-                    'act': act
-                }
-                return render(request, 'app/profile_edit.html', context)
-        except:
-            return redirect(reverse(home))
-    else:
-        return redirect(reverse(login_user))
-
-
-def updateActividad(request):
-    actividad = Actividad.objects.get(id=request.POST['id'])
-    actividad.nombre = request.POST['nombre']
-    actividad.capacidadActual = request.POST['asistentes']
-    actividad.save()
-    return redirect(reverse(monitorProfile))
-
-
 def espacio_master(request):
     if request.user.is_authenticated:
         all_places = Espacio.objects.all()
@@ -269,4 +234,38 @@ def espacio_master(request):
         }
         return render(request, 'app/espacio_master.html', context)
     else:
-        return redirect('/')
+        return redirect(reverse(home))
+
+# def monitorProfile(request):
+#     if request.user.is_authenticated:
+#         if not request.user.is_encargado_actividad():
+#             return error_page(request, ERR_NOT_AUTH)
+#         try:
+#             if request.method == 'GET':
+#                 actividades = Actividad.objects.filter(monitor=request.user.monitor)
+#                 if not actividades:
+#                     return error_page(request, ALERT_NO_ACTIVITIES)
+#                 return render(request, 'app/profile.html', {'actividades': actividades})
+#             elif request.method == 'POST':
+#                 monitor_activo = request.user.monitor
+#                 actividades = Actividad.objects.filter(monitor=monitor_activo)
+#                 act = Actividad.objects.get(id=request.POST['actividad'])
+#                 if not act:
+#                     return error_page(request, ALERT_NO_ACTIVITIES)
+#                 context = {
+#                     'actividades': actividades,
+#                     'act': act
+#                 }
+#                 return render(request, 'app/profile_edit.html', context)
+#         except:
+#             return redirect(reverse(home))
+#     else:
+#         return redirect(reverse(login_user))
+#
+#
+# def updateActividad(request):
+#     actividad = Actividad.objects.get(id=request.POST['id'])
+#     actividad.nombre = request.POST['nombre']
+#     actividad.capacidadActual = request.POST['asistentes']
+#     actividad.save()
+#     return redirect(reverse(monitorProfile))

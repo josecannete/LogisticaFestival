@@ -48,8 +48,8 @@ urlpatterns = [
 
     url(r'^espacio_master/', logistica.espacio_master, name='espacio_master'),
 
-    url(r'^profile/', logistica.monitorProfile, name='profile'),
-    url(r'^update/', logistica.updateActividad, name='update'),
+    # url(r'^profile/', logistica.monitorProfile, name='profile'),
+    # url(r'^update/', logistica.updateActividad, name='update'),
 
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
