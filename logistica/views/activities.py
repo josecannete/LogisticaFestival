@@ -17,7 +17,6 @@ def activities(request):
         return error_page(request, ALERT_NO_ACTIVITIES)
     context = {
         'activities': act,
-        'monitores': Monitor.objects.all()
     }
     return render(request, 'app/activity.html', context)
 
