@@ -62,6 +62,7 @@ class Espacio(models.Model):
     # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
     zona = models.CharField(max_length=200)
     duracion = models.IntegerField()  # minutos
+    observacion = models.CharField(max_length=20) #a
 
     def __str__(self):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
