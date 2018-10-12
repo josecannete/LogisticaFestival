@@ -27,7 +27,6 @@ def available_at(space, init_time):
     # get all the visits scheduled at this place
     all_visits = Visita.objects.filter(espacio=space)
     for visit in all_visits:
-        # TODO: test
         hours_visit = visit.horario
         # if the visit ends before my latest start time or if it starts after my earliest end time then it's ok.
         # (the negative) if it starts before my end and ends before my start then it's occupied

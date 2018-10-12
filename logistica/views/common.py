@@ -51,7 +51,9 @@ def save_tour_option(request):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
         tour = add_to_realdb(idTour, idMonitor)
-        context = {'events': get_events_by_tour(tour.pk)}
+        # TODO: delete day=18
+        context = dict(events=get_events_by_tour(tour.pk),
+                       startTime=(timezone.now().replace(day=18, hour=(tour.horaInicio.hour - 1))).strftime("%X"))
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
@@ -124,8 +126,10 @@ def create_tour_request(request):
             'range': range(7),
             'monitores': Monitor.objects.all(),
             'idTours': idTours,
+            'startTime': start_time.strftime("%X"),
             'events': events
         }
+        print("CONTEXT", start_time.strftime("%X"))
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
 
@@ -228,8 +232,11 @@ def espacio_master(request):
         all_places = Espacio.objects.all()
         context = {
             'name_places': [place.nombre for place in all_places],
-            'events': [[visitaToEventforEspacio(visit, Monitor.objects.get(nombre="Monitor_1"), "")
-                        for visit in Visita.objects.filter(espacio=place)]
+            'events': [[{"title": "Occupied",
+                        "start": visit.horario.inicio,
+                        "end": visit.horario.fin
+                        }
+                        for visit in Visita.objects.filter(espacio=place).all()]
                        for place in all_places]
         }
         return render(request, 'app/espacio_master.html', context)

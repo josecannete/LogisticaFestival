@@ -43,15 +43,13 @@
                                 defaultDate: '2018-10-18',
                                 columnHeader: 'false',
                                 aspectRatio: 0,
-                                minTime: "09:00:00",
+                                minTime: "{{startTime |safe}}",
                                 maxTime: "19:00:00",
                                 theme: 'bootstrap4',
                                 header: 'false',
                                 nowIndicator: 'true',
                                 defaultView: 'agendaDay',
-                                contentHeight: 'auto',
                                 allDaySlot: false,
-                                height: 'parent',
                                 events: {{ event|safe }}
                             });
                         {% endwith %}
