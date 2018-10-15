@@ -60,22 +60,15 @@ def save_tour_option(request):
 
 
 def add_to_realdb(optionTourId, selectedMonitorId):
-    posibleTour = PosibleTour.objects.get(pk=optionTourId)
+    tour = Tour.objects.get(pk=optionTourId)
+    tour.status = 1
     monitor = Monitor.objects.get(pk=selectedMonitorId)
-    nombre = posibleTour.nombre
-    horaInicio = posibleTour.horaInicio
-    duracion = posibleTour.duracion
-    alumnos = posibleTour.alumnos
-    realTour = Tour.objects.get_or_create(monitor=monitor, nombre=nombre, horaInicio=horaInicio, duracion=duracion,
-                                          alumnos=alumnos)[0]
-    posiblesVisitas = posibleTour.visitas.all()
-    for posibleVisita in posiblesVisitas:
-        espacio = posibleVisita.espacio
-        horario = posibleVisita.horario
-        realVisita = Visita.objects.get_or_create(espacio=espacio, horario=horario)[0]
-        realTour.visitas.add(realVisita)
-
-    return realTour
+    visitas = tour.visitas.all()
+    for visita in visitas:
+        visita.status = 1
+        visita.save()
+    tour.save()
+    return tour
 
 
 def add_to_fakedb(objectTour, nombre, alumnos):
@@ -83,14 +76,14 @@ def add_to_fakedb(objectTour, nombre, alumnos):
     duracion = (objectTour.end_time - horaInicio).seconds / 60
     monitor = Monitor.objects.get(pk=1)
 
-    posible_tour = PosibleTour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
-                                              duracion=duracion)
+    posible_tour = Tour.objects.create(nombre=nombre, monitor=monitor, horaInicio=horaInicio, alumnos=alumnos,
+                                       duracion=duracion)
 
     for i in range(len(objectTour.places)):
         start_time = objectTour.start_times[i]
         end_time = start_time + datetime.timedelta(minutes=objectTour.places[i].duracion)
         horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
-        posible_visita = PosibleVisita.objects.get_or_create(espacio=objectTour.places[i], horario=horario)[0]
+        posible_visita = Visita.objects.get_or_create(espacio=objectTour.places[i], horario=horario)[0]
         posible_tour.visitas.add(posible_visita)
 
     return posible_tour

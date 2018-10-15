@@ -6,6 +6,7 @@ from logistica.models import Visita, Espacio, Tour, Horario
 import datetime
 import collections
 
+
 def available_at(space, init_time):
     """
     Args:
@@ -25,14 +26,14 @@ def available_at(space, init_time):
     if not place_is_open:
         return False
     # get all the visits scheduled at this place
-    all_visits = Visita.objects.filter(espacio=space)
+    all_visits = Visita.objects.filter(espacio=space, status=1)
     for visit in all_visits:
         hours_visit = visit.horario
         # if the visit ends before my latest start time or if it starts after my earliest end time then it's ok.
         # (the negative) if it starts before my end and ends before my start then it's occupied
         if not (hours_visit.fin <= latest_begin or
                 hours_visit.inicio >= earliest_end):
-            #print("{} already has visit. Requesting {}:{}-{}:{}, overlaps with {}:{}-{}:{}".format(
+            # print("{} already has visit. Requesting {}:{}-{}:{}, overlaps with {}:{}-{}:{}".format(
             #    space, latest_begin.hour, latest_begin.minute, earliest_end.hour, earliest_end.minute,
             #    hours_visit.inicio.hour, hours_visit.inicio.minute, hours_visit.fin.hour, hours_visit.fin.minute))
             return False
@@ -136,32 +137,32 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
     # generate all possible tours according to time constraint
     print("..Creating all possible tours, len(seeds)=", len(incomplete_tours))
     while len(incomplete_tours) > 0:
-        #print("---")
-        #print("len(incomplete_tours):", len(incomplete_tours))
-        #print("largos:", [len(tour_.places) for tour_ in incomplete_tours])
+        # print("---")
+        # print("len(incomplete_tours):", len(incomplete_tours))
+        # print("largos:", [len(tour_.places) for tour_ in incomplete_tours])
         # get first
         curr_tour = incomplete_tours.popleft()
-        #print("curr_tour:", curr_tour)
-        #print("curr_tour.end_time >= target_end_time:", curr_tour.end_time, "\t", target_end_time)
+        # print("curr_tour:", curr_tour)
+        # print("curr_tour.end_time >= target_end_time:", curr_tour.end_time, "\t", target_end_time)
         if curr_tour.end_time >= target_end_time:
             complete_tours.append(curr_tour)
             continue
         # create a new tour for each possible place that can go next
         for i, group in enumerate(groups_places):
-            #print("Checking group: {}/{}".format(i, len(groups_places)))
+            # print("Checking group: {}/{}".format(i, len(groups_places)))
             for j, place in enumerate(group):
-                #print("Checking to add place:", place, "place: {}/{}, group:{}/{}".format(j, len(group), i, len(groups_places)))
+                # print("Checking to add place:", place, "place: {}/{}, group:{}/{}".format(j, len(group), i, len(groups_places)))
                 # if the place cannot support the amount of people ignore it
                 if place.capacidad < number_people:
                     continue
                 # time arriving at the new place
                 next_hour = curr_tour.end_time + get_walking_time(curr_tour.get_last_place(), place)
-                #print("Is place already on the tour:", curr_tour.is_place_included(place))
-                #print("Searching place at:", next_hour)
+                # print("Is place already on the tour:", curr_tour.is_place_included(place))
+                # print("Searching place at:", next_hour)
                 # if the place is not already on the tour and it's available at this time
                 if not curr_tour.is_place_included(place) and available_at(place, next_hour):
                     # create new tour with that place as next
-                    #print("\tcreating new tour with this stop")
+                    # print("\tcreating new tour with this stop")
                     next_curr_tour = copy.deepcopy(curr_tour)
                     next_curr_tour.add_place(place, next_hour)
                     incomplete_tours.append(next_curr_tour)

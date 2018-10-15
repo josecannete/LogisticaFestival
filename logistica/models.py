@@ -73,6 +73,8 @@ class Espacio(models.Model):
 class Visita(models.Model):
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    # Status indica si es tour válido o no. 0 si no, 1 si lo es
+    status = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.espacio) + " - " + str(self.horario)
@@ -86,9 +88,11 @@ class Tour(models.Model):
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
     visitas = models.ManyToManyField(Visita)
+    # Status indica si es tour válido o no. 0 si no, 1 si lo es
+    status = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.nombre)
+        return ("Válido: " if self.status else "Posible: ") + self.nombre
 
 
 # Actividad
@@ -105,33 +109,3 @@ class Actividad(models.Model):
 
     def __str__(self):
         return self.nombre
-
-
-'''
-
-Todo lo que esta abajo es para no tener que guardar los posibles tours en la base de datos que consultamos
-
-'''
-
-
-# PosibleVisita
-# Un tour es un conjunto de visitas
-class PosibleVisita(models.Model):
-    horario = models.ForeignKey(Horario, on_delete=models.CASCADE, null=True)
-    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.espacio) + " - " + str(self.horario)
-
-
-# PosibleTour
-class PosibleTour(models.Model):
-    nombre = models.CharField(max_length=200)
-    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE, null=True)
-    horaInicio = models.TimeField()
-    duracion = models.IntegerField()
-    alumnos = models.IntegerField()
-    visitas = models.ManyToManyField(PosibleVisita)
-
-    def __str__(self):
-        return str(self.nombre)
