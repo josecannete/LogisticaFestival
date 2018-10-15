@@ -229,17 +229,20 @@ def espacio(request, pk_espacio=None):
 
 def espacio_master(request):
     if request.user.is_authenticated:
-        all_places = Espacio.objects.all()
-        context = {
-            'name_places': [place.nombre for place in all_places],
-            'events': [[{"title": "Occupied",
-                        "start": visit.horario.inicio,
-                        "end": visit.horario.fin
-                        }
-                        for visit in Visita.objects.filter(espacio=place).all()]
-                       for place in all_places]
-        }
-        return render(request, 'app/espacio_master.html', context)
+        if request.user.is_monitor_stand():
+            all_places = Espacio.objects.all()
+            context = {
+                'name_places': [place.nombre for place in all_places],
+                'events': [[{"title": "Occupied",
+                            "start": visit.horario.inicio,
+                            "end": visit.horario.fin
+                            }
+                            for visit in Visita.objects.filter(espacio=place).all()]
+                           for place in all_places]
+            }
+            return render(request, 'app/espacio_master.html', context)
+        else:
+            return error_page(ERR_NOT_AUTH)
     else:
         return redirect(reverse(home))
 

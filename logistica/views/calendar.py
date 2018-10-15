@@ -17,8 +17,8 @@ def visitaToEventforMonitor(visita):
 
 
 def visitaToEventforEspacio(visita, monitor, name_tour):
-    inicio = str(visita.horario.all()[0].inicio.isoformat())
-    fin = str(visita.horario.all()[0].fin.isoformat())
+    inicio = str(visita.horario.inicio.isoformat())
+    fin = str(visita.horario.fin.isoformat())
     name_monitor = str(monitor.nombre)
     contacto = str(monitor.contacto)
 
@@ -68,12 +68,14 @@ def get_events_by_espacio(pk_espacio):
         events.append(visitaToEventforEspacio(visita, monitor, tour.nombre))
     return json.dumps(events)
 
+
 def get_events_by_tour(pk_tour):
     tour = Tour.objects.get(pk=pk_tour)
     events = []
     for visita in tour.visitas.all():
         events.append(visitaToEventforMonitor(visita))
     return json.dumps(events)
+
 
 def get_name_and_events_by_espacio():
     tours = Tour.objects.all()
