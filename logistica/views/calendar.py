@@ -17,8 +17,8 @@ def visitaToEventforMonitor(visita):
 
 
 def visitaToEventforEspacio(visita, monitor, name_tour):
-    inicio = str(visita.horario.inicio.isoformat())
-    fin = str(visita.horario.fin.isoformat())
+    inicio = str(visita.horario.inicio)
+    fin = str(visita.horario.fin)
     name_monitor = str(monitor.nombre)
     contacto = str(monitor.contacto)
 
