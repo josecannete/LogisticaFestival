@@ -42,16 +42,22 @@
                 defaultDate: '2018-10-18',
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
-                header: {
-                    left: 'prev, next today',
-                    center: 'title'
+                allDaySlot: false,
+                slotDuration: '01:00:00',
+                minTime: "09:00:00",
+                maxTime: "19:00:00",
+                height: "auto",
+                header:{
+                    left:   'title',
+                    center: '',
+                    right:  'prev,next'
                 },
                 events: {{ events|safe }}
             });
         });
     </script>
     <div class="row">
-        <div class="col-md-12">
+        <div class="offset-md-1 col-md-10">
             {% include 'card/espacio_calendar.html' %}
         </div>
     </div>

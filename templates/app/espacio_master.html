@@ -31,6 +31,11 @@
 {% endblock %}
 
 {% block content %}
+        <script>
+        function get_height() {
+              return $(window).height();
+        }
+        </script>
 
     {% for event in events %}
         <script>
@@ -42,10 +47,10 @@
                                 timezone: 'America/Santiago',
                                 defaultDate: '2018-10-18',
                                 columnHeader: 'false',
-                                aspectRatio: 0,
                                 minTime: "09:00:00",
                                 maxTime: "19:00:00",
-                                contentHeight: 'auto',
+                                height: get_height()*0.5,
+                                slotDuration: '02:00:00',
                                 theme: 'bootstrap4',
                                 header: 'false',
                                 nowIndicator: 'true',
@@ -66,7 +71,7 @@
             {% for nombre_espacio in name_places %}
                 {% with y=forloop.counter|stringformat:"s" %}
                     {% with template="calendar"|add:y %}
-                        <div class="col-md-4 col-sm-6 card">
+                        <div class="col-md-3 col-sm-6 card">
                             <div class="card-header">
                                 {{ nombre_espacio }}
                             </div>

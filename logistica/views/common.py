@@ -53,7 +53,8 @@ def save_tour_option(request):
         tour = add_to_realdb(idTour, idMonitor)
         # TODO: delete day=18
         context = dict(events=get_events_by_tour(tour.pk),
-                       startTime=(timezone.now().replace(day=18, hour=(tour.horaInicio.hour - 1))).strftime("%X"))
+                       startTime=(timezone.now().replace(day=18, hour=(tour.horaInicio.hour - 1))).strftime("%X"),
+                       nameMonitor=Monitor.objects.get(pk=idMonitor).nombre)
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
 
@@ -230,15 +231,25 @@ def espacio(request, pk_espacio=None):
 def espacio_master(request):
     if request.user.is_authenticated:
         all_places = Espacio.objects.all()
+        occupied_available_events = []
+        for place in all_places:
+            this_events = []
+            for visit in Visita.objects.filter(espacio=place).all():
+                this_events.append({"title": "Occupied",
+                                                  "color": '#e9454d',
+                                                  "start": str(visit.horario.inicio),
+                                                  "end": str(visit.horario.fin)})
+            for available in place.horarioAbierto.all():
+                this_events.append({"title":"Available",
+                                                  "color": '#84b951',
+                                                  "start": str(available.inicio),
+                                                  "end": str(available.fin)})
+            occupied_available_events.append(this_events)
         context = {
             'name_places': [place.nombre for place in all_places],
-            'events': [[{"title": "Occupied",
-                        "start": visit.horario.inicio,
-                        "end": visit.horario.fin
-                        }
-                        for visit in Visita.objects.filter(espacio=place).all()]
-                       for place in all_places]
+            'events': occupied_available_events
         }
+        print("here>", context)
         return render(request, 'app/espacio_master.html', context)
     else:
         return redirect(reverse(home))
