@@ -3,6 +3,7 @@ from random import randint
 import time
 from heapq import heappush, heappop
 from logistica.models import Visita, Espacio, Tour, Horario
+from logistica.exceptions import NoToursAvailableException
 import datetime
 import collections
 
@@ -180,7 +181,8 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
         complete_tours = list(filter(lambda this_tour: this_tour.good_route, complete_tours))
     # select tours to return randomly
     print("len(complete_tours):", len(complete_tours))
-    # TODO: if len(complete_tours) == 0 redireccionar a armar tour / mostrar error
+    if not tours_count:
+        raise NoToursAvailableException
     for i in range(tours_count):
         selected = randint(i, len(complete_tours) - 1)
         complete_tours[i], complete_tours[selected] = complete_tours[selected], complete_tours[i]

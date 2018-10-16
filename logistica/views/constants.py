@@ -10,3 +10,7 @@ ALERT_NO_ACTIVITIES = {
     'err': False,
     'msg': 'No Posee Actividades A Cargo'
 }
+ALERT_NO_AVAILABLE_TOURS = {
+    'err': False,
+    'msg': 'No existen lugares disponibles para armar un tour con estos requerimientos. Intente más tarde'
+}
