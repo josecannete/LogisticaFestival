@@ -247,7 +247,7 @@ def espacio_master(request):
             occupied_available_events = []
             for place in all_places:
                 this_events = []
-                for visit in Visita.objects.filter(espacio=place).all():
+                for visit in Visita.objects.filter(espacio=place, status=1).all():
                     this_events.append({"title": "Occupied",
                                         "color": '#e9454d',
                                         "start": str(visit.horario.inicio),
