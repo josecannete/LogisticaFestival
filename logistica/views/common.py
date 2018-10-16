@@ -217,11 +217,9 @@ def monitor(request, pk_monitor=None):
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
         events = []
-        espacios = None
         # Si es monitor_stand, se permite ver listado de monitores
         if request.user.is_monitor_stand():
             events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
-            espacios = Monitor.objects.all()
         # Si es monitor tour. puede ver sólo su tour
         elif request.user.is_encargado_espacio():
             space = Espacio.objects.filter(encargado__pk=request.user.pk)

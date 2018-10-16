@@ -50,7 +50,7 @@ def convert_object_tour_to_event(object_tour):
 
 
 def get_event_by_monitor(pk_monitor):
-    tours = Tour.objects.filter(monitor__pk=pk_monitor)
+    tours = Tour.objects.filter(monitor__pk=pk_monitor, status=1)
     events = []
     for tour in tours:
         visitas = tour.visitas.all()
@@ -60,7 +60,7 @@ def get_event_by_monitor(pk_monitor):
 
 
 def get_events_by_espacio(pk_espacio):
-    tours = Tour.objects.filter(visitas__espacio__pk=pk_espacio)
+    tours = Tour.objects.filter(visitas__espacio__pk=pk_espacio, status=1)
     events = []
     for tour in tours:
         visita = tour.visitas.filter(espacio__pk=pk_espacio)[0]
@@ -78,7 +78,7 @@ def get_events_by_tour(pk_tour):
 
 
 def get_name_and_events_by_espacio():
-    tours = Tour.objects.all()
+    tours = Tour.objects.filter(status=1)
     espacios = Espacio.objects.all()
     espacios_id = {}
     for espacio in espacios:
