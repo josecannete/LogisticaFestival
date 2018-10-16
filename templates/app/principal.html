@@ -47,12 +47,17 @@
             padding-bottom: 1em;
             margin-bottom: 0.7em !important;
         }
+
+        @media (max-width: 576px){
+            .card-body{
+                padding: 1.25rem 0.5rem;
+            }
+        }
     </style>
 {% endblock %}
 
 
 {% block content %}
-    <div class="container-fluid">
         <div id="ui-view">
             <div>
                 <div class="animated fadeIn">
@@ -72,5 +77,4 @@
                 </div>
             </div>
         </div>
-    </div>
 {% endblock %}
