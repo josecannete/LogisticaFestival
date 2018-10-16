@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse
 from django.template import RequestContext
@@ -85,6 +86,7 @@ def add_to_realdb(optionTourId, selectedMonitorId):
     for visita in visitas:
         visita.status = 1
         visita.save()
+    tour.monitor = monitor
     tour.save()
     return tour
 
@@ -302,3 +304,5 @@ def espacio_master(request):
 #     actividad.capacidadActual = request.POST['asistentes']
 #     actividad.save()
 #     return redirect(reverse(monitorProfile))
+
+
