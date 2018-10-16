@@ -97,7 +97,7 @@ def create_tour_request(request):
         tour.save()
         print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now().replace(day=18, hour=12)  # TODO: delete replace
+        start_time = timezone.now().replace(day=18, hour=9)  # TODO: delete replace
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
@@ -120,7 +120,7 @@ def create_tour_request(request):
             'range': range(7),
             'monitores': Monitor.objects.all(),
             'idTours': idTours,
-            'startTime': start_time.strftime("%X"),
+            'startTime': start_time.replace(minute=0).strftime("%X"),
             'events': events
         }
         print("CONTEXT", start_time.strftime("%X"))

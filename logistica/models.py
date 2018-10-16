@@ -62,7 +62,7 @@ class Espacio(models.Model):
     # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
     zona = models.CharField(max_length=200)
     duracion = models.IntegerField()  # minutos
-    observacion = models.CharField(max_length=20) #a
+    observacion = models.CharField(max_length=20, blank=True) #a
 
     def __str__(self):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
@@ -77,7 +77,7 @@ class Visita(models.Model):
     status = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.espacio) + " - " + str(self.horario)
+        return ("Válido: " if self.status else "Posible: ") + str(self.espacio) + " - " + str(self.horario)
 
 
 # Tour
