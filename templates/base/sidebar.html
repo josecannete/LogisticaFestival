@@ -6,7 +6,7 @@
         </li>
         {% if user.is_encargado_actividad %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'activities' %}"><i class="fa fa-building-o"></i> Actividades</a>
+                <a class="nav-link" href="{% url 'activities' %}"><i class="fa fa-building-o"></i> Charlas y Talleres</a>
             </li>
         {% endif %}
         {% if user.is_monitor_stand %}
@@ -20,7 +20,7 @@
         {% endif %}
         {% if user.is_monitor_stand or user.is_encargado_espacio %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flag-o"></i> Espacios</a>
+                <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flag-o"></i> Salas y Labs</a>
             </li>
         {% endif %}
         {% if user.is_monitor_stand or user.is_monitor_encargado %}
