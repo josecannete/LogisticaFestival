@@ -29,33 +29,47 @@
 
 {% block content %}
     <script>
-        $(function (){
-        for (i = 1; i <= 1; i++)
-        {
-            $('#calendar'+i.toString()).fullCalendar({
-                timezone: 'America/Santiago',
-                defaultDate: '2018-10-18',
-                columnHeader: 'false',
-                aspectRatio: 0,
-                minTime: "{{startTime |safe}}",
-                maxTime: "19:00:00",
-                theme: 'bootstrap4',
-                header: 'false',
-                nowIndicator: 'true',
-                defaultView: 'agendaDay',
-                allDaySlot: false,
-                height: $(window).height()*0.6,
-                events: {{ events|safe }}
-            });
-        }});
+        $(function () {
+            for (i = 1; i <= 1; i++) {
+                $('#calendar' + i.toString()).fullCalendar({
+                    timezone: 'America/Santiago',
+                    defaultDate: '2018-10-18',
+                    columnHeader: 'false',
+                    aspectRatio: 0,
+                    minTime: "{{startTime |safe}}",
+                    maxTime: "19:00:00",
+                    theme: 'bootstrap4',
+                    header: 'false',
+                    nowIndicator: 'true',
+                    defaultView: 'agendaDay',
+                    allDaySlot: false,
+                    height: $(window).height() * 0.6,
+                    events: {{ events|safe }}
+                });
+            }
+        });
     </script>
-    <div class="card">
-    <div class="card-body">
-        <div class="offset-md-4 col-md-4" style="border-bottom: solid; border-bottom-width: 2px;
-        border-bottom-color: #e4e5e6; margin-bottom: 0.9em;"><h1 class="text-left">Tour escogido:</h1></div>
-        <div class="offset-md-4 col-md-4" style="padding-bottom:1em"><h6 class="text-left">Monitor a cargo: {{nameMonitor}}</h6></div>
-        <div class="offset-md-4 col-md-3 card-body" style="background-color: #f0f3f5; border-radius: 0.3em;">
-            <div id="calendar1"></div></div>
-    </div>
+    <div class="container-fluid">
+        <div id="ui-view">
+            <div>
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-sm-12 col-l-6">
+                            <div class="card">
+                                <div class="card-header">Tour Confirmado</div>
+                                <div class="card-body">
+                                    <h4 class="text-center">
+                                        Monitor a
+                                        cargo: {{ nameMonitor }}</h4>
+                                    <div>
+                                        <div id="calendar1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -6,16 +6,16 @@ places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fis
 
 
 # Create your models here.
-def is_monitor_admin(self):
-    return self.groups.filter(name='Monitor Admin').exists()
-
-
 def is_monitor_stand(self):
     return self.groups.filter(name='Monitor Stand Principal').exists()
 
 
 def is_monitor_tour(self):
     return self.groups.filter(name='Monitor Tour').exists()
+
+
+def is_monitor_encargado(self):
+    return self.groups.filter(name='Monitor Encargado').exists()
 
 
 def is_encargado_actividad(self):
@@ -26,9 +26,9 @@ def is_encargado_espacio(self):
     return self.groups.filter(name='Encargado Espacio').exists()
 
 
-User.add_to_class("is_monitor_admin", is_monitor_admin)
 User.add_to_class("is_monitor_stand", is_monitor_stand)
 User.add_to_class("is_monitor_tour", is_monitor_tour)
+User.add_to_class("is_monitor_encargado", is_monitor_encargado)
 User.add_to_class("is_encargado_actividad", is_encargado_actividad)
 User.add_to_class("is_encargado_espacio", is_encargado_espacio)
 
@@ -50,6 +50,10 @@ class Monitor(models.Model):
 
     def __str__(self):
         return str(self.nombre)
+
+    @staticmethod
+    def from_group(group):
+        tour_monitors = Monitor.objects.filter(user__groups__name__contains=group)
 
 
 # Espacio

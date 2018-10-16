@@ -118,7 +118,7 @@ def create_tour_request(request):
         print('\n'.join(events))
         context = {
             'range': range(7),
-            'monitores': Monitor.objects.all(),
+            'monitores': Monitor.from_group('Monitor Tour'),
             'idTours': idTours,
             'startTime': start_time.replace(minute=0).strftime("%X"),
             'events': events
