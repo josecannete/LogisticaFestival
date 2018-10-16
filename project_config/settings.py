@@ -28,7 +28,8 @@ ALLOWED_HOSTS = [
     '167.99.12.214',
     'localhost',
     '127.0.0.1',
-    'festivalingenieria.me'
+    'festivalingenieria.me',
+    'festivalea.me'
 ]
 
 # Application definition
