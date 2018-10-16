@@ -59,77 +59,89 @@
         </script>
     {% endfor %}
 
-<script>
-    function choosingTour(){
-        console.log("trying to highlite tour");
-        var radios = document.querySelectorAll('input[type="radio"]:checked');
-        var value = radios.length>0? radios[0].value: null;
-        console.log(value.className);
-        var group = document.getElementsByName("optionTourId");
-        console.log(group)
-        var elem_checked = null;
-        for ( var i = 0; i < group.length; i++) {
-            console.log(group.item(i).checked)
-            if (group.item(i).checked) {
-                console.log("found checked");
-                div_card = group.item(i).parentNode.parentNode;
-                console.log(div_card);
-                div_card.classList.add("highlighted")
+    <script>
+        function choosingTour() {
+            console.log("trying to highlite tour");
+            var radios = document.querySelectorAll('input[type="radio"]:checked');
+            var value = radios.length > 0 ? radios[0].value : null;
+            console.log(value.className);
+            var group = document.getElementsByName("optionTourId");
+            console.log(group)
+            var elem_checked = null;
+            for (var i = 0; i < group.length; i++) {
+                console.log(group.item(i).checked)
+                if (group.item(i).checked) {
+                    console.log("found checked");
+                    div_card = group.item(i).parentNode.parentNode;
+                    console.log(div_card);
+                    div_card.classList.add("highlighted")
+                }
+                else {
+                    div_card = group.item(i).parentNode.parentNode;
+                    console.log("removing style");
+                    console.log(div_card);
+                    div_card.classList.remove("highlighted");
+                }
             }
-            else{
-                div_card = group.item(i).parentNode.parentNode;
-                console.log("removing style");
-                console.log(div_card);
-                div_card.classList.remove("highlighted");
-            }
+
         }
+    </script>
 
-    }
-</script>
+    <style>
+        .highlighted {
+            border-style: solid !important;
+            border-width: 3px !important;
+            border-color: #39b2d5 !important;
+        }
+    </style>
 
-<style>
-    .highlighted{
-        border-style: solid !important;
-        border-width: 3px !important;
-        border-color: #39b2d5 !important;
-    }
-</style>
-
-    <div class="container-fluid">
     <form method="POST" action="{% url 'showTour' %}">
-    {% csrf_token %}
-    <div class="form-group">
-    <div class="row d-flex flex-row flex-wrap justify-content-around">
-        {% for id in idTours %}
-            {% with y=forloop.counter|stringformat:"s" %}
-            {% with template="calendar"|add:y %}
-            <div class="col-md-2 card" style="padding: 0.7em; transition: border-width 0.1s linear; border-radius: 0.5em;">
-                <div class="text-center lead">Opción {{y}}</div>
-                <div id={{ template }} style="margin-bottom: 1em"></div>
-                <div class="align-self-center">
-                    <input class="form-check-input" type="radio" onclick="choosingTour()"
-                           name="optionTourId" id={{ id }} value={{ id }}>
-                    <label class="form-check-label" for="exampleRadios1"></label>
+        <div class="container-fluid">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="row d-flex flex-row flex-wrap justify-content-around">
+                    {% for id in idTours %}
+                        {% with y=forloop.counter|stringformat:"s" %}
+                            {% with template="calendar"|add:y %}
+                                <div class="col-md-2 card"
+                                     style="padding: 0.7em; transition: border-width 0.1s linear; border-radius: 0.5em;">
+                                    <div class="text-center lead">Opción {{ y }}</div>
+                                    <div id={{ template }} style="margin-bottom: 1em
+                                    ">
+                                </div>
+                                <div class="align-self-center">
+                                    <input class="form-check-input" type="radio" onclick="choosingTour()"
+                                           name="optionTourId" id={{ id }} value={{ id }}>
+                                    <label class="form-check-label" for="exampleRadios1"></label>
+                                </div>
+                                </div>
+                            {% endwith %}
+                        {% endwith %}
+                    {% endfor %}
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <select class="form-control" id="select_monitor" name="select_monitor">
+                            {% for monitor in monitores %}
+                                <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <input hidden name="list_id_tours" value="{{ idTours }}">
+                <div class="row">
+                    <div class="form-group text-center col-sm-12">
+                        <div class="col mx-auto">
+                            <input type="submit" class="btn btn-primary btn-lg" value="Selecciona tour y monitor"
+                                   style="border-radius: 0.4em;">
+                        </div>
+                    </div>
                 </div>
             </div>
-            {% endwith%}
-            {% endwith %}
-        {% endfor %}
-    </div>
-    <div class="row"></div>
-        <select class="form-control" id="select_monitor" name="select_monitor">
-            {% for monitor in monitores %}
-            <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-row text-center" style="margin-bottom: 2em">
-        <div class="col mx-auto">
-            <input type="submit" class="btn btn-primary btn-lg" value="Selecciona tour y monitor"
-                   style="border-radius: 0.4em;">
-        </div></div>
+        </div>
     </form>
-
-    </div>
 
 {% endblock %}

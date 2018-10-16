@@ -11,7 +11,8 @@ from logistica.views.constants import *
 from .calendar import get_event_by_monitor, get_events_by_espacio, get_events_by_tour, \
     convert_object_tour_to_event, visitaToEventforEspacio
 from random import randint
-import datetime
+from logistica.exceptions import *
+import datetime, json
 
 
 def error_404(request, exception):
@@ -50,13 +51,30 @@ def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
         idTour = request.POST.get('optionTourId')
+        allIdTours = json.loads(request.POST.get('list_id_tours'))
         tour = add_to_realdb(idTour, idMonitor)
+        allIdTours.remove(int(idTour))
+        delete_from_fakedb(allIdTours)
         # TODO: delete day=18
         context = dict(events=get_events_by_tour(tour.pk),
                        startTime=(timezone.now().replace(day=18, hour=(tour.horaInicio.hour - 1))).strftime("%X"),
                        nameMonitor=Monitor.objects.get(pk=idMonitor).nombre)
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))
+
+
+def delete_from_fakedb(listTourIds):
+    for tour_pk in listTourIds:
+        tour = Tour.objects.get(pk=tour_pk)
+        if not tour.status:
+            for visita in tour.visitas.all():
+                if not visita.status:
+                    visita.delete()
+                else:
+                    raise CannotDeleteConfirmedVisitException()
+            tour.delete()
+        else:
+            raise CannotDeleteConfirmedTourException()
 
 
 def add_to_realdb(optionTourId, selectedMonitorId):
@@ -83,7 +101,7 @@ def add_to_fakedb(objectTour, nombre, alumnos):
         start_time = objectTour.start_times[i]
         end_time = start_time + datetime.timedelta(minutes=objectTour.places[i].duracion)
         horario = Horario.objects.get_or_create(inicio=start_time, fin=end_time)[0]
-        posible_visita = Visita.objects.get_or_create(espacio=objectTour.places[i], horario=horario)[0]
+        posible_visita = Visita.objects.create(espacio=objectTour.places[i], horario=horario)
         posible_tour.visitas.add(posible_visita)
 
     return posible_tour

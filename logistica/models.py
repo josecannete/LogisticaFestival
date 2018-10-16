@@ -53,7 +53,7 @@ class Monitor(models.Model):
 
     @staticmethod
     def from_group(group):
-        tour_monitors = Monitor.objects.filter(user__groups__name__contains=group)
+        return Monitor.objects.filter(user__groups__name__contains=group)
 
 
 # Espacio
@@ -77,11 +77,11 @@ class Espacio(models.Model):
 class Visita(models.Model):
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-    # Status indica si es tour válido o no. 0 si no, 1 si lo es
+    # Status indica si es tour confirmado o no. 0 si no, 1 si lo es
     status = models.IntegerField(default=0)
 
     def __str__(self):
-        return ("Válido: " if self.status else "Posible: ") + str(self.espacio) + " - " + str(self.horario)
+        return ("Confirmado: " if self.status else "Posible: ") + str(self.espacio) + " - " + str(self.horario)
 
 
 # Tour
@@ -92,11 +92,11 @@ class Tour(models.Model):
     duracion = models.IntegerField()
     alumnos = models.IntegerField()
     visitas = models.ManyToManyField(Visita)
-    # Status indica si es tour válido o no. 0 si no, 1 si lo es
+    # Status indica si es tour confirmado o no. 0 si no, 1 si lo es
     status = models.IntegerField(default=0)
 
     def __str__(self):
-        return ("Válido: " if self.status else "Posible: ") + self.nombre
+        return ("Confirmado: " if self.status else "Posible: ") + self.nombre
 
 
 # Actividad
