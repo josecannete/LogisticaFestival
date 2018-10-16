@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse
 from django.template import RequestContext
@@ -85,6 +86,7 @@ def add_to_realdb(optionTourId, selectedMonitorId):
     for visita in visitas:
         visita.status = 1
         visita.save()
+    tour.monitor = monitor
     tour.save()
     return tour
 
@@ -219,12 +221,13 @@ def espacio(request, pk_espacio=None):
         events = []
         # Si es monitor_stand, se permite ver listado de monitores
         if request.user.is_monitor_stand():
+            espacios = Espacio.objects.all()
             events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
-        # Si es monitor tour. puede ver sólo su tour
+        # Si es encargado espacio. puede ver sólo sus espacios
         elif request.user.is_encargado_espacio():
-            space = Espacio.objects.filter(encargado__pk=request.user.pk)
-            if space.exists():
-                events = get_events_by_espacio(space.all()[0].pk)
+            espacios = Espacio.objects.filter(encargado__pk=request.user.pk)
+            if espacios.exists():
+                events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
             else:
                 return error_page(request, ALERT_NO_SPACES)
         # El resto no tiene acceso
@@ -232,7 +235,7 @@ def espacio(request, pk_espacio=None):
             return error_page(request, ERR_NOT_AUTH)
         context = {
             'events': events,
-            'espacios': Espacio.objects.all(),
+            'espacios': espacios,
             'pk_espacio': int(pk_espacio) if pk_espacio is not None else None
         }
         return render(request, 'app/espacio.html', context)
@@ -302,3 +305,5 @@ def espacio_master(request):
 #     actividad.capacidadActual = request.POST['asistentes']
 #     actividad.save()
 #     return redirect(reverse(monitorProfile))
+
+

@@ -125,6 +125,7 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         <select class="form-control" id="select_monitor" name="select_monitor">
+                        <option selected="true" disabled="disabled">Selecciona Monitor</option>
                             {% for monitor in monitores %}
                                 <option value="{{ monitor.id }}">{{ monitor.nombre }}</option>
                             {% endfor %}

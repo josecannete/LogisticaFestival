@@ -1,20 +1,23 @@
 <div class="card">
     <div class="card-header">
-        Visión Espacios
+        Visión Espacios/Labs
     </div>
-    <div class="offset-md-3 col-md-6 card-body" id="card_id">
-        {% if user.is_monitor_stand %}
-            <h3 class="text-left">Selecciona el espacio:</h3>
-            <select class="form-control"
-                    id="select_espacio" data-parsley-multiple="tabs">
-                <option disabled {% if not pk_espacio %}selected{% endif %}>Espacios</option>
-                {% for espacio in espacios %}
-                    <option value="{{ espacio.id }}"
-                            {% if espacio.id == pk_espacio %}selected{% endif %}>{{ espacio.nombre }}</option>
-                {% endfor %}
-            </select>
-        {% endif %}
-        <br>
+    <div class="card-body" id="card_id">
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="activity">Escoger Sala/Lab</label>
+            <div class="col-md-9">
+
+                <select class="form-control"
+                        id="select_espacio" data-parsley-multiple="tabs">
+                    <option disabled {% if not pk_espacio %}selected{% endif %}>Sala/Lab</option>
+                    {% for espacio in espacios %}
+                        <option value="{{ espacio.id }}"
+                                {% if espacio.id == pk_espacio %}selected{% endif %}>{{ espacio.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <div class="card-body" id='calendar' style="background-color: #f0f3f5; border-radius: 0.3em;"></div>
     </div>
 </div>
