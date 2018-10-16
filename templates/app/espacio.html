@@ -37,7 +37,7 @@
         $(function () {
             $('#calendar').fullCalendar({
                 eventClick: function (eventObj) {
-                    alert('Monitor: ' + eventObj['title'] + '\n Contacto: ' + eventObj['contacto']);
+                    alert('Monitor: ' + eventObj['description'] + '\n Contacto: ' + eventObj['contacto']);
                 },
                 defaultDate: '2018-10-18',
                 nowIndicator: 'true',
