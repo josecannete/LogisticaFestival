@@ -1,42 +1,23 @@
 <div class="card">
     <div class="card-header">Talleres</div>
     <div class="card-body">
-        <div class="jumbotron jumbotron-fluid"
-             style="background-color: white; padding: 1rem 2rem;">
-            <div class="container">
-                <h1 class="text-left" style="margin-bottom: 0.9em; white-space: nowrap">Talleres</h1>
-                {% if talleres %}
-                    <div class="table-wrapper-scroll-y"
-                         style="display: block; max-height: 350px; overflow-y: auto; -ms-overflow-style: -ms-autohiding-scrollbar; width: 100%">
-
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">Taller</th>
-                                <th scope="col">Hora inicio</th>
-                                <th scope="col">Hora término</th>
-                                <th scope="col">Inscritos</th>
-                                <th scope="col">Capacidad</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for taller in talleres %}
-                                <tr style="text-align: center">
-                                    <td class="filterable-cell">{{ taller.nombre }}</td>
-                                    <td class="filterable-cell">{{ taller.horario.inicio.time }}</td>
-                                    <td class="filterable-cell">{{ taller.horario.fin.time }}</td>
-                                    <td class="filterable-cell">{{ taller.capacidadActual }}</td>
-                                    <td class="filterable-cell">{{ taller.capacidadTotal }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
+        <div class="col-md-12"><h1 class="text-left" style="margin-bottom: 0.9em; white-space: nowrap">Talleres</h1></div>
+        {% if talleres %}
+            {% for taller in talleres %}
+                <div class="info-charla">
+                    <div class="col-md-12"><h5>{{ taller.nombre }}</h5></div>
+                    <div class="col-md-12"><p><i class="fa fa-map-marker" aria-hidden="true"></i>Ingresar lugar acá</p></div>
+                    <div class="col-md-12 add-line-bottom">
+                        <p><i class="fa fa-clock-o" aria-hidden="true"></i>
+                            {{ taller.horario.inicio.time }} - {{ taller.horario.fin.time }}</p>
                     </div>
-                {% else %}
+                    <div class="col-md-12 d-flex justify-content-between">Asistentes y capacidad:
+                        <div><h6 class="capacity">{{ taller.capacidadActual }} / {{ taller.capacidadTotal }}</h6></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
                     No hay talleres para mostrar
                 {% endif %}
-            </div>
-        </div>
     </div>
 </div>
