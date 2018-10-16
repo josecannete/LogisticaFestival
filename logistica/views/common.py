@@ -244,7 +244,7 @@ def espacio(request, pk_espacio=None):
 
 def espacio_master(request):
     if request.user.is_authenticated:
-        if request.user.is_monitor_stand():
+        if request.user.is_monitor_stand() or request.user.is_monitor_encargado():
             all_places = Espacio.objects.all()
             occupied_available_events = []
             for place in all_places:
