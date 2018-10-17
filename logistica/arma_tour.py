@@ -171,7 +171,6 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
     count_bad_locations = 0
     for tour in complete_tours:
         if not is_good_route(tour):
-            print("not good route:", tour)
             count_bad_locations += 1
             tour.good_route = False
     # if possible delete tours with bad location

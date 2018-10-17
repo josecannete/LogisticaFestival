@@ -124,11 +124,6 @@ def create_tour_request(request):
             tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
         except NoToursAvailableException:
             return error_page(request, ALERT_NO_AVAILABLE_TOURS)
-        print("Tours seleccionados: iniciando a las {}:{}".format(start_time.hour, start_time.minute))
-        print("\n\n".join(
-            ["\n".join(
-                ["{}/{} {}:{} - {}".format(this_time.day, this_time.month, this_time.hour, this_time.minute, space)
-                 for this_time, space in zip(tour_.start_times, tour_.places)]) for tour_ in tour_options]))
 
         nombre = tour.cleaned_data['nombre']
         idTours = []
