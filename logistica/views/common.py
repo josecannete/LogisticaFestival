@@ -219,10 +219,19 @@ def monitor(request, pk_monitor=None):
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
         events = []
-        # Si es monitor_stand, se permite ver listado de monitores
+        # Si es monitor_stand o monitor_info, se permite ver listado de monitores
         if request.user.is_monitor_stand() or request.user.is_monitor_informaciones():
             espacios = Espacio.objects.all()
             events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+        # Si es encargado_zona, puede ver sólo espacios de su zona a cargo
+        elif request.user.is_encargado_zona():
+            zones = Encargado.objects.filter(monitor=request.user.monitor)
+            if zones.exists():
+                zone = Encargado.objects.get(monitor=request.user.monitor).zona.all()
+                espacios = Espacio.objects.filter(zona__in=zone)
+                events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+            else:
+                return error_page(request, ALERT_NO_ZONES)
         # Si es encargado espacio. puede ver sólo sus espacios
         elif request.user.is_encargado_espacio():
             espacios = Espacio.objects.filter(encargado__pk=request.user.pk)

@@ -27,12 +27,17 @@ def is_encargado_espacio(self):
     return self.groups.filter(name='Encargado Espacio').exists()
 
 
+def is_encargado_zona(self):
+    return self.groups.filter(name='Encargado Zona').exists()
+
+
 User.add_to_class("is_monitor_stand", is_monitor_stand)
 User.add_to_class("is_monitor_tour", is_monitor_tour)
 User.add_to_class("is_monitor_encargado", is_monitor_encargado)
 User.add_to_class("is_monitor_informaciones", is_monitor_informaciones)
 User.add_to_class("is_encargado_actividad", is_encargado_actividad)
 User.add_to_class("is_encargado_espacio", is_encargado_espacio)
+User.add_to_class("is_encargado_zona", is_encargado_zona)
 
 
 class Zona(models.Model):
@@ -63,6 +68,14 @@ class Monitor(models.Model):
     @staticmethod
     def from_group(group):
         return Monitor.objects.filter(user__groups__name__contains=group)
+
+
+class Encargado(models.Model):
+    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
+    zona = models.ManyToManyField(Zona)
+
+    def __str__(self):
+        return str(self.monitor)
 
 
 # Espacio

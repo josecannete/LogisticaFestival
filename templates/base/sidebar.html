@@ -6,7 +6,8 @@
         </li>
         {% if user.is_encargado_actividad %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'activities' %}"><i class="fa fa-building-o"></i> Charlas y Talleres</a>
+                <a class="nav-link" href="{% url 'activities' %}"><i class="fa fa-building-o"></i> Charlas y
+                    Talleres</a>
             </li>
         {% endif %}
         {% if user.is_monitor_stand or user.is_monitor_informaciones %}
@@ -18,7 +19,7 @@
                 <a class="nav-link" href="{% url 'monitor' %}"><i class="icon-people"></i> Tours</a>
             </li>
         {% endif %}
-        {% if user.is_monitor_stand or user.is_encargado_espacio or user.is_monitor_informaciones %}
+        {% if user.is_monitor_stand or user.is_monitor_informaciones  or user.is_encargado_espacio  or user.is_encargado_zona %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flag-o"></i> Puntos de Tour</a>
             </li>
