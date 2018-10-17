@@ -20,12 +20,12 @@
         {% endif %}
         {% if user.is_monitor_stand or user.is_encargado_espacio %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flag-o"></i> Salas y Labs</a>
+                <a class="nav-link" href="{% url 'espacio' %}"><i class="fa fa-flag-o"></i> Puntos de Tour</a>
             </li>
         {% endif %}
         {% if user.is_monitor_stand or user.is_monitor_encargado %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'espacio_master' %}"><i class="fa fa-bullseye"></i> Espacios Master</a>
+                <a class="nav-link" href="{% url 'espacio_master' %}"><i class="fa fa-bullseye"></i> Vista General</a>
             </li>
         {% endif %}
     </ul>

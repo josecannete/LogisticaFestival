@@ -3,19 +3,21 @@
         Visión Monitor
     </div>
     <div class="card-body" id="card_id">
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="activity">Escoger Monitor</label>
-            <div class="col-md-9">
-                <select class="form-control"
-                        id="select_monitor" data-parsley-multiple="tabs">
-                    <option disabled {% if not pk_monitor %}selected{% endif %}>Monitor</option>
-                    {% for monitor in monitores %}
-                        <option value="{{ monitor.id }}"
-                                {% if monitor.id == pk_monitor %}selected{% endif %}>{{ monitor.nombre }}</option>
-                    {% endfor %}
-                </select>
+        {% if user.is_monitor_stand %}
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="activity">Escoger Monitor</label>
+                <div class="col-md-9">
+                    <select class="form-control"
+                            id="select_monitor" data-parsley-multiple="tabs">
+                        <option disabled {% if not pk_monitor %}selected{% endif %}>Monitor</option>
+                        {% for monitor in monitores %}
+                            <option value="{{ monitor.id }}"
+                                    {% if monitor.id == pk_monitor %}selected{% endif %}>{{ monitor.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
+        {% endif %}
         {#            <h3 class="text-left">Selecciona el monitor:</h3>#}
         {#            <select class="form-control"#}
         {#                    id="select_monitor" data-parsley-multiple="tabs">#}
