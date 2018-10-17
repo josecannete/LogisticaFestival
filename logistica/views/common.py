@@ -43,8 +43,8 @@ def error_page(request, err):
 
 def get_places_by_group():
     ans = []
-    for name in places_names:
-        ans.append(Espacio.objects.filter(zona__contains=name))
+    for zona in Zona.objects.all():
+        ans.append(Espacio.objects.filter(zona=zona))
     return ans
 
 

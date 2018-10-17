@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fisica_civil", "quimica", "electrica",
-                "geo"]
-
 
 # Create your models here.
 def is_monitor_stand(self):
@@ -31,6 +28,13 @@ User.add_to_class("is_monitor_tour", is_monitor_tour)
 User.add_to_class("is_monitor_encargado", is_monitor_encargado)
 User.add_to_class("is_encargado_actividad", is_encargado_actividad)
 User.add_to_class("is_encargado_espacio", is_encargado_espacio)
+
+
+class Zona(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
 
 
 # Horario
@@ -63,10 +67,9 @@ class Espacio(models.Model):
     nombre = models.CharField(max_length=200)
     capacidad = models.IntegerField()
     horarioAbierto = models.ManyToManyField(Horario)
-    # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
-    zona = models.CharField(max_length=200)
+    zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     duracion = models.IntegerField()  # minutos
-    observacion = models.CharField(max_length=20, blank=True) #a
+    observacion = models.CharField(max_length=20, blank=True)  # a
 
     def __str__(self):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
