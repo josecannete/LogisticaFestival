@@ -3,7 +3,7 @@
         Visión Monitor
     </div>
     <div class="card-body" id="card_id">
-        {% if user.is_monitor_stand %}
+        {% if user.is_monitor_stand or user.is_monitor_informaciones %}
             <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="activity">Escoger Monitor</label>
                 <div class="col-md-9">

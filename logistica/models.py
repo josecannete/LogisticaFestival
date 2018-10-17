@@ -15,6 +15,10 @@ def is_monitor_encargado(self):
     return self.groups.filter(name='Monitor Encargado').exists()
 
 
+def is_monitor_informaciones(self):
+    return self.groups.filter(name='Monitor Informaciones').exists()
+
+
 def is_encargado_actividad(self):
     return self.groups.filter(name='Encargado Actividad').exists()
 
@@ -26,6 +30,7 @@ def is_encargado_espacio(self):
 User.add_to_class("is_monitor_stand", is_monitor_stand)
 User.add_to_class("is_monitor_tour", is_monitor_tour)
 User.add_to_class("is_monitor_encargado", is_monitor_encargado)
+User.add_to_class("is_monitor_informaciones", is_monitor_informaciones)
 User.add_to_class("is_encargado_actividad", is_encargado_actividad)
 User.add_to_class("is_encargado_espacio", is_encargado_espacio)
 
