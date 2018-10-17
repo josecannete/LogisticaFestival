@@ -10,7 +10,6 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -21,7 +20,6 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -50,7 +48,12 @@
                                 nowIndicator: 'true',
                                 defaultView: 'agendaDay',
                                 allDaySlot: false,
-                                events: {{ event|safe }}
+                                events: {{ event|safe }},
+                                eventRender: function(event, element) {
+                                    $(element).tooltip({title: event.start.toISOString().substring(11,16) +
+                                                                '-' + event.end.toISOString().substring(11,16) +
+                                                               '\n Obs.: '+ event.observacionEspacio});
+                                }
                             });
                         {% endwith %}
                     {% endwith %}

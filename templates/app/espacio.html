@@ -10,7 +10,6 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -23,7 +22,6 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -36,23 +34,27 @@
     <script>
         $(function () {
             $('#calendar').fullCalendar({
-                eventClick: function (eventObj) {
-                    alert('Monitor: ' + eventObj['description'] + '\n Contacto: ' + eventObj['contacto']);
-                },
                 defaultDate: '2018-10-18',
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
                 allDaySlot: false,
                 slotDuration: '01:00:00',
                 minTime: "09:00:00",
-                maxTime: "19:00:00",
+                maxTime: "18:00:00",
                 height: "auto",
                 header:{
                     left:   'title',
                     center: '',
                     right:  'prev,next'
                 },
-                events: {{ events|safe }}
+                events: {{ events|safe }},
+                eventRender: function(event, element) {
+                    console.log(typeof event.start);
+                    $(element).tooltip({title: event.start.toISOString().substring(11,16) +
+                                                '-' + event.end.toISOString().substring(11,16) +
+                                               '\n Monitor: '+ event.nameMonitor +
+                                               "\n Teléfono: " + event.contacto});
+                }
             });
         });
     </script>

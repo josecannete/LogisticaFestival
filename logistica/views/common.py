@@ -58,7 +58,7 @@ def save_tour_option(request):
         delete_from_fakedb(allIdTours)
         # TODO: delete day=18
         context = dict(events=get_events_by_tour(tour.pk),
-                       startTime=(timezone.now().replace(day=18, hour=(tour.horaInicio.hour - 1))).strftime("%X"),
+                       startTime=Tour.objects.get(pk=tour.pk).horaInicio.strftime("%X"),
                        nameMonitor=Monitor.objects.get(pk=idMonitor).nombre)
         return render(request, 'app/showTour.html', context)
     return redirect(reverse(principal))

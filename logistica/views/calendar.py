@@ -3,15 +3,15 @@ import json
 import datetime
 
 
-def visitaToEventforMonitor(visita):
-    inicio = str(visita.horario.inicio.isoformat())
-    fin = str(visita.horario.fin.isoformat())
-    title = str(visita.espacio)
+def visitaToEventforMonitor(visita, name_tour):
+    inicio = visita.horario.inicio.strftime("%H:%M")
+    fin = visita.horario.fin.strftime("%H:%M")
 
     event = {
-        "title": title,
+        "title": name_tour + ": " + visita.espacio.nombre,
         "start": inicio,
-        "end": fin
+        "end": fin,
+        "description": "{}({})\n {}".format(visita.espacio.nombre, visita.espacio.zona, visita.espacio.observacion)
     }
     return event
 
@@ -27,7 +27,7 @@ def visitaToEventforEspacio(visita, monitor, name_tour):
         "start": inicio,
         "end": fin,
         "contacto": contacto,
-        "description": name_monitor
+        "nameMonitor": name_monitor
     }
     return event
 
@@ -38,12 +38,12 @@ def convert_object_tour_to_event(object_tour):
         espacio = object_tour.places[i]
         inicio = object_tour.start_times[i].isoformat()
         fin = (object_tour.start_times[i] + datetime.timedelta(minutes=espacio.duracion)).isoformat()
-        title = str(espacio)
-
+        title = "{} ({})".format(espacio.nombre, espacio.zona)
         event = {
             "title": title,
             "start": inicio,
-            "end": fin
+            "end": fin,
+            "observacionEspacio": espacio.observacion
         }
         events.append(event)
     return json.dumps(events)
@@ -55,7 +55,7 @@ def get_event_by_monitor(pk_monitor):
     for tour in tours:
         visitas = tour.visitas.all()
         for visita in visitas:
-            events.append(visitaToEventforMonitor(visita))
+            events.append(visitaToEventforMonitor(visita, tour.nombre))
     return json.dumps(events)
 
 
@@ -73,7 +73,7 @@ def get_events_by_tour(pk_tour):
     tour = Tour.objects.get(pk=pk_tour)
     events = []
     for visita in tour.visitas.all():
-        events.append(visitaToEventforMonitor(visita))
+        events.append(visitaToEventforMonitor(visita, tour.nombre))
     return json.dumps(events)
 
 

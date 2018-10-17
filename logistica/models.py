@@ -66,7 +66,8 @@ class Espacio(models.Model):
     # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
     zona = models.CharField(max_length=200)
     duracion = models.IntegerField()  # minutos
-    observacion = models.CharField(max_length=20, blank=True) #a
+    observacion = models.CharField(max_length=20, blank=True)
+    # TODO: sala_lugar = models.CharField(max_length=200)
 
     def __str__(self):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
@@ -110,6 +111,8 @@ class Actividad(models.Model):
                                  blank=True)  # Quién dara charla/taller. Sólo uso informativo
     tipo = models.CharField(max_length=15)  # Charla o taller
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
+    #TODO: descripcion = models.CharField(max_length=400)
+    #TODO: sala_lugar = models.CharField(max_length=200)
 
     def __str__(self):
         return self.nombre

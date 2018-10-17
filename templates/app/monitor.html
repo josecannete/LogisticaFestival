@@ -11,7 +11,6 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -20,10 +19,7 @@
 {% block extrascript %}
 
     <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}">
-    <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
     <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
-    <script src="{% static 'fullcalendar/jquery.min.js' %}"></script>
     <script src="{% static 'fullcalendar/moment.min.js' %}"></script>
     <script src="{% static 'fullcalendar/fullcalendar.js' %}"></script>
     <script src='{% static 'fullcalendar/es.js' %}'></script>
@@ -32,23 +28,45 @@
 {% endblock extrascript %}
 
 {% block content %}
+
     <script>
+    String.prototype.format = function() {
+      a = this;
+      for (k in arguments) {
+        a = a.replace("{" + k + "}", arguments[k])
+      }
+      return a
+    }
+
+    function pad(number) {
+      if (number < 10) {
+        return '0' + number;
+      }
+      return number;
+    }
+
         $(function () {
             $('#calendar').fullCalendar({
                 defaultDate: '2018-10-18',
                 nowIndicator: 'true',
                 defaultView: 'agendaDay',
                 minTime: "09:00:00",
-                maxTime: "19:00:00",
+                maxTime: "18:00:00",
                 allDaySlot: false,
-                slotDuration: '01:00:00',
+                slotDuration: '00:30:00',
                 height: "auto",
                 header:{
                     left:   'title',
                     center: '',
                     right:  'prev,next'
                 },
-                events: {{ events|safe }}
+                events: {{ events|safe }},
+                eventRender: function(event, element) {
+                    console.log(typeof event.start);
+                    $(element).tooltip({title: event.start.toISOString().substring(11,16) +
+                                                '-' + event.end.toISOString().substring(11,16) +
+                                               '\n'+ event.description});
+                }
             });
         });
     </script>
