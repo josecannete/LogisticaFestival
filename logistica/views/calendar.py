@@ -11,7 +11,9 @@ def visitaToEventforMonitor(visita, name_tour):
         "title": name_tour + ": " + visita.espacio.nombre,
         "start": inicio,
         "end": fin,
-        "description": "{}({})\n {}".format(visita.espacio.nombre, visita.espacio.zona, visita.espacio.observacion)
+        "namePlace": visita.espacio.nombre,
+        "zone": visita.espacio.zona.nombre,
+        #"sala": visita.espacio.sala_lugar
     }
     return event
 

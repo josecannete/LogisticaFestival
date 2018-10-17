@@ -45,6 +45,13 @@
       return number;
     }
 
+    function myMinimize(word){
+        if(word.length > 20){
+            return word.substring(0, 20)+"...";
+        }
+        return word;
+    }
+
         $(function () {
             $('#calendar').fullCalendar({
                 defaultDate: '2018-10-18',
@@ -64,8 +71,9 @@
                 eventRender: function(event, element) {
                     console.log(typeof event.start);
                     $(element).tooltip({title: event.start.toISOString().substring(11,16) +
-                                                '-' + event.end.toISOString().substring(11,16) +
-                                               '\n'+ event.description});
+                                               '-' + event.end.toISOString().substring(11,16) +
+                                               ("\n Espacio: {0}\n Sala: {2} ({1})".format(
+                                                   myMinimize(event.namePlace), event.zone, "B01 prueba"))});
                 }
             });
         });
