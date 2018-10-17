@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-places_names = ["851_norte", "851_sur", "hall_sur", "biblioteca", "cancha", "fisica_civil", "quimica", "electrica",
-                "geo"]
-
 
 # Create your models here.
 def is_monitor_stand(self):
@@ -18,6 +15,10 @@ def is_monitor_encargado(self):
     return self.groups.filter(name='Monitor Encargado').exists()
 
 
+def is_monitor_informaciones(self):
+    return self.groups.filter(name='Monitor Informaciones').exists()
+
+
 def is_encargado_actividad(self):
     return self.groups.filter(name='Encargado Actividad').exists()
 
@@ -26,11 +27,24 @@ def is_encargado_espacio(self):
     return self.groups.filter(name='Encargado Espacio').exists()
 
 
+def is_encargado_zona(self):
+    return self.groups.filter(name='Encargado Zona').exists()
+
+
 User.add_to_class("is_monitor_stand", is_monitor_stand)
 User.add_to_class("is_monitor_tour", is_monitor_tour)
 User.add_to_class("is_monitor_encargado", is_monitor_encargado)
+User.add_to_class("is_monitor_informaciones", is_monitor_informaciones)
 User.add_to_class("is_encargado_actividad", is_encargado_actividad)
 User.add_to_class("is_encargado_espacio", is_encargado_espacio)
+User.add_to_class("is_encargado_zona", is_encargado_zona)
+
+
+class Zona(models.Model):
+    nombre = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nombre
 
 
 # Horario
@@ -56,6 +70,14 @@ class Monitor(models.Model):
         return Monitor.objects.filter(user__groups__name__contains=group)
 
 
+class Encargado(models.Model):
+    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
+    zona = models.ManyToManyField(Zona)
+
+    def __str__(self):
+        return str(self.monitor)
+
+
 # Espacio
 # Contiene espacios físicos dentro de la facultad. Ej: Auditorio Gorbea
 class Espacio(models.Model):
@@ -63,8 +85,7 @@ class Espacio(models.Model):
     nombre = models.CharField(max_length=200)
     capacidad = models.IntegerField()
     horarioAbierto = models.ManyToManyField(Horario)
-    # zonas: 851_norte, 851_sur, hall_sur, biblioteca, cancha, fisica_civil, quimica, electrica, geo
-    zona = models.CharField(max_length=200)
+    zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     duracion = models.IntegerField()  # minutos
     observacion = models.CharField(max_length=20, blank=True)
     # TODO: sala_lugar = models.CharField(max_length=200)

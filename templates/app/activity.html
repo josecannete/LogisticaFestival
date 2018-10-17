@@ -50,6 +50,7 @@
                             <label class="col-md-3 col-form-label" for="text-input">Capacidad</label>
                             <div class="col-md-9 col-form-label" id="ct_value"></div>
                         </div>
+                        <input hidden id="ct_hi_value"/>
 
                         <div class="form-group row" id="ca_div" hidden>
                             <label class="col-md-3 col-form-label" for="text-input">Ocupación</label>
@@ -83,6 +84,7 @@
             $("#ct_div").attr("hidden", false);
             $("#ca_div").attr("hidden", false);
             $("#ct_value").text($(this).find(':selected').data("ct"));
+            $("#ct_hi_value").val($(this).find(':selected').data("ct"));
             $("#ca_value").val($(this).find(':selected').data("ca"));
         });
     </script>

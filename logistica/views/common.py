@@ -43,8 +43,8 @@ def error_page(request, err):
 
 def get_places_by_group():
     ans = []
-    for name in places_names:
-        ans.append(Espacio.objects.filter(zona__contains=name))
+    for zona in Zona.objects.all():
+        ans.append(Espacio.objects.filter(zona=zona))
     return ans
 
 
@@ -197,7 +197,7 @@ def monitor(request, pk_monitor=None):
         events = []
         monitores = None
         # Si es monitor_stand, se permite ver listado de monitores
-        if request.user.is_monitor_stand():
+        if request.user.is_monitor_stand() or request.user.is_monitor_informaciones():
             events = get_event_by_monitor(pk_monitor) if pk_monitor is not None else []
             monitores = Monitor.objects.all()
         # Si es monitor tour. puede ver sólo su tour
@@ -219,10 +219,19 @@ def monitor(request, pk_monitor=None):
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
         events = []
-        # Si es monitor_stand, se permite ver listado de monitores
-        if request.user.is_monitor_stand():
+        # Si es monitor_stand o monitor_info, se permite ver listado de monitores
+        if request.user.is_monitor_stand() or request.user.is_monitor_informaciones():
             espacios = Espacio.objects.all()
             events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+        # Si es encargado_zona, puede ver sólo espacios de su zona a cargo
+        elif request.user.is_encargado_zona():
+            zones = Encargado.objects.filter(monitor=request.user.monitor)
+            if zones.exists():
+                zone = Encargado.objects.get(monitor=request.user.monitor).zona.all()
+                espacios = Espacio.objects.filter(zona__in=zone)
+                events = get_events_by_espacio(pk_espacio) if pk_espacio is not None else []
+            else:
+                return error_page(request, ALERT_NO_ZONES)
         # Si es encargado espacio. puede ver sólo sus espacios
         elif request.user.is_encargado_espacio():
             espacios = Espacio.objects.filter(encargado__pk=request.user.pk)
@@ -245,27 +254,29 @@ def espacio(request, pk_espacio=None):
 
 def espacio_master(request):
     if request.user.is_authenticated:
-        if request.user.is_monitor_stand() or request.user.is_monitor_encargado():
+        if request.user.is_monitor_stand() or \
+                request.user.is_monitor_encargado() or \
+                request.user.is_monitor_informaciones():
             all_places = Espacio.objects.all()
             places_dict = {place.nombre: [] for place in all_places}
             all_tours = Tour.objects.all()
             for tour in all_tours:
                 for visit in tour.visitas.all():
                     places_dict[visit.espacio.nombre].append({"title": tour.nombre,
-                                                               "color": '#e9454d',
-                                                               "start": str(visit.horario.inicio),
-                                                               "end": str(visit.horario.fin)})
+                                                              "color": '#e9454d',
+                                                              "start": str(visit.horario.inicio),
+                                                              "end": str(visit.horario.fin)})
             for place in all_places:
                 for available in place.horarioAbierto.all():
                     places_dict[place.nombre].append({"title": "Available",
-                                                        "color": '#84b951',
-                                                        "start": str(available.inicio),
-                                                        "end": str(available.fin)})
+                                                      "color": '#84b951',
+                                                      "start": str(available.inicio),
+                                                      "end": str(available.fin)})
             context = {
                 'name_places': list(places_dict.keys()),
                 'events': list(places_dict.values())
             }
-            #print("here>", context)
+            # print("here>", context)
             return render(request, 'app/espacio_master.html', context)
         else:
             return error_page(request, ERR_NOT_AUTH)
@@ -305,5 +316,3 @@ def espacio_master(request):
 #     actividad.capacidadActual = request.POST['asistentes']
 #     actividad.save()
 #     return redirect(reverse(monitorProfile))
-
-

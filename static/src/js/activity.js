@@ -5,7 +5,7 @@ function edit_activity_capacity() {
         return false;
     }
     var cant_act = parseInt($("#ca_value").val());
-    var cant_tot = parseInt($("#ct_value").html());
+    var cant_tot = parseInt($("#ct_hi_value").val());
     if (cant_tot < cant_act) {
         append_alert("warning", "No puede existir sobrecapacidad!");
         return false

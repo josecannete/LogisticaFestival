@@ -4,9 +4,11 @@ from django.contrib import admin
 
 from .models import *
 
+admin.site.register(Zona)
 admin.site.register(Horario)
 admin.site.register(Espacio)
 admin.site.register(Monitor)
 admin.site.register(Visita)
 admin.site.register(Actividad)
 admin.site.register(Tour)
+admin.site.register(Encargado)

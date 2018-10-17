@@ -1,16 +1,16 @@
 <div class="card">
     <div class="card-header">
-        Visión Espacios/Labs
+        Puntos de Tour
     </div>
     <div class="card-body" id="card_id">
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="activity">Escoger Sala/Lab</label>
+            <label class="col-md-3 col-form-label" for="activity">Escoger Punto de Tour</label>
             <div class="col-md-9">
 
                 <select class="form-control"
                         id="select_espacio" data-parsley-multiple="tabs">
-                    <option disabled {% if not pk_espacio %}selected{% endif %}>Sala/Lab</option>
+                    <option disabled {% if not pk_espacio %}selected{% endif %}>Punto de Tour</option>
                     {% for espacio in espacios %}
                         <option value="{{ espacio.id }}"
                                 {% if espacio.id == pk_espacio %}selected{% endif %}>{{ espacio.nombre }}</option>
