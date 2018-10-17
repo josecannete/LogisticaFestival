@@ -247,25 +247,25 @@ def espacio_master(request):
     if request.user.is_authenticated:
         if request.user.is_monitor_stand() or request.user.is_monitor_encargado():
             all_places = Espacio.objects.all()
-            occupied_available_events = []
+            places_dict = {place.nombre: [] for place in all_places}
+            all_tours = Tour.objects.all()
+            for tour in all_tours:
+                for visit in tour.visitas.all():
+                    places_dict[visit.espacio.nombre].append({"title": tour.nombre,
+                                                               "color": '#e9454d',
+                                                               "start": str(visit.horario.inicio),
+                                                               "end": str(visit.horario.fin)})
             for place in all_places:
-                this_events = []
-                for visit in Visita.objects.filter(espacio=place, status=1).all():
-                    this_events.append({"title": "Occupied",
-                                        "color": '#e9454d',
-                                        "start": str(visit.horario.inicio),
-                                        "end": str(visit.horario.fin)})
                 for available in place.horarioAbierto.all():
-                    this_events.append({"title": "Available",
-                                        "color": '#84b951',
-                                        "start": str(available.inicio),
-                                        "end": str(available.fin)})
-                occupied_available_events.append(this_events)
+                    places_dict[place.nombre].append({"title": "Available",
+                                                        "color": '#84b951',
+                                                        "start": str(available.inicio),
+                                                        "end": str(available.fin)})
             context = {
-                'name_places': [place.nombre for place in all_places],
-                'events': occupied_available_events
+                'name_places': list(places_dict.keys()),
+                'events': list(places_dict.values())
             }
-            print("here>", context)
+            #print("here>", context)
             return render(request, 'app/espacio_master.html', context)
         else:
             return error_page(request, ERR_NOT_AUTH)
