@@ -130,13 +130,13 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
     target_end_time = start_time + datetime.timedelta(minutes=target_duration)
     start_time += datetime.timedelta(minutes=10)  # time to make the tour and get the group to the first place
     # select all places that are available at the start hour
-    print("Adding all possibles starts")
+    # print("Adding all possibles starts")
     for group in groups_places:
         for place in group:
             if available_at(place, start_time):
                 incomplete_tours.append(ObjectTour(place, start_time))
     # generate all possible tours according to time constraint
-    print("..Creating all possible tours, len(seeds)=", len(incomplete_tours))
+    # print("..Creating all possible tours, len(seeds)=", len(incomplete_tours))
     while len(incomplete_tours) > 0:
         # print("---")
         # print("len(incomplete_tours):", len(incomplete_tours))
@@ -174,12 +174,12 @@ def get_tours(groups_places, start_time, number_people, target_duration=120,
             count_bad_locations += 1
             tour.good_route = False
     # if possible delete tours with bad location
-    print("len(complete_tours):", len(complete_tours))
-    print("count_bad_locations:", count_bad_locations)
+    # print("len(complete_tours):", len(complete_tours))
+    # print("count_bad_locations:", count_bad_locations)
     if len(complete_tours) - count_bad_locations >= tours_count:
         complete_tours = list(filter(lambda this_tour: this_tour.good_route, complete_tours))
     # select tours to return randomly
-    print("len(complete_tours):", len(complete_tours))
+    # print("len(complete_tours):", len(complete_tours))
     if not tours_count:
         raise NoToursAvailableException
     for i in range(tours_count):

@@ -112,10 +112,10 @@ def add_to_fakedb(objectTour, nombre, alumnos):
 def create_tour_request(request):
     user = request.user
     if user.is_authenticated:
-        print(request.POST)
+        # print(request.POST)
         tour = NewTourForm(request.POST)
         tour.save()
-        print(tour.cleaned_data['alumnos'])
+        # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
         start_time = timezone.now().replace(day=18, hour=9)  # TODO: delete replace
         number_people = tour.cleaned_data['alumnos']
@@ -132,8 +132,8 @@ def create_tour_request(request):
             idTours.append(add_to_fakedb(object_tour, nombre, number_people).id)
 
         events = [convert_object_tour_to_event(tour_option) for tour_option in tour_options]
-        print("LIST EVENTS:")
-        print('\n'.join(events))
+        # print("LIST EVENTS:")
+        # print('\n'.join(events))
         context = {
             'range': range(7),
             'monitores': Monitor.from_group('Monitor Tour'),
@@ -141,7 +141,7 @@ def create_tour_request(request):
             'startTime': start_time.replace(minute=0).strftime("%X"),
             'events': events
         }
-        print("CONTEXT", start_time.strftime("%X"))
+        # print("CONTEXT", start_time.strftime("%X"))
         return render(request, 'app/tour.html', context)
     return redirect(reverse(login_user))
 
