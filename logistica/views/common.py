@@ -117,7 +117,7 @@ def create_tour_request(request):
         tour.save()
         # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now().replace(day=18, hour=9)  # TODO: delete replace
+        start_time = timezone.now()    #.replace(day=18, hour=9)  # TODO: delete replace
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         try:
@@ -149,11 +149,11 @@ def create_tour_request(request):
 def principal(request):
     if request.user.is_authenticated:
         # start_time = datetime.datetime.now()
-        start_time = timezone.now().replace(day=18, hour=9)  # TODO: Eliminar
-        charlas = Actividad.objects.filter(horario__inicio__gt=start_time,
+        start_time = timezone.now()   #.replace(day=18, hour=9)  # TODO: Eliminar
+        charlas = Actividad.objects.filter(horario__inicio__gt=start_time - datetime.timedelta(hours=1),
                                            horario__inicio__lt=(start_time + datetime.timedelta(hours=2)),
                                            horario__inicio__day=start_time.day, tipo='charla').order_by('horario__inicio')
-        talleres = Actividad.objects.filter(horario__inicio__gt=start_time,
+        talleres = Actividad.objects.filter(horario__inicio__gt=start_time - datetime.timedelta(hours=1),
                                             horario__inicio__lt=(start_time + datetime.timedelta(hours=2)),
                                             horario__inicio__day=start_time.day, tipo='taller').order_by('horario__inicio')
         context = {
