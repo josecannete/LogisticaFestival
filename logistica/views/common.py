@@ -159,7 +159,7 @@ def principal(request):
         context = {
             'charlas': charlas,
             'talleres': talleres,
-            'tour': NewTourForm()
+            # 'tour': NewTourForm()
         }
         return render(request, 'app/principal.html', context)
     else:
