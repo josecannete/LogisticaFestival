@@ -73,7 +73,7 @@
                     $(element).tooltip({title: event.start.toISOString().substring(11,16) +
                                                '-' + event.end.toISOString().substring(11,16) +
                                                ("\n Espacio: {0}\n Sala: {2} ({1})".format(
-                                                   myMinimize(event.namePlace), event.zone, "B01 prueba"))});
+                                                   myMinimize(event.namePlace), event.zone, event.sala))});
                 }
             });
         });

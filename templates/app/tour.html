@@ -52,6 +52,7 @@
                                 eventRender: function(event, element) {
                                     $(element).tooltip({title: event.start.toISOString().substring(11,16) +
                                                                 '-' + event.end.toISOString().substring(11,16) +
+                                                                '\n Ubicación: '+ event.zona +
                                                                '\n Obs.: '+ event.observacionEspacio});
                                 }
                             });

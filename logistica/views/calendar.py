@@ -13,7 +13,7 @@ def visitaToEventforMonitor(visita, name_tour):
         "end": fin,
         "namePlace": visita.espacio.nombre,
         "zone": visita.espacio.zona.nombre,
-        #"sala": visita.espacio.sala_lugar
+        "sala": visita.espacio.sala_lugar if visita.espacio.sala_lugar is not None else ""
     }
     return event
 
@@ -45,6 +45,7 @@ def convert_object_tour_to_event(object_tour):
             "title": title,
             "start": inicio,
             "end": fin,
+            "zona": "({})".format(espacio.zona),
             "observacionEspacio": espacio.observacion
         }
         events.append(event)
