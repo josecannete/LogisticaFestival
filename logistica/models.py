@@ -88,7 +88,8 @@ class Espacio(models.Model):
     zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     duracion = models.IntegerField()  # minutos
     observacion = models.CharField(max_length=20, blank=True)
-    # TODO: sala_lugar = models.CharField(max_length=200)
+    sala_lugar = models.CharField(max_length=200, null=True, blank=True)
+    contacto = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
