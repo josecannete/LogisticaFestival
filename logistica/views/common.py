@@ -16,18 +16,18 @@ from logistica.exceptions import *
 import datetime, json
 
 
-def error_404(request, exception):
+def error_404(request):
     context = {
         'gif_number': str(randint(1, 4))
     }
-    return render(request, 'app/404.html', context)
+    return render(request, 'app/404.html', context, status=404)
 
 
-def error_500(request, exception):
+def error_500(request):
     context = {
         'gif_number': str(randint(1, 4))
     }
-    return render(request, 'app/500.html', context)
+    return render(request, 'app/500.html', context, status=500)
 
 
 def home(request):
@@ -117,7 +117,7 @@ def create_tour_request(request):
         tour.save()
         # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now()    #.replace(day=18, hour=9)  # TODO: delete replace
+        start_time = timezone.now()    #.replace(day=18, hour=9)
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         try:
