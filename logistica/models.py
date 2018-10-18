@@ -81,7 +81,7 @@ class Encargado(models.Model):
 # Espacio
 # Contiene espacios físicos dentro de la facultad. Ej: Auditorio Gorbea
 class Espacio(models.Model):
-    encargado = models.ForeignKey(User, on_delete=models.CASCADE)
+    encargado = models.ForeignKey(Monitor, on_delete=models.CASCADE, null=True)
     nombre = models.CharField(max_length=200)
     capacidad = models.IntegerField()
     horarioAbierto = models.ManyToManyField(Horario)
