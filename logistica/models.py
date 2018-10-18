@@ -128,12 +128,12 @@ class Actividad(models.Model):
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
     capacidadTotal = models.IntegerField()
     capacidadActual = models.IntegerField()
-    charlista = models.CharField(max_length=200, null=True,
-                                 blank=True)  # Quién dara charla/taller. Sólo uso informativo
+    charlista = models.CharField(max_length=200, null=True, blank=True)  # Quién dara charla/taller. Sólo uso informativo
     tipo = models.CharField(max_length=15)  # Charla o taller
     monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE)
-    #TODO: descripcion = models.CharField(max_length=400)
-    #TODO: sala_lugar = models.CharField(max_length=200)
+    observaciones = models.CharField(max_length=400, null=True, blank=True)
+    sala_lugar = models.CharField(max_length=200, null=True, blank=True)
+    contacto = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.nombre
