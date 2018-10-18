@@ -7,11 +7,22 @@
                 <div class="col-md-12"><h5>{{ charla.nombre }}
                     <small class="text-muted">{{ charla.charlista }}</small></h5>
                 </div>
-                <div class="col-md-12"><p><i class="fa fa-map-marker" aria-hidden="true"></i>Ingresar lugar acá</p></div>
-                <div class="col-md-12 add-line-bottom">
+                <div class="col-md-12"><p><i class="fa fa-map-marker" aria-hidden="true"></i>{{ charla.sala_lugar }}</p></div>
+                <div class="col-md-12">
                     <p><i class="fa fa-clock-o" aria-hidden="true"></i>
-                        {{ charla.horario.inicio.time }} - {{ charla.horario.fin.time }}</p>
+                        {{ charla.horario.inicio.time|date:'H:i' }} - {{ charla.horario.fin.time|date:'H:i' }}</p>
                 </div>
+                {% if charla.observaciones %}
+                    <div class="col-md-12 add-line-bottom">
+                            <div class="observations-box">
+                                <u><i class="fa fa-exclamation" aria-hidden="true"></i>Obs.</u>
+                                <p>{{ charla.observaciones }}</p>
+                            </div>
+                        </div>
+                {% else %}
+                    <div class="col-md-12 add-line-bottom">
+                    </div>
+                {% endif %}
                 <div class="col-md-12 d-flex justify-content-between">Ocupación y Capacidad:
                     <div><h6 class="capacity">{{ charla.capacidadActual }} / {{ charla.capacidadTotal }}</h6></div>
                 </div>

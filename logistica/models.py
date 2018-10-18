@@ -130,7 +130,7 @@ class Actividad(models.Model):
     capacidadActual = models.IntegerField()
     charlista = models.CharField(max_length=200, null=True, blank=True)  # Quién dara charla/taller. Sólo uso informativo
     tipo = models.CharField(max_length=15)  # Charla o taller
-    monitor = models.ForeignKey(Monitor, null=True, blank=True)
+    monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE, null=True, blank=True)
     observaciones = models.CharField(max_length=400, null=True, blank=True)
     sala_lugar = models.CharField(max_length=200, null=True, blank=True)
     contacto = models.CharField(max_length=200, null=True, blank=True)
