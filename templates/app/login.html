@@ -4,7 +4,7 @@
 {% block main_card %}
     <h1>Inicio de sesión</h1>
     <p class="text-muted">Entra con tu cuenta</p>
-    <form role="form" action="{% url 'login_user' %}" method="POST">
+    <form role="form" action="{% url 'login' %}" method="POST">
         {% csrf_token %}
         <div class="form-group mb-3">
             <input class="form-control {% if error_login %}is-invalid{% endif %}" type="text" placeholder="Usuario"

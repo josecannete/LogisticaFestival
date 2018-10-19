@@ -30,8 +30,8 @@ urlpatterns = [
 
     url(r'^$', logistica.home, name='home'),
 
-    url(r'^login/', logistica.login_user, name='login_user'),
-    url(r'^logout/', logistica.logout_user, name='logout_user'),
+    url(r'^login/', logistica.login_user, name='login'),
+    url(r'^logout/', logistica.logout_user, name='logout'),
 
     url(r'^actividades/', logistica.activities, name='activities'),
     url(r'^principal/', logistica.principal, name='principal'),

@@ -134,3 +134,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Equipo IV° Festival Ingeniería y Ciencias <logisticafcfm@gmail.com>'
 
 handler404 = 'app.views.handler404'
+
+LOGIN_URL = '/login/'
