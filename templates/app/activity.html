@@ -35,7 +35,7 @@
                                                 data-ch="{{ activity.charlista }}"
                                                 data-me="{{ activity.monitor.nombre }}"
                                                 {% if activity.id == -1 %}selected="true"
-                                                disabled="disabled"{% endif %}>{{ activity.nombre }}</option>
+                                                disabled="disabled"{% endif %}>{{ activity.nombre }} {{ activity.horario }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
