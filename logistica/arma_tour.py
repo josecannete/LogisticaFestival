@@ -6,6 +6,8 @@ from logistica.models import Visita, Espacio, Tour, Horario
 from logistica.exceptions import NoToursAvailableException
 import datetime
 import collections
+import operator
+import functools
 
 
 def available_at(space, init_time):
@@ -88,101 +90,131 @@ class ObjectTour:
             start_time: start time in the first place (the tour starting time is 5-10 minutes before)
         """
         self.start_times = [start_time]
+        self.starting_point_score = len(Visita.objects.filter(espacio=first_place, status=1))
         self.end_time = start_time + datetime.timedelta(minutes=first_place.duracion)
         self.places = [first_place]
         self.good_route = True
+        self.visited_zones = set()
+        self.last_zone = first_place.zona
 
     def get_last_place(self):
         return self.places[-1]
+
+    def get_is_good_route(self):
+        return self.good_route and len(self.visited_zones) > 1
+
+    def check_good_route(self):
+        """Check if the new place added implies bad route"""
+        # still good route
+        if self.good_route:
+            this_zone = self.places[-1].zona
+            # zone is already visited but it's not the one before
+            if this_zone != self.last_zone and this_zone in self.visited_zones:
+                self.good_route = False
+            # either the zone is the same or it's different but it has not been visited before
+            else:
+                self.last_zone = this_zone
+                self.visited_zones.add(this_zone)
 
     def add_place(self, new_place, start_time_new_place):
         self.start_times.append(start_time_new_place)
         self.end_time += (get_walking_time(self.get_last_place(), new_place) +
                           datetime.timedelta(minutes=new_place.duracion))
         self.places.append(new_place)
+        self.check_good_route()
 
     def is_place_included(self, to_check_place):
         """Returns True if the place is already visited in this tour, if not False."""
         for place_visited in self.places:
-            if to_check_place == place_visited:
+            if to_check_place == place_visited or to_check_place.nombre[-2] == place_visited.nombre[-2]:
                 return True
         return False
+
+    def __lt__(self, other):
+        return self.starting_point_score < other.starting_point_score
 
     def __str__(self):
         return " -> ".join([str(p) for p in self.places])
 
 
+def reorder(groups_places):
+    """Reorder each list of Espacio's to have the ones with less visits first"""
+    def get_score(espacio):
+        if espacio.nombre[-2] in {"Avión", "Camión", "Biblioteca"}:
+            return 100000
+        else:
+            return len(Visita.objects.filter(espacio=espacio, status=1))
+
+    groups_places_sorted = []
+    for i, group in enumerate(groups_places):
+        groups_places_sorted.append(sorted(
+            group, key=lambda place: get_score(place)))
+    return sorted(groups_places_sorted,
+                  key=lambda group_sorted: functools.reduce(lambda acc, e: acc + get_score(e), group_sorted, 0))
+
+
 def get_tours(groups_places, start_time, number_people, target_duration=120,
-              tours_count=5):
+              target_tours_count=5):
     """
     Args:
         groups_places: list of list of Espacio's
         start_time: start time of the tour
         number_people: integer
         target_duration: integer representing minutes
-        tours_count: quantity of tours wanted
+        target_tours_count: quantity of tours wanted
 
     Returns:
         list of list, each list represents a tour containing tuples (time, Espacio)
     """
-    incomplete_tours = collections.deque([])
+    starting_points = []
     complete_tours = []
+    count_good_route = 0
+    min_good_route_created = 300
     target_end_time = start_time + datetime.timedelta(minutes=target_duration)
     start_time += datetime.timedelta(minutes=10)  # time to make the tour and get the group to the first place
     # select all places that are available at the start hour
-    # print("Adding all possibles starts")
     for group in groups_places:
         for place in group:
             if available_at(place, start_time):
-                incomplete_tours.append(ObjectTour(place, start_time))
+                starting_points.append(ObjectTour(place, start_time))
+    # last places with less score
+    starting_points.sort(reverse=True)
+    incomplete_tours = starting_points
+    # first place less score
+    groups_places = reorder(groups_places)
     # generate all possible tours according to time constraint
-    # print("..Creating all possible tours, len(seeds)=", len(incomplete_tours))
     while len(incomplete_tours) > 0:
-        # print("---")
-        # print("len(incomplete_tours):", len(incomplete_tours))
-        # print("largos:", [len(tour_.places) for tour_ in incomplete_tours])
         # get first
-        curr_tour = incomplete_tours.popleft()
-        # print("curr_tour:", curr_tour)
-        # print("curr_tour.end_time >= target_end_time:", curr_tour.end_time, "\t", target_end_time)
+        curr_tour = incomplete_tours.pop()
         if curr_tour.end_time >= target_end_time:
             complete_tours.append(curr_tour)
+            count_good_route += int(curr_tour.get_is_good_route())
+            if count_good_route > min_good_route_created:
+                break
             continue
         # create a new tour for each possible place that can go next
         for i, group in enumerate(groups_places):
-            # print("Checking group: {}/{}".format(i, len(groups_places)))
             for j, place in enumerate(group):
-                # print("Checking to add place:", place, "place: {}/{}, group:{}/{}".format(j, len(group), i, len(groups_places)))
                 # if the place cannot support the amount of people ignore it
                 if place.capacidad < number_people:
                     continue
                 # time arriving at the new place
                 next_hour = curr_tour.end_time + get_walking_time(curr_tour.get_last_place(), place)
-                # print("Is place already on the tour:", curr_tour.is_place_included(place))
-                # print("Searching place at:", next_hour)
                 # if the place is not already on the tour and it's available at this time
                 if not curr_tour.is_place_included(place) and available_at(place, next_hour):
                     # create new tour with that place as next
-                    # print("\tcreating new tour with this stop")
                     next_curr_tour = copy.deepcopy(curr_tour)
                     next_curr_tour.add_place(place, next_hour)
                     incomplete_tours.append(next_curr_tour)
-    # tag tours with bad order of locations
-    count_bad_locations = 0
-    for tour in complete_tours:
-        if not is_good_route(tour):
-            count_bad_locations += 1
-            tour.good_route = False
+
     # if possible delete tours with bad location
-    # print("len(complete_tours):", len(complete_tours))
-    # print("count_bad_locations:", count_bad_locations)
-    if len(complete_tours) - count_bad_locations >= tours_count:
+    count_bad_locations = sum([int(not tour_object.get_is_good_route()) for tour_object in complete_tours])
+    if len(complete_tours) - count_bad_locations >= target_tours_count:
         complete_tours = list(filter(lambda this_tour: this_tour.good_route, complete_tours))
-    # select tours to return randomly
-    # print("len(complete_tours):", len(complete_tours))
-    if not tours_count:
+    if len(complete_tours) == 0:
         raise NoToursAvailableException
-    for i in range(tours_count):
+    # select tours to return randomly
+    for i in range(target_tours_count):
         selected = randint(i, len(complete_tours) - 1)
         complete_tours[i], complete_tours[selected] = complete_tours[selected], complete_tours[i]
-    return complete_tours[0:tours_count]
+    return complete_tours[0:target_tours_count]

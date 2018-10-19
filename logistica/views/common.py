@@ -124,11 +124,11 @@ def create_tour_request(request):
         tour.save()
         # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now()  # .replace(day=18, hour=9)
+        start_time = timezone.now()    #.replace(day=18, hour=9)
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         try:
-            tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+            tour_options = get_tours(groups_places, start_time, number_people, duration, target_tours_count=5)
         except NoToursAvailableException:
             return error_page(request, ALERT_NO_AVAILABLE_TOURS)
 
@@ -157,15 +157,13 @@ def create_tour_request(request):
 def principal(request):
     if request.user.is_authenticated:
         # start_time = datetime.datetime.now()
-        start_time = timezone.now()  # .replace(day=18, hour=9)  # TODO: Eliminar
+        start_time = timezone.now()   #.replace(day=18, hour=9)  # TODO: Eliminar
         charlas = Actividad.objects.filter(horario__inicio__gt=start_time - datetime.timedelta(hours=1),
                                            horario__inicio__lt=(start_time + datetime.timedelta(hours=2)),
-                                           horario__inicio__day=start_time.day, tipo='charla').order_by(
-            'horario__inicio')
+                                           horario__inicio__day=start_time.day, tipo='charla').order_by('horario__inicio')
         talleres = Actividad.objects.filter(horario__inicio__gt=start_time - datetime.timedelta(hours=1),
                                             horario__inicio__lt=(start_time + datetime.timedelta(hours=2)),
-                                            horario__inicio__day=start_time.day, tipo='taller').order_by(
-            'horario__inicio')
+                                            horario__inicio__day=start_time.day, tipo='taller').order_by('horario__inicio')
         context = {
             'charlas': charlas,
             'talleres': talleres,

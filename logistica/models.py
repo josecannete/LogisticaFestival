@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 # Create your models here.
 def is_monitor_stand(self):
     return self.groups.filter(name='Monitor Stand Principal').exists()
@@ -92,7 +91,8 @@ class Espacio(models.Model):
     contacto = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return "{} \ zona:{}".format(str(self.nombre), str(self.zona))
+        name = self.nombre.replace('á', 'a').replace('é','e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
+        return name
 
 
 # Visita
