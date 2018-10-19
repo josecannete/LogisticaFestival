@@ -38,7 +38,7 @@
                         {% with eventos="events"|add:y %}
                             $({{ template|safe }}).fullCalendar({
                                 timezone: 'America/Santiago',
-                                defaultDate: '2018-10-18',
+                                defaultDate: '2018-10-19',
                                 columnHeader: 'false',
                                 aspectRatio: 0,
                                 minTime: "{{startTime |safe}}",
@@ -52,7 +52,8 @@
                                 eventRender: function(event, element) {
                                     $(element).tooltip({title: event.start.toISOString().substring(11,16) +
                                                                 '-' + event.end.toISOString().substring(11,16) +
-                                                                '\n Ubicación: '+ event.zona +
+                                                                '\n' + event.nombre +
+                                                                '\n Zona: '+ event.zona +
                                                                '\n Obs.: '+ event.observacionEspacio});
                                 }
                             });

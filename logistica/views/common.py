@@ -117,11 +117,11 @@ def create_tour_request(request):
         tour.save()
         # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now()    #.replace(day=18, hour=9)
+        start_time = timezone.now().replace(day=19, hour=10)
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         try:
-            tour_options = get_tours(groups_places, start_time, number_people, duration, tours_count=5)
+            tour_options = get_tours(groups_places, start_time, number_people, duration, target_tours_count=5)
         except NoToursAvailableException:
             return error_page(request, ALERT_NO_AVAILABLE_TOURS)
 

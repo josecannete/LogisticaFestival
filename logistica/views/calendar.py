@@ -45,7 +45,8 @@ def convert_object_tour_to_event(object_tour):
             "title": title,
             "start": inicio,
             "end": fin,
-            "zona": "({})".format(espacio.zona),
+            "nombre": espacio.nombre,
+            "zona": espacio.zona.nombre,
             "observacionEspacio": espacio.observacion
         }
         events.append(event)
