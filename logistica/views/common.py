@@ -42,7 +42,6 @@ def error_page(request, err):
     return render(request, 'app/error_page.html', {'info': err})
 
 
-@login_required
 def get_places_by_group():
     ans = []
     for zona in Zona.objects.all():
@@ -50,7 +49,6 @@ def get_places_by_group():
     return ans
 
 
-@login_required
 def save_tour_option(request):
     if request.POST.get('select_monitor') and request.POST.get('optionTourId'):
         idMonitor = request.POST.get('select_monitor')
@@ -67,7 +65,6 @@ def save_tour_option(request):
     return redirect(reverse(principal))
 
 
-@login_required
 def delete_from_fakedb(listTourIds):
     for tour_pk in listTourIds:
         tour = Tour.objects.get(pk=tour_pk)
@@ -82,7 +79,6 @@ def delete_from_fakedb(listTourIds):
             raise CannotDeleteConfirmedTourException()
 
 
-@login_required
 def add_to_realdb(optionTourId, selectedMonitorId):
     tour = Tour.objects.get(pk=optionTourId)
     tour.status = 1
@@ -96,7 +92,6 @@ def add_to_realdb(optionTourId, selectedMonitorId):
     return tour
 
 
-@login_required
 def add_to_fakedb(objectTour, nombre, alumnos):
     horaInicio = objectTour.start_times[0]
     duracion = (objectTour.end_time - horaInicio).seconds / 60
@@ -115,7 +110,6 @@ def add_to_fakedb(objectTour, nombre, alumnos):
     return posible_tour
 
 
-@login_required
 def create_tour_request(request):
     user = request.user
     if user.is_authenticated:
@@ -197,7 +191,6 @@ def logout_user(request):
     return redirect(reverse(home))
 
 
-@login_required
 def monitor(request, pk_monitor=None):
     if request.user.is_authenticated:
         events = []
@@ -222,7 +215,6 @@ def monitor(request, pk_monitor=None):
         return redirect(reverse(home))
 
 
-@login_required
 def espacio(request, pk_espacio=None):
     if request.user.is_authenticated:
         events = []
@@ -259,7 +251,6 @@ def espacio(request, pk_espacio=None):
         return redirect(reverse(home))
 
 
-@login_required
 def espacio_master(request):
     if request.user.is_authenticated:
         if request.user.is_monitor_stand() or \

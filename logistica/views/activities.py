@@ -8,7 +8,6 @@ from logistica.views.common import error_page
 from logistica.views.constants import *
 
 
-@login_required
 def activities(request):
     if not request.user.is_encargado_actividad():
         return error_page(request, ERR_NOT_AUTH)
