@@ -117,7 +117,7 @@ def create_tour_request(request):
         tour.save()
         # print(tour.cleaned_data['alumnos'])
         groups_places = get_places_by_group()
-        start_time = timezone.now().replace #(day=19, hour=10)
+        start_time = timezone.now() #.replace #(day=19, hour=10)
         number_people = tour.cleaned_data['alumnos']
         duration = tour.cleaned_data['duracion']
         try:
