@@ -258,7 +258,7 @@ def espacio_master(request):
                 request.user.is_monitor_informaciones():
             all_places = Espacio.objects.all()
             places_dict = {place.nombre: [] for place in all_places}
-            all_tours = Tour.objects.all() #Tour.objects.filter(hora) #Tour.objects.all() #TODO: filtrar por tours de hoy
+            all_tours = Tour.objects.all() #TODO: filtrar por tours de hoy
             for tour in all_tours:
                 for visit in tour.visitas.all():
                     places_dict[visit.espacio.nombre].append({"title": tour.nombre,
