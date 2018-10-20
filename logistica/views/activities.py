@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -22,7 +24,7 @@ def activities(request):
 
 def generate_activity_id_list(user=None):
     if user:
-        return Actividad.objects.filter(monitor=user.monitor)
+        return Actividad.objects.filter(monitor=user.monitor, horario__inicio__day=datetime.date.today())
     else:
         return Actividad.objects.all()
 
